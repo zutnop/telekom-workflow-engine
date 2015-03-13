@@ -1,5 +1,5 @@
 # Introduction
-This document gives an overview of the Telekom workflow engine. For more details, please read the wiki pages (TODO link).
+This document gives an overview of the Telekom workflow engine. For more details, please read the wiki pages: https://github.com/zutnop/telekom-workflow-engine/wiki.
 
 # Workflow engine 
 The telekom-workflow-engine is a custom built embeddable technology that provides a runtime environment for long-lived business processes.
@@ -28,15 +28,16 @@ The engine implementation can be divided into three main parts:
 * core - provides the runtime environment for workflow execution (based on graph oriented programming) together with all the supporting services (clustering, persistence, error handline etc.)
 * API - interface (DSL) for writing your workflow definitions and plugins, more info in "Workflow implementations" paragraph
 * web - web console, REST services and JMX interface for monitoring and interacting with the running engine
+
 An empty engine itself does not provide any value for the end users. To do something useful with the engine, you need to write your workflow definitions (via using the API). The engine implementation and the workflow definitions are to be kept in separate repositories to provide a clear distinction between the platform and the actual workflow business logic code. The engine, together with those workflow definitions, packaged as a *.war archive, will be deployed to Tomcat web server(s). When the web server is started, the engine spools up, reads the previous state from its DB and continues to execute the ongoing instances. The engine will keep executing the started workflow instances, persisting the new state when a wait state is reached.
 
 ### Error handling
 The execution of the long-lived workflows is a delicate process (must survive technical problems) and thus a lot of effort has gone into making the workflow engine very robust and bulletproof. The workflows are executed as transactions from one wait state to the next wait state. If the next wait state is successfully reached, then the new state is persisted and the transaction is commited. If an exception occurs, the transaction is rolled back, the execution is stored and the workflow will go into a frozen state, waiting for a human decision. After correcting the problem, the workflow can be continued from the last good wait state.
 This achieves:
 * good protection against infrastructure problems, e.g.:
-** database problems
-** webservice problems
-** external application errors
+  * database problems
+  * webservice problems
+  * external application errors
 * low impact of development errors - a bug, which causes a NullpointerException, freezes the instance; bug is fixed and released into production; workflow instance can be continued from the last wait state
 
 ### Performance
@@ -57,7 +58,8 @@ The workflow engine is fully covered with unit and integration tests. And the wo
 ### Workflow implementations
 To implement an automatic workflow, you need to implement the workflow process/rules in Java using the telekom-workflow-api interfaces. Each workflow is described in its own Java class as one or more steps.
 
-```
+Workflow definition example:
+```java
 factory
     .start()
     
