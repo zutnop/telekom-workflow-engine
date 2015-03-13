@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="workflow-engine-test-2014.08.14.1" author="Christian Klock">
+    <sql>
+      <![CDATA[
+        CREATE SEQUENCE "NODE_REF_NUM_S";
+        
+        CREATE TABLE "NODES"
+        (
+          "REF_NUM"       INTEGER NOT NULL,
+          "NODE_NAME"     VARCHAR2(100) NOT NULL,
+          "CLUSTER_NAME"  VARCHAR2(100) NOT NULL,
+          "STATUS"        VARCHAR2(100) NOT NULL,
+          "HEARTBEAT"     DATETIME NOT NULL,
+          CONSTRAINT "NODE_PK" PRIMARY KEY ("REF_NUM"),
+          UNIQUE ("NODE_NAME"),
+          UNIQUE ("CLUSTER_NAME", "NODE_NAME")          
+         );      
+      
+        CREATE SEQUENCE "WOIN_REF_NUM_S";
+        
+        CREATE TABLE "WORKFLOW_INSTANCES"
+        (  
+          "REF_NUM"           INTEGER NOT NULL,
+          "WORKFLOW_NAME"     VARCHAR2(255) NOT NULL,
+          "WORKFLOW_VERSION"  INTEGER,
+          "ATTRIBUTES"        TEXT,
+          "STATE"             TEXT,
+          "HISTORY"           TEXT,
+          "LABEL1"            VARCHAR2(100),
+          "LABEL2"            VARCHAR2(100),
+          "CLUSTER_NAME"      VARCHAR2(100) NOT NULL,
+          "NODE_NAME"         VARCHAR2(100),
+          "STATUS"            VARCHAR2(100) NOT NULL,
+          "LOCKED"            VARCHAR2(1),
+          "DATE_CREATED"      DATETIME NOT NULL, 
+          "CREATED_BY"        VARCHAR2(30) NOT NULL, 
+          "DATE_UPDATED"      DATETIME, 
+          "LAST_UPDATED_BY"   VARCHAR2(30),
+          CONSTRAINT "WOIN_PK" PRIMARY KEY ("REF_NUM"),
+          CONSTRAINT "WOIN_FK1" FOREIGN KEY ("NODE_NAME") REFERENCES NODES ("NODE_NAME")
+         );
+        
+        CREATE SEQUENCE "WOIT_REF_NUM_S";
+        
+        CREATE TABLE "WORK_ITEMS" 
+        (  
+          "REF_NUM"         INTEGER NOT NULL,
+          "WOIN_REF_NUM"    INTEGER NOT NULL,
+          "TOKEN_ID"        INTEGER NOT NULL,
+          "STATUS"          VARCHAR2(100) NOT NULL,
+          "SIGNAL"          VARCHAR2(100),
+          "DUE_DATE"        DATETIME,
+          "BEAN"            VARCHAR2(100),
+          "METHOD"          VARCHAR2(100),
+          "ROLE"            VARCHAR2(100),
+          "USER_NAME"       VARCHAR2(100),
+          "ARGUMENTS"       TEXT,
+          "RESULT"          TEXT,
+          "DATE_CREATED"    DATETIME NOT NULL, 
+          "CREATED_BY"      VARCHAR2(30) NOT NULL, 
+          "DATE_UPDATED"    DATETIME, 
+          "LAST_UPDATED_BY" VARCHAR2(30),
+          CONSTRAINT "WOIT_PK" PRIMARY KEY ("REF_NUM"),
+          CONSTRAINT "WOIT_FK1" FOREIGN KEY ("WOIN_REF_NUM") REFERENCES "WORKFLOW_INSTANCES" ("REF_NUM") 
+          );
+        
+        CREATE SEQUENCE "EXER_REF_NUM_S";
+        
+        CREATE TABLE "EXECUTION_ERRORS" 
+        (  
+          "REF_NUM"         INTEGER NOT NULL,
+          "WOIN_REF_NUM"    INTEGER NOT NULL,
+          "WOIT_REF_NUM"    INTEGER,
+          "ERROR_TEXT"      TEXT NOT NULL, 
+          "ERROR_DETAILS"   TEXT,
+          "DATE_CREATED"    DATETIME NOT NULL, 
+          "CREATED_BY"      VARCHAR2(100) NOT NULL, 
+          CONSTRAINT "EXER_PK" PRIMARY KEY ("REF_NUM"),
+          CONSTRAINT "EXER_FK1" FOREIGN KEY ("WOIN_REF_NUM") REFERENCES "WORKFLOW_INSTANCES" ("REF_NUM"),
+          CONSTRAINT "EXER_FK2" FOREIGN KEY ("WOIT_REF_NUM") REFERENCES "WORK_ITEMS" ("REF_NUM"),
+          UNIQUE ("WOIN_REF_NUM")
+         );
+        
+        CREATE SEQUENCE "LOCK_REF_NUM_S";
+        
+        CREATE TABLE "LOCKS"
+        (
+          CLUSTER_NAME VARCHAR2(20) NOT NULL,
+          OWNER        VARCHAR2(20),
+          EXPIRE_TIME  DATETIME,
+          CONSTRAINT "LOCK_PK" PRIMARY KEY ("CLUSTER_NAME"),
+          CONSTRAINT "LOCK_FK1" FOREIGN KEY ("CLUSTER_NAME","OWNER") REFERENCES "NODES" ("CLUSTER_NAME","NODE_NAME")
+        );
+        
+        CREATE TABLE "WORKFLOW_INSTANCES_ARCHIVE"
+        (  
+          "REF_NUM"           INTEGER NOT NULL,
+          "WORKFLOW_NAME"     VARCHAR2(255) NOT NULL,
+          "WORKFLOW_VERSION"  INTEGER,
+          "ATTRIBUTES"        TEXT,
+          "STATE"             TEXT,
+          "HISTORY"           TEXT,
+          "LABEL1"            VARCHAR2(100),
+          "LABEL2"            VARCHAR2(100),
+          "CLUSTER_NAME"      VARCHAR2(100) NOT NULL,
+          "NODE_NAME"         VARCHAR2(100),
+          "STATUS"            VARCHAR2(100) NOT NULL,
+          "LOCKED"            VARCHAR2(1),
+          "DATE_CREATED"      DATETIME NOT NULL, 
+          "CREATED_BY"        VARCHAR2(30) NOT NULL, 
+          "DATE_UPDATED"      DATETIME, 
+          "LAST_UPDATED_BY"   VARCHAR2(30),
+          CONSTRAINT "WINA_PK" PRIMARY KEY ("REF_NUM")
+         );
+        
+        CREATE TABLE "WORK_ITEMS_ARCHIVE" 
+        (  
+          "REF_NUM"         INTEGER NOT NULL,
+          "WOIN_REF_NUM"    INTEGER NOT NULL,
+          "TOKEN_ID"        INTEGER NOT NULL,
+          "STATUS"          VARCHAR2(100) NOT NULL,
+          "SIGNAL"          VARCHAR2(100),
+          "DUE_DATE"        DATETIME,
+          "BEAN"            VARCHAR2(100),
+          "METHOD"          VARCHAR2(100),
+          "ROLE"            VARCHAR2(100),
+          "USER_NAME"       VARCHAR2(100),
+          "ARGUMENTS"       TEXT,
+          "RESULT"          TEXT,
+          "DATE_CREATED"    DATETIME NOT NULL, 
+          "CREATED_BY"      VARCHAR2(30) NOT NULL, 
+          "DATE_UPDATED"    DATETIME, 
+          "LAST_UPDATED_BY" VARCHAR2(30),
+          CONSTRAINT "WITA_PK" PRIMARY KEY ("REF_NUM"),
+          CONSTRAINT "WITA_FK1" FOREIGN KEY ("WOIN_REF_NUM") REFERENCES "WORKFLOW_INSTANCES_ARCHIVE" ("REF_NUM") 
+          );
+
+      ]]>
+    </sql>
+  </changeSet>
+</databaseChangeLog> 

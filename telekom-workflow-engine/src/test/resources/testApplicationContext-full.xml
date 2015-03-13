@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <import resource="workflow-engine-configuration.xml" />
+  <import resource="workflow-engine-jta.xml" />
+  <import resource="workflow-engine-jdbc.xml" />
+  <import resource="workflow-engine-components.xml" />
+  <import resource="workflow-engine-jmx.xml"/>
+  <import resource="workflow-engine-aop.xml" />
+
+  <bean id="configuration" class="org.apache.commons.configuration.PropertiesConfiguration">
+    <constructor-arg value="application.properties" />
+  </bean>
+
+  <!-- mocks -->
+  <bean id="plugin" class="ee.telekom.workflow.executor.plugin.MockPlugin" />
+
+</beans>

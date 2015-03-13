@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="true" scan="true" scanPeriod="10 seconds">
+
+  <property name="logs.dir.resolved" value="${logs.dir:-/home/webapp/log}" />
+  <property name="log.file.resolved" value="${log.file:-workflow_example.log}" />
+  <property name="log.level.resolved" value="${log.level:-DEBUG}" />
+
+  <appender name="MAIN_SYNC" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${logs.dir.resolved}/${log.file.resolved}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${logs.dir.resolved}/${log.file.resolved}.%d{yyyy-MM-dd}</fileNamePattern>
+      <maxHistory>${logs.maxhistory:-7}</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{HH:mm:ss.SSS}||%-5level|%logger{40}|%X{workunit}%X{requestmdc}|%msg|%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="MAIN" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="MAIN_SYNC" />
+    <queueSize>500</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+  </appender>
+
+  <logger name="ee.telekom.workflow" level="${log.level.resolved}" />
+  <logger name="ee.telekom.workflow.util.AdvancedBeanRowMapper" level="INFO" />
+  <logger name="org.springframework" level="WARN" />
+  <logger name="org.apache.tomcat.jdbc" level="WARN" />
+  <logger name="com.hazelcast" level="INFO" />
+  <logger name="liquibase" level="INFO" />
+
+  <root level="WARN">
+    <appender-ref ref="MAIN" />
+  </root>
+
+</configuration>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+  <!-- This configuration file provides a basic deployment configuration, you MOST probably want to override it with your own database connection and pool settings -->
+
+  <bean id="workflowengineDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+    <property name="driverClassName" value="${database.workflowengine.driver:org.postgresql.Driver}" />
+    <property name="url" value="${database.workflowengine.url}" />
+    <property name="username" value="${database.workflowengine.username}" />
+    <property name="password" value="${database.workflowengine.password}" />
+    <property name="initialSize" value="0" />
+    <property name="minIdle" value="0" />
+    <property name="maxActive" value="10" />
+    <property name="maxIdle" value="10" />
+    <property name="maxWait" value="5000" />
+    <property name="maxAge" value="3600000" />
+    <property name="logAbandoned" value="true" />
+    <property name="suspectTimeout" value="60" />    
+    <property name="logValidationErrors" value="true" />
+    <property name="fairQueue" value="true" />
+    <property name="timeBetweenEvictionRunsMillis" value="10000" />
+    <property name="minEvictableIdleTimeMillis" value="600000" />
+    <property name="removeAbandoned" value="true" />
+    <property name="removeAbandonedTimeout" value="600000" />
+    <property name="abandonWhenPercentageFull" value="75" />
+    <property name="jmxEnabled" value="false" />
+    <property name="validationInterval" value="5000" />
+    <property name="testWhileIdle" value="true" />
+    <property name="testOnBorrow" value="true" />
+    <property name="testOnReturn" value="true" />
+    <property name="validationQuery" value="SELECT 1" />
+    <property name="defaultTransactionIsolation" value="2" />
+  </bean>
+
+  <bean class="liquibase.integration.spring.SpringLiquibase">
+    <property name="dataSource" ref="workflowengineDataSource" />
+    <property name="defaultSchema" value="engine" />
+    <property name="changeLog" value="classpath:changelog/db-changelog.xml" />
+  </bean>
+
+</beans>

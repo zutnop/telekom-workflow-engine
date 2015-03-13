@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<taglib version="2.0"
+        xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        >
+  <tlib-version>1.0</tlib-version>
+  <short-name>telekom</short-name>
+  <uri>http://telekom.ee/tags/workflow</uri>
+  <tag-file>
+    <name>menu</name>
+    <path>/META-INF/tags/menu.tag</path>
+  </tag-file>
+  <tag-file>
+    <name>adminAccess</name>
+    <path>/META-INF/tags/adminAccess.tag</path>
+  </tag-file>
+</taglib>

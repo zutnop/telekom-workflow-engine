@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <!-- 
+  The Spring application context file for plugins. The context is started when the engine starts and closed when it shuts down. It is used to: 
+  * resolve beans by name during call and callAsync executions,
+  * find listeners to engine events,
+  * find workflow definitions.
+  -->
+
+  <context:component-scan base-package="ee.telekom.workflow.example.service" />
+  <context:component-scan base-package="ee.telekom.workflow.example.listener" />
+  <context:component-scan base-package="ee.telekom.workflow.example.definition" />
+
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="properties">
+      <bean class="org.springmodules.commons.configuration.CommonsConfigurationFactoryBean">
+        <property name="configurations">
+          <list>
+            <bean class="org.apache.commons.configuration.SystemConfiguration" />
+            <ref bean="configuration" />
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+</beans>

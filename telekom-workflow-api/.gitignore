@@ -1,0 +1,9 @@
+# Eclipse
+.classpath
+.project
+.settings/
+target/
+.DS_Store
+
+# IntelliJ
+*.iml

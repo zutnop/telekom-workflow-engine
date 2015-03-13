@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+  <!-- This security feature has to be enabled here, won't work if moved to workflow-console-security-context.xml -->
+  <sec:global-method-security pre-post-annotations="enabled"/>
+  <context:component-scan base-package="ee.telekom.workflow.web" />
+
+  <mvc:annotation-driven />
+  <mvc:default-servlet-handler />
+  <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
+  <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
+  <mvc:resources mapping="/images/**" location="/images/, /WEB-INF/images/" />
+
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" p:contentType="text/html;charset=UTF-8"
+        p:order="1" p:exposedContextBeanNames="configuration"/>
+
+  <bean class="ee.telekom.workflow.web.LoggingHandlerExceptionResolver">
+    <property name="defaultErrorView" value="error" />
+  </bean>
+
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basename" value="classpath:workflow_engine_messages" />
+    <property name="defaultEncoding" value="UTF-8" />
+  </bean>
+
+</beans>

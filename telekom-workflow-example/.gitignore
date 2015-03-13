@@ -1,0 +1,12 @@
+conf/profile.properties
+
+# Eclipse
+.classpath
+.project
+.settings/
+target/
+runtime/
+.DS_Store
+
+# IntelliJ
+*.iml

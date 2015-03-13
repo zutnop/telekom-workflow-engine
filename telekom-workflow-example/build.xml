@@ -1,0 +1,103 @@
+<project name="root" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant" xmlns:ac="antlib:net.sf.antcontrib">
+
+  <description>An ANT build file to setup and start an "embedded" Tomcat 8 instance for running the workflow-example module in a development environment.</description>
+  
+  <property name="root.dir" location="${basedir}" />
+
+  <target name="initAntClasspath">
+    <artifact:dependencies pathId="ant.lib.path">
+      <dependency groupId="ant-contrib" artifactId="ant-contrib" version="1.0b3" type="jar" />
+      <dependency groupId="org.tigris.antelope" artifactId="antelopetasks" version="3.2.10" type="jar" />
+    </artifact:dependencies>
+  </target>
+
+  <target name="init" depends="initAntClasspath">
+    <taskdef resource="net/sf/antcontrib/antlib.xml" uri="antlib:net.sf.antcontrib" classpathref="ant.lib.path" />
+    <taskdef resource="ise/antelope/tasks/antlib.xml" uri="antlib:ise.antelope.tasks" classpathref="ant.lib.path" />
+    <property file="conf/profile.properties" />
+    <property file="conf/default/default.properties" />
+    <property name="tomcat.home" location="runtime/tomcat" />
+
+    <presetdef name="fastget">
+      <get usetimestamp="true" verbose="true" />
+    </presetdef>
+  </target>
+
+  <target name="installTomcat" depends="init">
+    <mkdir dir="runtime/tomcat" />
+    <mkdir dir="target/downloads" />
+
+    <fastget src="http://archive.apache.org/dist/tomcat/tomcat-8/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip" dest="target/downloads/tomcat.zip" />
+    <sync todir="${tomcat.home}">
+      <mappedresources>
+        <zipfileset src="target/downloads/tomcat.zip">
+          <exclude name="*/webapps/**" />
+        </zipfileset>
+        <cutdirsmapper dirs="1" />
+      </mappedresources>
+    </sync>
+    <copy file="conf/default/server.xml" todir="${tomcat.home}/conf" overwrite="true" />
+  </target>
+
+  <target name="setup" depends="installTomcat" description="Downloads and sets up the embedded Tomcat 8 folder." />
+
+  <target name="start" depends="init" description="Starts the embedded Tomcat 8 instance and runs the target/workflow-example/ webapp.">
+    <property name="web.build.war.dir" location="${basedir}/target/workflow-example" />
+    <echo file="${tomcat.home}/conf/Catalina/localhost/ROOT.xml">&lt;?xml version="1.0" encoding="UTF-8"?>&lt;Context
+      docBase="${web.build.war.dir}" privileged="true" antiResourceLocking="false" /></echo>
+
+    <local name="start.jrebel.params" />
+    <local name="start.jpda.params" />
+    <local name="start.other.params" />
+    <local name="logback.configuration.file" />
+
+    <ac:if>
+      <istrue value="${tomcat.cleanSessionsOnStartup}" />
+      <then>
+        <delete dir="${tomcat.home}/work" />
+        <delete dir="${tomcat.home}/temp" />
+        <mkdir dir="${tomcat.home}/work" />
+        <mkdir dir="${tomcat.home}/temp" />
+      </then>
+    </ac:if>
+
+    <property name="logs.dir" location="${tomcat.home}/logs" />
+    <property name="start.other.params" value="-Duser.country=en -Duser.language=en -Duser.variant= -Dlogs.dir=${logs.dir} -Dtomcat.shutdown.port=${tomcat.shutdown.port} -Dtomcat.http.port=${tomcat.http.port}" />
+
+    <ac:if>
+      <istrue value="${jrebel.enabled}" />
+      <then>
+        <property name="start.jrebel.params" value="${jrebel.params}" />
+      </then>
+    </ac:if>
+    <ac:if>
+      <istrue value="${jpda.enabled}" />
+      <then>
+        <property name="start.jpda.params" value="${jpda.params}" />
+      </then>
+    </ac:if>
+
+    <property name="start.jrebel.params" value="" />
+    <property name="start.jpda.params" value="" />
+
+    <property name="start.javaopts" value="-Dlogback.debug=true ${start.other.params} ${start.jpda.params} ${start.jrebel.params} ${memory.options}" />
+    <echo>Using JAVA_OPTS: ${start.javaopts}</echo>
+    <exec dir="${tomcat.home}/bin" executable="cmd" osfamily="windows">
+      <env key="CATALINA_BASE" value="${tomcat.home}" />
+      <env key="JAVA_OPTS" value="${start.javaopts}" />
+      <arg line='/c "catalina.bat run"' />
+    </exec>
+    <exec dir="${tomcat.home}/bin" executable="${tomcat.home}/bin/startup.sh" os="Linux">
+      <env key="CATALINA_BASE" value="${tomcat.home}" />
+      <env key="JAVA_OPTS" value="${start.javaopts}" />
+    </exec>
+  </target>
+
+  <target name="stop" depends="init" description="Stops the embedded Tomcat 8 instance.">
+    <exec dir="${tomcat.home}/bin" executable="cmd" osfamily="windows">
+      <env key="JAVA_OPTS" value="-Dtomcat.shutdown.port=${tomcat.shutdown.port} -Dtomcat.http.port=${tomcat.http.port}" />
+      <arg line="/c shutdown.bat" />
+    </exec>
+  </target>
+
+</project>

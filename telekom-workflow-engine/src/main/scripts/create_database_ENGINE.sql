@@ -1,0 +1,6 @@
+CREATE DATABASE workflowengine;
+
+CREATE USER engine WITH PASSWORD 'engine';
+GRANT ALL PRIVILEGES ON DATABASE workflowengine TO engine;
+
+CREATE SCHEMA engine AUTHORIZATION engine;
