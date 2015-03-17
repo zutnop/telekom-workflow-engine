@@ -25,7 +25,7 @@ It was decided to build a lightweight embeddable workflow engine that meets our 
 # Technical vision
 ### Engine overview
 The engine implementation can be divided into three main parts:
-* core - provides the runtime environment for workflow execution (based on graph oriented programming) together with all the supporting services (clustering, persistence, error handline etc.)
+* core - provides the runtime environment for workflow execution (based on graph oriented programming) together with all the supporting services (clustering, persistence, error handling etc.)
 * API - interface (DSL) for writing your workflow definitions and plugins, more info in "Workflow implementations" paragraph
 * web - web console, REST services and JMX interface for monitoring and interacting with the running engine
 
