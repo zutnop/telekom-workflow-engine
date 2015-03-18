@@ -62,9 +62,9 @@
     </dependency>
 
     <dependency>
-      <groupId>postgresql</groupId>
+      <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>9.3-1102.jdbc41</version>
+      <version>9.4-1201-jdbc41</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
