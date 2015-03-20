@@ -43,15 +43,25 @@
 
   <dependencies>
     <dependency>
-      <groupId>ee.telekom.workflow</groupId>
-      <artifactId>workflow-web</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <version>1.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ee.telekom.workflow</groupId>
+      <artifactId>workflow-api</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ee.telekom.workflow</groupId>
+      <artifactId>workflow-web</artifactId>
+      <version>${project.version}</version>
+      <!-- Normally you would want to have only a runtime dependency on the web module, because you are only supposed to write code against the workflow-api interfaces. 
+      But as we don't want to import all the Spring and related dependencys again here in this pom, then we just fully depend on the workflow-web module to provide is with those dependencies -->
+      <!-- <scope>runtime</scope> -->
     </dependency>
 
     <dependency>
