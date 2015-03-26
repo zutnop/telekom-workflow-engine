@@ -13,13 +13,13 @@
 			</c:when>
 			<c:when test="${not empty form.refNum}">
 				<div class="message success">
-					<c:url value="/console/workflow/instances/${form.refNum}" var="url"/>
+					<c:url value="${urlPrefix}/console/workflow/instances/${form.refNum}" var="url"/>
 					<spring:message code="workflow.create.single.success" />&nbsp;<a href="${url}"><c:out value="${form.refNum}"/></a>
 				</div>
 			</c:when>
 			<c:when test="${not empty batchForm.refNums}" >
 				<div class="message success">
-					<spring:message code="workflow.create.batch.success" />&nbsp;<c:forEach items="${batchForm.refNums}" var="refNum" varStatus="status"><c:url value="/console/workflow/instances/${refNum}" var="url"/><c:if test="${!status.first}">, </c:if><a href="${url}"><c:out value="${refNum}"/></a></c:forEach>
+					<spring:message code="workflow.create.batch.success" />&nbsp;<c:forEach items="${batchForm.refNums}" var="refNum" varStatus="status"><c:url value="${urlPrefix}/console/workflow/instances/${refNum}" var="url"/><c:if test="${!status.first}">, </c:if><a href="${url}"><c:out value="${refNum}"/></a></c:forEach>
 				</div>
 			</c:when>
 		</c:choose>

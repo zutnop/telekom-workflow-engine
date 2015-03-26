@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ee.telekom.workflow.core.common.UnexpectedStatusException;
+import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.facade.model.WorkItemState;
@@ -30,6 +31,8 @@ import ee.telekom.workflow.web.console.model.WorkflowInstanceStateModel;
 @RequestMapping("/console")
 public class WorkflowInstanceDetailsController{
 
+    @Autowired
+    private WorkflowEngineConfiguration configuration;
     @Autowired
     private WorkflowEngineFacade facade;
 
@@ -85,7 +88,7 @@ public class WorkflowInstanceDetailsController{
             model.addFlashAttribute( "unknownAction", action );
             model.addFlashAttribute( "errorMessage", "workflow.instance.action.error.unknownaction" );
         }
-        return "redirect:/console/workflow/instances/" + woinRefNum;
+        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + woinRefNum;
     }
 
     private List<WorkItemStateModel> createModels( List<WorkItemState> woits ){

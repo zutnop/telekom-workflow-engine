@@ -19,14 +19,14 @@
                 <c:forEach items="${workflows}" var="workflow">
                     <tr>
                         <td>
-                            <c:url value="/console/workflow/instances" var="workflowUrl">
+                            <c:url value="${urlPrefix}/console/workflow/instances" var="workflowUrl">
                                 <c:param name="workflowName" value="${workflow.key}" />
                             </c:url>
                             <a href="${workflowUrl}"><c:out value="${workflow.key}" /></a>
                         </td>
                         <c:forEach items="${statuses}" var="status">
                             <td>
-                                <c:url value="/console/workflow/instances" var="workflowStatusUrl">
+                                <c:url value="${urlPrefix}/console/workflow/instances" var="workflowStatusUrl">
                                     <c:param name="workflowName" value="${workflow.key}" />
                                     <c:param name="status" value="${status}" />
                                 </c:url>
