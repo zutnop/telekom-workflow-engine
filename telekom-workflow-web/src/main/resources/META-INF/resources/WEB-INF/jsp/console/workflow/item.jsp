@@ -33,7 +33,7 @@
 					</c:if>
            			<p><spring:message code="workflow.item.description.${workItem.type}"/></p>
            			<workflow-ui:adminAccess>
-	           			<c:url value="/console/workflow/instances/${workItem.woinRefNum}" var="url"/>
+	           			<c:url value="${urlPrefix}/console/workflow/instances/${workItem.woinRefNum}" var="url"/>
 	           			<a href="${url}" class="btn-01"><spring:message code="workflow.item.cancel"/></a>
 						<button><spring:message code="workflow.item.action.${workItem.type}"/></button>
 					</workflow-ui:adminAccess>

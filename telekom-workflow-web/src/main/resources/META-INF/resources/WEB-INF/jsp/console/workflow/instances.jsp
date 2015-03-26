@@ -82,7 +82,7 @@
                         </tbody>
                     </table>
 
-                    <c:url value="/console/workflow/instances/" var="urlPrefix" />
+                    <c:url value="${urlPrefix}/console/workflow/instances/" var="urlPrefix" />
                     <form method="post" action="${urlPrefix}action" id="actionForm">
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="refNums" />

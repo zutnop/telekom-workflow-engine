@@ -51,6 +51,8 @@ public class WorkflowEngineConfiguration{
     private String pluginApplicationContextFile;
     @Value("${workflowengine.developmentMode}")
     private boolean developmentMode;
+    @Value("${workflowengine.console.mapping.prefix}")
+    private String consoleMappingPrefix;
 
     @PostConstruct
     public void init(){
@@ -166,6 +168,10 @@ public class WorkflowEngineConfiguration{
      */
     public boolean isDevelopmentMode(){
         return developmentMode;
+    }
+
+    public String getConsoleMappingPrefix() {
+        return consoleMappingPrefix != null ? consoleMappingPrefix : "";
     }
 
     private String getFirstNotEmpty( String configValue, String defaultValue ){

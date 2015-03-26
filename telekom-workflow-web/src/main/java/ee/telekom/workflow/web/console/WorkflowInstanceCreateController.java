@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
 
+import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.facade.model.CreateWorkflowInstance;
 import ee.telekom.workflow.util.JsonUtil;
@@ -39,6 +40,8 @@ public class WorkflowInstanceCreateController{
     private static final Logger log = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
     private static final Gson gson = new Gson();
 
+    @Autowired
+    private WorkflowEngineConfiguration configuration;
     @Autowired
     private WorkflowEngineFacade facade;
 
@@ -89,7 +92,7 @@ public class WorkflowInstanceCreateController{
                 log.error( e.getMessage(), e );
             }
         }
-        return "redirect:/console/workflow/create";
+        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -135,7 +138,7 @@ public class WorkflowInstanceCreateController{
             }
         }
 
-        return "redirect:/console/workflow/create";
+        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
     }
 
     private List<Long> getRefNums( CreateWorkflowInstance[] requests ){

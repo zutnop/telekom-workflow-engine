@@ -127,7 +127,7 @@
 				                            <td>
 				                            	<c:choose>
 				                            		<c:when test="${wi.status == 'NEW' && (wi.type != 'TIMER' || wi.dueDateInFuture)}">
-				                            			<c:url value="/console/workflow/instances/${workflowInstance.refNum}/item/${wi.refNum}" var="url" />
+				                            			<c:url value="${urlPrefix}/console/workflow/instances/${workflowInstance.refNum}/item/${wi.refNum}" var="url" />
 				                            			<a href="${url}"><spring:message code="workflow.instance.workitem.action.${wi.type}"/></a>
 				                            		</c:when>
 				                            		<c:otherwise>&nbsp;</c:otherwise>
@@ -212,7 +212,7 @@
 		</c:if>
     </div>
 
-	<c:url value="/console/workflow/instances/${workflowInstance.refNum}" var="url" />
+	<c:url value="${urlPrefix}/console/workflow/instances/${workflowInstance.refNum}" var="url" />
 	<form method="post" action="${url}" id="form">
  		<input type="hidden" name="action" id="action"/>
 	</form>

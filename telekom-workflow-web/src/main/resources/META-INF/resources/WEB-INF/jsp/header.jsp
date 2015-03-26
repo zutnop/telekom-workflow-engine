@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ include file="/WEB-INF/jsp/init.jsp" %>
-<c:url value="/css/main.css" var="mainCssUrl" />
-<c:url value="/images/favicon.ico" var="faviconUrl" />
-<c:url value="/js/jquery-1.11.1.min.js" var="jQueryUrl" />
-<c:url value="/js/jquery.dataTables.js" var="dataTablesUrl" />
+<c:set var="urlPrefix" value="${configuration.getProperty('workflowengine.console.mapping.prefix')}" scope="request"/>
+<c:url value="${urlPrefix}/css/main.css" var="mainCssUrl" />
+<c:url value="${urlPrefix}/images/favicon.ico" var="faviconUrl" />
+<c:url value="${urlPrefix}/js/jquery-1.11.1.min.js" var="jQueryUrl" />
+<c:url value="${urlPrefix}/js/jquery.dataTables.js" var="dataTablesUrl" />
 
 <html>
 <head>
@@ -24,7 +25,7 @@
 <div id="wrap">
     <div id="header">
         <div class="inner clear">
-            <p id="logo"><a href="/console"><spring:message code="header.logo" /></a></p>
+            <p id="logo"><a href="<c:url value='${urlPrefix}/console' />"><spring:message code="header.logo" /></a></p>
             <c:set var="environmentName" value="${configuration.getProperty('workflowengine.environment')}"/>
             <p id="portal"><spring:message code="header.name" /><c:if test="${not empty environmentName}">&nbsp;${environmentName}</c:if></p>
             <c:if test="${not empty sessionScope['SPRING_SECURITY_CONTEXT']}">
@@ -32,7 +33,7 @@
                     <div id="user">
                         <ul>
                             <li><strong>${sessionScope['SPRING_SECURITY_CONTEXT'].authentication.principal}</strong></li>
-                            <li><a href="<c:url value='/processlogout' />"><spring:message code="header.logout" /></a></li>
+                            <li><a href="<c:url value='${urlPrefix}/processlogout' />"><spring:message code="header.logout" /></a></li>
                         </ul>
                     </div>
                 </div>

@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ee.telekom.workflow.core.common.UnexpectedStatusException;
+import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.facade.model.WorkflowInstanceFacadeStatus;
@@ -48,6 +49,8 @@ import ee.telekom.workflow.web.console.model.WorkflowInstanceSearchModel;
 @SessionAttributes("instanceSearchForm")
 public class WorkflowInstancesListController{
 
+    @Autowired
+    private WorkflowEngineConfiguration configuration;
     @Autowired
     private WorkflowEngineFacade facade;
     @Autowired
@@ -142,7 +145,7 @@ public class WorkflowInstancesListController{
     @RequestMapping(value = "/workflow/instances", method = RequestMethod.POST)
     public String searchInstancesAction( @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form, RedirectAttributes model ){
         model.addFlashAttribute( "instanceSearchForm", form );
-        return "redirect:/console/workflow/instances";
+        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -183,7 +186,7 @@ public class WorkflowInstancesListController{
                 break;
 
         }
-        return "redirect:/console/workflow/instances";
+        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances";
     }
 
     private void invokeAction( List<Long> refNums, RedirectAttributes model, WorkflowInstanceActionInvoker handler ){

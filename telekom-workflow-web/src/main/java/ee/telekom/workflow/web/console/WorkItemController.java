@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ee.telekom.workflow.core.common.UnexpectedStatusException;
+import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.facade.model.WorkItemState;
 import ee.telekom.workflow.util.JsonUtil;
@@ -30,6 +31,8 @@ public class WorkItemController{
 
     private static final Logger log = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
+    @Autowired
+    private WorkflowEngineConfiguration configuration;
     @Autowired
     private WorkflowEngineFacade facade;
 
@@ -73,7 +76,7 @@ public class WorkItemController{
             catch( UnexpectedStatusException e ){
                 log.info( e.getMessage(), e );
                 model.addFlashAttribute( "errorMessage", "workflow.item.error.status" );
-                return "redirect:/console/workflow/instances/" + workItem.getWoinRefNum();
+                return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum();
             }
             catch( Exception e ){
                 log.warn( "Unable to perform action on work item " + woitRefNum, e );
@@ -85,11 +88,11 @@ public class WorkItemController{
         if( result.hasErrors() || model.getFlashAttributes().containsKey( "error" ) ){
             model.addFlashAttribute( "form", form );
             model.addFlashAttribute( "org.springframework.validation.BindingResult.form", result );
-            return "redirect:/console/workflow/instances/" + workItem.getWoinRefNum() + "/item/" + workItem.getRefNum();
+            return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum() + "/item/" + workItem.getRefNum();
         }
         else{
             model.addFlashAttribute( "successMessage", "workflow.item.success." + workItem.getType() );
-            return "redirect:/console/workflow/instances/" + workItem.getWoinRefNum();
+            return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum();
         }
     }
 
