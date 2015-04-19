@@ -43,7 +43,7 @@ This achieves:
 ### Performance
 The engine is built to provide high throughput and supports scalability in both dimensions:
 * vertical - faster CPU, more memory, increase the engine thread pool size to support more concurrency
-* horizontal - clustering and its dynamic management based on the Hazelcast framework; adding and removing claster nodes does not distract the engine's work; the self-healing mechanism finds the dead nodes and redistributes it's pending work
+* horizontal - clustering and its dynamic management based on the Hazelcast framework; adding and removing cluster nodes does not distract the engine's work; the self-healing mechanism finds the dead nodes and redistributes it's pending work
 
 ### Monitoring/management
 The workflow engine publishes a web console, REST services and JMX interface for monitoring and interacting with the running engine. These services provide the following functionality:
