@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ include file="header.jsp" %>
-<c:url value="/processlogin" var="loginUrl" />
+<c:url value="${urlPrefix}/processlogin" var="loginUrl" />
 
 <div class="grid-box">
     <h1><spring:message code="login.title" /></h1>
