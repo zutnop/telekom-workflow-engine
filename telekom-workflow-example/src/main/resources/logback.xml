@@ -24,7 +24,7 @@
   </appender>
 
   <logger name="ee.telekom.workflow" level="${log.level.resolved}" />
-  <logger name="ee.telekom.workflow.util.AdvancedBeanRowMapper" level="INFO" />
+  <logger name="ee.telekom.workflow.util.StatisticsLoggingAspect" level="INFO" />
   <logger name="org.springframework" level="WARN" />
   <logger name="org.apache.tomcat.jdbc" level="WARN" />
   <logger name="com.hazelcast" level="INFO" />
