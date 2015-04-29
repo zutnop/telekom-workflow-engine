@@ -30,4 +30,8 @@ public class AbstractWorkflowEngineDao extends AbstractDao{
         return getJdbcTemplate().queryForLong( "SELECT nextval('" + sequence + "')" );
     }
 
+    protected String getSchema() {
+        return config.getSchema();
+    }
+
 }

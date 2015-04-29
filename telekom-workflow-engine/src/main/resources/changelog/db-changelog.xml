@@ -2,12 +2,13 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="workflow-engine-2014.08.14.1" author="Christian Klock">
+  <changeSet id="workflow-engine-2014.08.14.1" author="Christian Klock" dbms="postgresql">
+    <validCheckSum>7:5a0cc544406b4db4de48bcf562f5d8f0</validCheckSum>
     <sql>
       <![CDATA[
-        CREATE SEQUENCE NODE_REF_NUM_S MINVALUE 1 MAXVALUE 9223372036854775807 INCREMENT BY 1 START WITH 1;
-        
-        CREATE TABLE NODES
+        CREATE SEQUENCE ${schemaName}.NODE_REF_NUM_S MINVALUE 1 MAXVALUE 9223372036854775807 INCREMENT BY 1 START WITH 1;
+
+        CREATE TABLE ${schemaName}.NODES
         (
           REF_NUM      BIGINT NOT NULL,
           NODE_NAME    VARCHAR(100) NOT NULL,
@@ -16,21 +17,21 @@
           HEARTBEAT    TIMESTAMP    NOT NULL,
           CONSTRAINT NODE_PK PRIMARY KEY (REF_NUM),
           UNIQUE (NODE_NAME),
-          UNIQUE (CLUSTER_NAME, NODE_NAME) 
+          UNIQUE (CLUSTER_NAME, NODE_NAME)
         );
-        
-        COMMENT ON COLUMN NODES.REF_NUM IS 'Record sequence number (NODE_REF_NUM_S)';
-        COMMENT ON COLUMN NODES.NODE_NAME IS 'Node''s name';
-        COMMENT ON COLUMN NODES.CLUSTER_NAME IS 'Node''s cluster name';
-        COMMENT ON COLUMN NODES.STATUS IS 'Node''s execution status';
-        COMMENT ON COLUMN NODES.HEARTBEAT IS 'Node''s last heartbeat time';
-            
+
+        COMMENT ON COLUMN ${schemaName}.NODES.REF_NUM IS 'Record sequence number (NODE_REF_NUM_S)';
+        COMMENT ON COLUMN ${schemaName}.NODES.NODE_NAME IS 'Node''s name';
+        COMMENT ON COLUMN ${schemaName}.NODES.CLUSTER_NAME IS 'Node''s cluster name';
+        COMMENT ON COLUMN ${schemaName}.NODES.STATUS IS 'Node''s execution status';
+        COMMENT ON COLUMN ${schemaName}.NODES.HEARTBEAT IS 'Node''s last heartbeat time';
+
         --------------------------------------------------------
         --------------------------------------------------------
-        
-        CREATE SEQUENCE WOIN_REF_NUM_S INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
-        
-        CREATE TABLE WORKFLOW_INSTANCES
+
+        CREATE SEQUENCE ${schemaName}.WOIN_REF_NUM_S INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+        CREATE TABLE ${schemaName}.WORKFLOW_INSTANCES
         (
           REF_NUM               BIGINT  NOT NULL,
           WORKFLOW_NAME         TEXT NOT NULL,
@@ -49,32 +50,32 @@
           DATE_UPDATED          TIMESTAMP,
           LAST_UPDATED_BY       VARCHAR(30),
           CONSTRAINT WOIN_PK PRIMARY KEY (REF_NUM),
-          CONSTRAINT WOIN_FK1 FOREIGN KEY (NODE_NAME) REFERENCES NODES (NODE_NAME)
+          CONSTRAINT WOIN_FK1 FOREIGN KEY (NODE_NAME) REFERENCES ${schemaName}.NODES (NODE_NAME)
         );
-        
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.REF_NUM IS 'Record sequence number (WOIN_REF_NUM_S)';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.WORKFLOW_NAME IS 'To be executed workflow''s name';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.WORKFLOW_VERSION IS 'To be executed workflow''s version';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.ATTRIBUTES IS 'JSON encoded instance environment';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.STATE IS 'JSON encoded instance execution state';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.HISTORY IS 'The instance''s xecution history';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.LABEL1 IS 'Label to query workflow instances';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.LABEL2 IS 'Another label to query workflow instances';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.CLUSTER_NAME IS 'Responsible cluster''s name';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.NODE_NAME IS 'Responsible node''s node in cluster';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.LOCKED IS 'Execution lock';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.STATUS IS 'Instance execution status';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.DATE_CREATED IS 'Record creation time';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.CREATED_BY IS 'Record creator';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.DATE_UPDATED IS 'Record last update time';
-        COMMENT ON COLUMN WORKFLOW_INSTANCES.LAST_UPDATED_BY IS 'Record last updator';
-        
+
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.REF_NUM IS 'Record sequence number (WOIN_REF_NUM_S)';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.WORKFLOW_NAME IS 'To be executed workflow''s name';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.WORKFLOW_VERSION IS 'To be executed workflow''s version';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.ATTRIBUTES IS 'JSON encoded instance environment';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.STATE IS 'JSON encoded instance execution state';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.HISTORY IS 'The instance''s xecution history';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.LABEL1 IS 'Label to query workflow instances';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.LABEL2 IS 'Another label to query workflow instances';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.CLUSTER_NAME IS 'Responsible cluster''s name';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.NODE_NAME IS 'Responsible node''s node in cluster';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.LOCKED IS 'Execution lock';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.STATUS IS 'Instance execution status';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.DATE_CREATED IS 'Record creation time';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.CREATED_BY IS 'Record creator';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.DATE_UPDATED IS 'Record last update time';
+        COMMENT ON COLUMN ${schemaName}.WORKFLOW_INSTANCES.LAST_UPDATED_BY IS 'Record last updator';
+
         --------------------------------------------------------
         --------------------------------------------------------
-        
-        CREATE SEQUENCE WOIT_REF_NUM_S INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
-        
-        CREATE TABLE WORK_ITEMS
+
+        CREATE SEQUENCE ${schemaName}.WOIT_REF_NUM_S INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+        CREATE TABLE ${schemaName}.WORK_ITEMS
         (
           REF_NUM               BIGINT NOT NULL,
           WOIN_REF_NUM          BIGINT NOT NULL,
@@ -93,32 +94,32 @@
           DATE_UPDATED          TIMESTAMP,
           LAST_UPDATED_BY       VARCHAR(30),
           CONSTRAINT WOIT_PK PRIMARY KEY (REF_NUM),
-          CONSTRAINT WOIT_FK1 FOREIGN KEY (WOIN_REF_NUM) REFERENCES WORKFLOW_INSTANCES (REF_NUM)
+          CONSTRAINT WOIT_FK1 FOREIGN KEY (WOIN_REF_NUM) REFERENCES ${schemaName}.WORKFLOW_INSTANCES (REF_NUM)
         );
-        
-        COMMENT ON COLUMN WORK_ITEMS.REF_NUM IS 'Record sequence number (WOIT_REF_NUM_S)';
-        COMMENT ON COLUMN WORK_ITEMS.WOIN_REF_NUM IS 'Reference to workflow instance';
-        COMMENT ON COLUMN WORK_ITEMS.TOKEN_ID IS 'Reference to token id';
-        COMMENT ON COLUMN WORK_ITEMS.STATUS IS 'Item execution status';
-        COMMENT ON COLUMN WORK_ITEMS.SIGNAL IS 'Signal name';
-        COMMENT ON COLUMN WORK_ITEMS.DUE_DATE IS 'Timer due date';
-        COMMENT ON COLUMN WORK_ITEMS.BEAN IS 'Task''s bean name';
-        COMMENT ON COLUMN WORK_ITEMS.METHOD IS 'Task''s method name';
-        COMMENT ON COLUMN WORK_ITEMS.ROLE IS 'Human task''s assignable role name';
-        COMMENT ON COLUMN WORK_ITEMS.USER_NAME IS 'Human tasks''s assignable user name';
-        COMMENT ON COLUMN WORK_ITEMS.ARGUMENTS IS 'JSON encoded task or human task execution arguments';
-        COMMENT ON COLUMN WORK_ITEMS.RESULT IS 'JSON encoded task, human task or signal result';
-        COMMENT ON COLUMN WORK_ITEMS.DATE_CREATED IS 'Record creation time';
-        COMMENT ON COLUMN WORK_ITEMS.CREATED_BY IS 'Record creator';
-        COMMENT ON COLUMN WORK_ITEMS.DATE_UPDATED IS 'Record last update time';
-        COMMENT ON COLUMN WORK_ITEMS.LAST_UPDATED_BY IS 'Record last updator';
+
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.REF_NUM IS 'Record sequence number (WOIT_REF_NUM_S)';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.WOIN_REF_NUM IS 'Reference to workflow instance';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.TOKEN_ID IS 'Reference to token id';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.STATUS IS 'Item execution status';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.SIGNAL IS 'Signal name';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.DUE_DATE IS 'Timer due date';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.BEAN IS 'Task''s bean name';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.METHOD IS 'Task''s method name';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.ROLE IS 'Human task''s assignable role name';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.USER_NAME IS 'Human tasks''s assignable user name';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.ARGUMENTS IS 'JSON encoded task or human task execution arguments';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.RESULT IS 'JSON encoded task, human task or signal result';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.DATE_CREATED IS 'Record creation time';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.CREATED_BY IS 'Record creator';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.DATE_UPDATED IS 'Record last update time';
+        COMMENT ON COLUMN ${schemaName}.WORK_ITEMS.LAST_UPDATED_BY IS 'Record last updator';
 
         --------------------------------------------------------
         --------------------------------------------------------
-        
-        CREATE SEQUENCE EXER_REF_NUM_S INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
-        
-        CREATE TABLE EXECUTION_ERRORS
+
+        CREATE SEQUENCE ${schemaName}.EXER_REF_NUM_S INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+
+        CREATE TABLE ${schemaName}.EXECUTION_ERRORS
         (
           REF_NUM        BIGINT NOT NULL,
           WOIN_REF_NUM   BIGINT NOT NULL,
@@ -128,69 +129,70 @@
           DATE_CREATED   TIMESTAMP   NOT NULL,
           CREATED_BY     VARCHAR(30) NOT NULL,
           CONSTRAINT EXER_PK PRIMARY KEY (REF_NUM),
-          CONSTRAINT EXER_FK1 FOREIGN KEY (WOIN_REF_NUM) REFERENCES WORKFLOW_INSTANCES (REF_NUM),
-          CONSTRAINT EXER_FK2 FOREIGN KEY (WOIT_REF_NUM) REFERENCES WORK_ITEMS (REF_NUM),
+          CONSTRAINT EXER_FK1 FOREIGN KEY (WOIN_REF_NUM) REFERENCES ${schemaName}.WORKFLOW_INSTANCES (REF_NUM),
+          CONSTRAINT EXER_FK2 FOREIGN KEY (WOIT_REF_NUM) REFERENCES ${schemaName}.WORK_ITEMS (REF_NUM),
           UNIQUE(WOIN_REF_NUM)
         );
-        
-        COMMENT ON COLUMN EXECUTION_ERRORS.REF_NUM IS 'Record sequence number (EXER_REF_NUM_S)';
-        COMMENT ON COLUMN EXECUTION_ERRORS.WOIN_REF_NUM IS 'Reference to workflow instance';
-        COMMENT ON COLUMN EXECUTION_ERRORS.WOIT_REF_NUM IS 'Reference to work item';
-        COMMENT ON COLUMN EXECUTION_ERRORS.ERROR_TEXT IS 'Error message';
-        COMMENT ON COLUMN EXECUTION_ERRORS.ERROR_DETAILS IS 'Error details (stacktrace)';
-        COMMENT ON COLUMN EXECUTION_ERRORS.DATE_CREATED IS 'Record creation time';
-        COMMENT ON COLUMN EXECUTION_ERRORS.CREATED_BY IS 'Record creator';
-        
+
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.REF_NUM IS 'Record sequence number (EXER_REF_NUM_S)';
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.WOIN_REF_NUM IS 'Reference to workflow instance';
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.WOIT_REF_NUM IS 'Reference to work item';
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.ERROR_TEXT IS 'Error message';
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.ERROR_DETAILS IS 'Error details (stacktrace)';
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.DATE_CREATED IS 'Record creation time';
+        COMMENT ON COLUMN ${schemaName}.EXECUTION_ERRORS.CREATED_BY IS 'Record creator';
+
         --------------------------------------------------------
         --------------------------------------------------------
-        
-        CREATE TABLE LOCKS
+
+        CREATE TABLE ${schemaName}.LOCKS
         (
           CLUSTER_NAME VARCHAR(20) NOT NULL,
           OWNER        VARCHAR(20),
           EXPIRE_TIME  TIMESTAMP,
           CONSTRAINT LOCK_PK PRIMARY KEY (CLUSTER_NAME),
-          CONSTRAINT LOCK_FK1 FOREIGN KEY (CLUSTER_NAME, OWNER) REFERENCES NODES (CLUSTER_NAME, NODE_NAME)
+          CONSTRAINT LOCK_FK1 FOREIGN KEY (CLUSTER_NAME, OWNER) REFERENCES ${schemaName}.NODES (CLUSTER_NAME, NODE_NAME)
         );
-        
-        COMMENT ON COLUMN LOCKS.CLUSTER_NAME IS 'The cluster''s name that this lock is working on';
-        COMMENT ON COLUMN LOCKS.OWNER IS 'Node''s name owning the lock';
-        COMMENT ON COLUMN LOCKS.EXPIRE_TIME IS 'Lock expiration time';
+
+        COMMENT ON COLUMN ${schemaName}.LOCKS.CLUSTER_NAME IS 'The cluster''s name that this lock is working on';
+        COMMENT ON COLUMN ${schemaName}.LOCKS.OWNER IS 'Node''s name owning the lock';
+        COMMENT ON COLUMN ${schemaName}.LOCKS.EXPIRE_TIME IS 'Lock expiration time';
     ]]>
     </sql>
   </changeSet>
 
-  <changeSet id="workflow-engine-2014.08.19.1" author="Christian Klock">
+  <changeSet id="workflow-engine-2014.08.19.1" author="Christian Klock" dbms="postgresql">
+    <validCheckSum>7:68f0a69b3256ec530fcfa02951faab21</validCheckSum>
     <sql>
       <![CDATA[
-        CREATE INDEX woin_idx1 ON workflow_instances (cluster_name) WHERE status = 'NEW' AND locked = 'N';
-        CREATE INDEX woin_idx2 ON workflow_instances (cluster_name) WHERE status = 'EXECUTING' AND locked = 'N';
-        CREATE INDEX woin_idx3 ON workflow_instances (cluster_name) WHERE status = 'ABORT' AND locked = 'N';
-  
-        CREATE INDEX woit_idx1 ON work_items (woin_ref_num);
-        CREATE INDEX woit_idx2 ON work_items (woin_ref_num) WHERE status = 'NEW' AND due_date IS NULL;
-        CREATE INDEX woit_idx3 ON work_items (woin_ref_num) WHERE status = 'NEW' AND due_date IS NOT NULL;
-        CREATE INDEX woit_idx4 ON work_items (woin_ref_num) WHERE status = 'NEW' AND bean IS NOT NULL;
+        CREATE INDEX woin_idx1 ON ${schemaName}.workflow_instances (cluster_name) WHERE status = 'NEW' AND locked = 'N';
+        CREATE INDEX woin_idx2 ON ${schemaName}.workflow_instances (cluster_name) WHERE status = 'EXECUTING' AND locked = 'N';
+        CREATE INDEX woin_idx3 ON ${schemaName}.workflow_instances (cluster_name) WHERE status = 'ABORT' AND locked = 'N';
+
+        CREATE INDEX woit_idx1 ON ${schemaName}.work_items (woin_ref_num);
+        CREATE INDEX woit_idx2 ON ${schemaName}.work_items (woin_ref_num) WHERE status = 'NEW' AND due_date IS NULL;
+        CREATE INDEX woit_idx3 ON ${schemaName}.work_items (woin_ref_num) WHERE status = 'NEW' AND due_date IS NOT NULL;
+        CREATE INDEX woit_idx4 ON ${schemaName}.work_items (woin_ref_num) WHERE status = 'NEW' AND bean IS NOT NULL;
       ]]>
     </sql>
-   <!-- 
+   <!--
     I also considered the following set of indexes but the index only queries do not seem to work as intended
-   
-    CREATE INDEX woin_idx1 ON workflow_instances (cluster_name, ref_num) WHERE status = 'NEW' AND locked = 'N';
-    CREATE INDEX woin_idx2 ON workflow_instances (cluster_name, ref_num) WHERE status = 'EXECUTING' AND locked = 'N';
-    CREATE INDEX woin_idx3 ON workflow_instances (cluster_name, ref_num) WHERE status = 'ABORT' AND locked = 'N';
-    
-    CREATE INDEX woit_idx1 ON work_items (woin_ref_num, date_updated, date_created) WHERE status = 'EXECUTED' AND due_date IS NULL;
-    CREATE INDEX woit_idx2 ON work_items (woin_ref_num, due_date) WHERE status = 'NEW' AND due_date IS NOT NULL;
-    CREATE INDEX woit_idx3 ON work_items (woin_ref_num, date_updated, date_created) WHERE status = 'NEW' AND bean IS NOT NULL;
+
+    CREATE INDEX woin_idx1 ON ${schemaName}.workflow_instances (cluster_name, ref_num) WHERE status = 'NEW' AND locked = 'N';
+    CREATE INDEX woin_idx2 ON ${schemaName}.workflow_instances (cluster_name, ref_num) WHERE status = 'EXECUTING' AND locked = 'N';
+    CREATE INDEX woin_idx3 ON ${schemaName}.workflow_instances (cluster_name, ref_num) WHERE status = 'ABORT' AND locked = 'N';
+
+    CREATE INDEX woit_idx1 ON ${schemaName}.work_items (woin_ref_num, date_updated, date_created) WHERE status = 'EXECUTED' AND due_date IS NULL;
+    CREATE INDEX woit_idx2 ON ${schemaName}.work_items (woin_ref_num, due_date) WHERE status = 'NEW' AND due_date IS NOT NULL;
+    CREATE INDEX woit_idx3 ON ${schemaName}.work_items (woin_ref_num, date_updated, date_created) WHERE status = 'NEW' AND bean IS NOT NULL;
     -->
   </changeSet>
 
-
-  <changeSet id="workflow-engine-2014.10.13.1" author="Christian Klock">
+  <changeSet id="workflow-engine-2014.10.13.1" author="Christian Klock" dbms="postgresql">
+    <validCheckSum>7:0a166b8ec23934c53bb525cbbb0669b5</validCheckSum>
     <sql>
       <![CDATA[
-        CREATE TABLE WORKFLOW_INSTANCES_ARCHIVE
+        CREATE TABLE ${schemaName}.WORKFLOW_INSTANCES_ARCHIVE
         (
           REF_NUM               BIGINT  NOT NULL,
           WORKFLOW_NAME         TEXT NOT NULL,
@@ -210,8 +212,8 @@
           LAST_UPDATED_BY       VARCHAR(30),
           CONSTRAINT WINA_PK PRIMARY KEY (REF_NUM)
         );
-        
-        CREATE TABLE WORK_ITEMS_ARCHIVE
+
+        CREATE TABLE ${schemaName}.WORK_ITEMS_ARCHIVE
         (
           REF_NUM               BIGINT NOT NULL,
           WOIN_REF_NUM          BIGINT NOT NULL,
@@ -230,15 +232,15 @@
           DATE_UPDATED          TIMESTAMP,
           LAST_UPDATED_BY       VARCHAR(30),
           CONSTRAINT WITA_PK PRIMARY KEY (REF_NUM),
-          CONSTRAINT WITA_FK1 FOREIGN KEY (WOIN_REF_NUM) REFERENCES WORKFLOW_INSTANCES_ARCHIVE (REF_NUM)
+          CONSTRAINT WITA_FK1 FOREIGN KEY (WOIN_REF_NUM) REFERENCES ${schemaName}.WORKFLOW_INSTANCES_ARCHIVE (REF_NUM)
         );
-        
-        CREATE INDEX wina_idx1 ON workflow_instances_archive (cluster_name, workflow_name);
-        CREATE INDEX wina_idx2 ON workflow_instances_archive (cluster_name, label1, label2);
-  
-        CREATE INDEX wita_idx1 ON work_items_archive (woin_ref_num);
+
+        CREATE INDEX wina_idx1 ON ${schemaName}.workflow_instances_archive (cluster_name, workflow_name);
+        CREATE INDEX wina_idx2 ON ${schemaName}.workflow_instances_archive (cluster_name, label1, label2);
+
+        CREATE INDEX wita_idx1 ON ${schemaName}.work_items_archive (woin_ref_num);
       ]]>
     </sql>
   </changeSet>
 
-</databaseChangeLog> 
+</databaseChangeLog>

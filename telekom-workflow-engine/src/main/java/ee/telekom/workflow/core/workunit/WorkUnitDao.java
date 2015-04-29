@@ -13,7 +13,7 @@ import ee.telekom.workflow.util.AbstractWorkflowEngineDao;
 
 /**
  * Provides the engine's central polling query.
- * 
+ *
  * @author Christian Klock
  */
 @Repository
@@ -35,13 +35,13 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
         return getJdbcTemplate().query( sqlCache, args, WorkUnitRowMapper.INSTANCE );
     }
 
-    /*         
-    * Note: The (a) sub-query is written deliberately before the sub-queries (b) and (c). 
+    /*
+    * Note: The (a) sub-query is written deliberately before the sub-queries (b) and (c).
     *       (b) and (c) return null values for woit_ref_num and waiting_since. PostgreSQL is only able to
     *       determine the type of this fields if there is a preceding sub-query (that is (a) in our case)
     *       that returns a non-null value for that field.
     *       If (b) and (c) were preceding (a), than PostgreSQL would use VARCHAR as a fallback type for the
-    *       null value fields. This would make the UNION of the sub-queries fail due to a type mismatch.  
+    *       null value fields. This would make the UNION of the sub-queries fail due to a type mismatch.
     */
     private String getSql( String clusterName ){
         String clusterCondition = getClusterCondition( clusterName );
@@ -52,8 +52,8 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
                 + "       '" + WorkType.COMPLETE_WORK_ITEM.name() + "' AS type, "
                 + "       woit.ref_num AS woit_ref_num,            "
                 + "       woit.date_updated AS waiting_since "
-                + "  FROM work_items woit                  "
-                + "  JOIN workflow_instances woin "
+                + "  FROM " + getSchema() + "work_items woit                  "
+                + "  JOIN " + getSchema() + "workflow_instances woin "
                 + "    ON woin.ref_num = woit.woin_ref_num "
                 + " WHERE woin.status  = '" + WorkflowInstanceStatus.EXECUTING.name() + "' "
                 + "   AND woin.locked  = 'N' "
@@ -68,7 +68,7 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
                 + "       '" + WorkType.START_WORKFLOW.name() + "' AS type, "
                 + "       null AS woit_ref_num, "
                 + "       null AS waiting_since "
-                + "  FROM workflow_instances woin "
+                + "  FROM " + getSchema() + "workflow_instances woin "
                 + " WHERE woin.status = '" + WorkflowInstanceStatus.NEW.name() + "' "
                 + "   AND woin.locked = 'N' "
                 + clusterCondition
@@ -80,7 +80,7 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
                 + "       '" + WorkType.ABORT_WORKFLOW.name() + "' AS type, "
                 + "       null AS woit_ref_num, "
                 + "       null AS waiting_since "
-                + "  FROM workflow_instances woin "
+                + "  FROM " + getSchema() + "workflow_instances woin "
                 + " WHERE woin.status = '" + WorkflowInstanceStatus.ABORT.name() + "' "
                 + "   AND woin.locked = 'N' "
                 + clusterCondition
@@ -92,8 +92,8 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
                 + "       '" + WorkType.COMPLETE_WORK_ITEM.name() + "' AS type, "
                 + "       woit.ref_num AS woit_ref_num,            "
                 + "       woit.due_date AS waiting_since "
-                + "  FROM work_items woit                  "
-                + "  JOIN workflow_instances woin "
+                + "  FROM " + getSchema() + "work_items woit                  "
+                + "  JOIN " + getSchema() + "workflow_instances woin "
                 + "    ON woin.ref_num = woit.woin_ref_num "
                 + " WHERE woin.status  = '" + WorkflowInstanceStatus.EXECUTING.name() + "' "
                 + "   AND woin.locked  = 'N' "
@@ -108,8 +108,8 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
                 + "       '" + WorkType.EXECUTE_TASK.name() + "' AS type, "
                 + "       woit.ref_num AS woit_ref_num,            "
                 + "       COALESCE(woit.date_updated, woit.date_created) AS waiting_since "
-                + "  FROM work_items woit                  "
-                + "  JOIN workflow_instances woin "
+                + "  FROM " + getSchema() + "work_items woit                  "
+                + "  JOIN " + getSchema() + "workflow_instances woin "
                 + "    ON woin.ref_num = woit.woin_ref_num "
                 + " WHERE woin.status  = '" + WorkflowInstanceStatus.EXECUTING.name() + "' "
                 + "   AND woin.locked  = 'N' "

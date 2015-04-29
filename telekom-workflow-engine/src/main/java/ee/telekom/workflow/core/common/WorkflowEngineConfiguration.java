@@ -15,7 +15,7 @@ import com.hazelcast.config.MulticastConfig;
  * Provides a common place to access configuration parameters.
  * <p>
  * Also provides default parameters for some of the values.
- * 
+ *
  * @author Christian Klock
  */
 @Component
@@ -25,6 +25,8 @@ public class WorkflowEngineConfiguration{
     private static final int DEFAULT_CLUSTER_MULTICAST_PORT = MulticastConfig.DEFAULT_MULTICAST_PORT;
     private static final int DEFAULT_CLUSTER_MULTICAST_TTL = 0;
 
+    @Value("${database.workflowengine.schema}")
+    private String schema;
     @Value("${workflowengine.cluster.name}")
     private String clusterName;
     @Value("${workflowengine.cluster.multicast.group}")
@@ -56,10 +58,23 @@ public class WorkflowEngineConfiguration{
 
     @PostConstruct
     public void init(){
+        if (StringUtils.isNotBlank(schema)) {
+            schema += ".";
+        }
+        else {
+            schema = "";
+        }
         clusterMulticastGroup = getFirstNotEmpty( clusterMulticastGroup, DEFAULT_CLUSTER_MULTICAST_GROUP );
         clusterMulticastPort = getFirstNotEmpty( clusterMulticastPortText, DEFAULT_CLUSTER_MULTICAST_PORT );
         clusterMulticastTtl = getFirstNotEmpty( clusterMulticastTtlText, DEFAULT_CLUSTER_MULTICAST_TTL );
         nodeName = getFirstNotEmptyNodeName( nodeName );
+    }
+
+    /**
+     * Returns the PostgreSQL schema name + "." for workflow engine tables or an empty string if not configured. Used for constructing SQL queries.
+     */
+    public String getSchema() {
+        return schema;
     }
 
     /**

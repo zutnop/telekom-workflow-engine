@@ -13,7 +13,7 @@ import ee.telekom.workflow.util.AdvancedParameterSource;
 public class LockDao extends AbstractWorkflowEngineDao{
 
     public boolean create( String clusterName, String owner, Date expireTime ){
-        String sql = "INSERT INTO locks (cluster_name, owner, expire_time) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO " + getSchema() + "locks (cluster_name, owner, expire_time) VALUES (?, ?, ?)";
         Object[] args = {clusterName, owner, expireTime};
         try{
             int count = getJdbcTemplate().update( sql, args );
@@ -26,7 +26,7 @@ public class LockDao extends AbstractWorkflowEngineDao{
     }
 
     public boolean deleteByOwner( String clusterName, String owner ){
-        String sql = "DELETE FROM locks WHERE cluster_name = ? AND owner = ?";
+        String sql = "DELETE FROM " + getSchema() + "locks WHERE cluster_name = ? AND owner = ?";
         Object[] args = {clusterName, owner};
         int count = getJdbcTemplate().update( sql, args );
         boolean isDeleted = (count == 1);
@@ -34,7 +34,7 @@ public class LockDao extends AbstractWorkflowEngineDao{
     }
 
     public boolean deleteByExpireTime( String clusterName, Date expireTime ){
-        String sql = "DELETE FROM locks WHERE cluster_name = ? AND expire_time < ?";
+        String sql = "DELETE FROM " + getSchema() + "locks WHERE cluster_name = ? AND expire_time < ?";
         Object[] args = {clusterName, expireTime};
         int count = getJdbcTemplate().update( sql, args );
         boolean isDeleted = (count == 1);
@@ -43,7 +43,7 @@ public class LockDao extends AbstractWorkflowEngineDao{
 
     public boolean updateExpireTime( String clusterName, String nodeName, Date expireTime ){
         String sql = ""
-                + "UPDATE locks "
+                + "UPDATE " + getSchema() + "locks "
                 + "   SET expire_time = :expireTime "
                 + " WHERE cluster_name = :clusterName "
                 + "   AND owner = :nodeName";
@@ -57,14 +57,14 @@ public class LockDao extends AbstractWorkflowEngineDao{
     }
 
     public String findOwner( String clusterName ){
-        String sql = "SELECT owner FROM locks WHERE cluster_name = ?";
+        String sql = "SELECT owner FROM " + getSchema() + "locks WHERE cluster_name = ?";
         Object[] args = {clusterName};
         List<String> result = getJdbcTemplate().queryForList( sql, String.class, args );
         return result.isEmpty() ? null : result.get( 0 );
     }
 
     public Date findExpireTime( String clusterName ){
-        String sql = "SELECT expire_time FROM locks WHERE cluster_name = ?";
+        String sql = "SELECT expire_time FROM " + getSchema() + "locks WHERE cluster_name = ?";
         Object[] args = {clusterName};
         List<Date> result = getJdbcTemplate().queryForList( sql, Date.class, args );
         return result.isEmpty() ? null : result.get( 0 );

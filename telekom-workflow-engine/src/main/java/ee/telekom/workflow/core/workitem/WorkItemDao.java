@@ -15,10 +15,10 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
 
     public void create( List<WorkItem> woits ){
         for( WorkItem woit : woits ){
-            woit.setRefNum( getNextSequenceValue( "woit_ref_num_s" ) );
+            woit.setRefNum( getNextSequenceValue( getSchema() + "woit_ref_num_s" ) );
         }
         String sql = ""
-                + "INSERT INTO work_items "
+                + "INSERT INTO " + getSchema() + "work_items "
                 + "  (ref_num, woin_ref_num, token_id, signal, due_date, bean, method, role, user_name, arguments, result, status, date_created, created_by) "
                 + " VALUES "
                 + "  (:refNum, :woinRefNum, :tokenId, :signal, :dueDate, :bean, :method, :role, :userName, :arguments, :result, :status, :dateCreated, :createdBy)";
@@ -33,26 +33,26 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
     }
 
     public WorkItem findByRefNum( long refNum ){
-        String sql = "SELECT * FROM work_items WHERE ref_num = ?";
+        String sql = "SELECT * FROM " + getSchema() + "work_items WHERE ref_num = ?";
         Object[] args = {refNum};
         List<WorkItem> results = getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
         return results.isEmpty() ? null : results.get( 0 );
     }
 
     public List<WorkItem> findByWoinRefNum( long woinRefNum ){
-        String sql = "SELECT * FROM work_items WHERE woin_ref_num = ?";
+        String sql = "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ?";
         Object[] args = {woinRefNum};
         return getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
     }
 
     public List<WorkItem> findActiveByWoinRefNum( long woinRefNum ){
-        String sql = "SELECT * FROM work_items WHERE woin_ref_num = ? AND NOT status IN (?,?) ORDER BY ref_num ASC";
+        String sql = "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ? AND NOT status IN (?,?) ORDER BY ref_num ASC";
         Object[] args = {woinRefNum, WorkItemStatus.COMPLETED.name(), WorkItemStatus.CANCELLED.name()};
         return getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
     }
 
     public WorkItem findActiveByWoinRefNumAndTokenId( long woinRefNum, int tokenId ){
-        String sql = "SELECT * FROM work_items WHERE woin_ref_num = ? AND token_id = ? AND NOT status IN (?,?) ORDER BY ref_num ASC";
+        String sql = "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ? AND token_id = ? AND NOT status IN (?,?) ORDER BY ref_num ASC";
         Object[] args = {woinRefNum, tokenId, WorkItemStatus.COMPLETED.name(), WorkItemStatus.CANCELLED.name()};
         List<WorkItem> results = getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
         return results.isEmpty() ? null : results.get( 0 );
@@ -61,8 +61,8 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
     public Collection<WorkItem> findByNodeNameAndStatus( String nodeName, WorkItemStatus status ){
         String sql = ""
                 + "SELECT woit.* "
-                + "  FROM work_items woit, "
-                + "       workflow_instances woin "
+                + "  FROM " + getSchema() + "work_items woit, "
+                + "       " + getSchema() + "workflow_instances woin "
                 + " WHERE woin.ref_num = woit.woin_ref_num"
                 + "   AND woin.node_name = :nodeName "
                 + "   AND woit.status = :status";
@@ -74,7 +74,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
 
     public void updateResult( long refNum, String result ){
         String sql = ""
-                + "UPDATE work_items "
+                + "UPDATE " + getSchema() + "work_items "
                 + "   SET result = :result, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -89,7 +89,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
 
     public boolean updateStatus( long refNum, WorkItemStatus newStatus, Collection<WorkItemStatus> expectedStatuses ){
         String sql = ""
-                + "UPDATE work_items "
+                + "UPDATE " + getSchema() + "work_items "
                 + "   SET status = :newStatus, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -107,7 +107,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
 
     public boolean updateStatus( List<Long> refNums, WorkItemStatus newStatus, Collection<WorkItemStatus> expectedStatuses ){
         String sql = ""
-                + "UPDATE work_items "
+                + "UPDATE " + getSchema() + "work_items "
                 + "   SET status = :newStatus, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -125,7 +125,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
 
     public boolean updateStatusAndResult( long refNum, WorkItemStatus newStatus, WorkItemStatus expectedStatus, String result ){
         String sql = ""
-                + "UPDATE work_items "
+                + "UPDATE " + getSchema() + "work_items "
                 + "   SET status = :newStatus, "
                 + "       result = :result, "
                 + "       date_updated = :dateUpdated, "

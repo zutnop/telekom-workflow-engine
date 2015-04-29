@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <!-- This configuration file provides a basic deployment configuration, you MOST probably want to override it with your own database connection and pool settings -->
@@ -17,7 +17,7 @@
     <property name="maxWait" value="5000" />
     <property name="maxAge" value="3600000" />
     <property name="logAbandoned" value="true" />
-    <property name="suspectTimeout" value="60" />    
+    <property name="suspectTimeout" value="60" />
     <property name="logValidationErrors" value="true" />
     <property name="fairQueue" value="true" />
     <property name="timeBetweenEvictionRunsMillis" value="10000" />
@@ -34,10 +34,17 @@
     <property name="defaultTransactionIsolation" value="2" />
   </bean>
 
-  <bean class="liquibase.integration.spring.SpringLiquibase">
+  <bean id="workflowengineLiquibase" class="liquibase.integration.spring.SpringLiquibase">
     <property name="dataSource" ref="workflowengineDataSource" />
-    <property name="defaultSchema" value="engine" />
     <property name="changeLog" value="classpath:changelog/db-changelog.xml" />
+    <!-- this works only with XML type changesets -->
+    <property name="defaultSchema" value="${database.workflowengine.schema:engine}" />
+    <!-- this is needed for SQL type changesets -->
+    <property name="changeLogParameters">
+      <map>
+        <entry key="schemaName" value="${database.workflowengine.schema:engine}" />
+      </map>
+    </property>
   </bean>
 
 </beans>

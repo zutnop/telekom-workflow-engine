@@ -14,10 +14,10 @@ import ee.telekom.workflow.util.AdvancedParameterSource;
 public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public void create( WorkflowInstance woin ){
-        long refNum = getNextSequenceValue( "woin_ref_num_s" );
+        long refNum = getNextSequenceValue( getSchema() + "woin_ref_num_s" );
         woin.setRefNum( refNum );
         String sql = ""
-                + "INSERT INTO workflow_instances "
+                + "INSERT INTO " + getSchema() + "workflow_instances "
                 + "  (ref_num, workflow_name, workflow_version, attributes, state, label1, label2, cluster_name, locked, status, date_created, created_by) "
                 + " VALUES "
                 + "  (:refNum, :workflowName, :workflowVersion, :attributes, :state, :label1, :label2, :clusterName, :locked, :status, :dateCreated, :createdBy)";
@@ -29,7 +29,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
     }
 
     public WorkflowInstance findByRefNum( long refNum ){
-        String sql = "SELECT * FROM workflow_instances WHERE ref_num = ?";
+        String sql = "SELECT * FROM " + getSchema() + "workflow_instances WHERE ref_num = ?";
         Object[] args = {refNum};
         List<WorkflowInstance> results = getJdbcTemplate().query( sql, args, WorkflowInstanceRowMapper.INSTANCE );
         return results.isEmpty() ? null : results.get( 0 );
@@ -43,7 +43,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
                                  WorkflowInstanceStatus newStatus,
                                  Collection<WorkflowInstanceStatus> expectedStatuses ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET workflow_version = :workflowVersion, "
                 + "       attributes = :attributes, "
                 + "       history = :history, "
@@ -72,7 +72,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public boolean updateStatus( long refNum, WorkflowInstanceStatus newStatus, Collection<WorkflowInstanceStatus> expectedStatuses ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET status = :newStatus, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -90,7 +90,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public int recover( String nodeName, WorkflowInstanceStatus status, WorkflowInstanceStatus recoveredStatus ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET status = :recoveredStatus, "
                 + "       locked = :recoveredLocked,"
                 + "       node_name = NULL, "
@@ -111,7 +111,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public int recoverNotAssigned( String clusterName ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET locked = :recoveredLocked,"
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -136,7 +136,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public void updateLock( List<Long> refNums, boolean locked ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET locked = :locked, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -151,7 +151,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public void updateNodeName( long refNum, String nodeName ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET node_name = :nodeName, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -166,7 +166,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public void updateLockAndNodeName( long refNum, boolean locked, String nodeName ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET locked = :locked, "
                 + "       node_name = :nodeName, "
                 + "       date_updated = :dateUpdated, "
@@ -183,7 +183,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public boolean updateState( long refNum, String state, WorkflowInstanceStatus expectedStatus ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET state = :state, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
@@ -201,7 +201,7 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public boolean updateHistory( Long refNum, String history, WorkflowInstanceStatus expectedStatus ){
         String sql = ""
-                + "UPDATE workflow_instances "
+                + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET history = :history, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "

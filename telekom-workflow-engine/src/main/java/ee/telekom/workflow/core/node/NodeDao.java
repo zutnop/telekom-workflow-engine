@@ -12,10 +12,10 @@ import ee.telekom.workflow.util.AdvancedParameterSource;
 public class NodeDao extends AbstractWorkflowEngineDao{
 
     public void create( Node node ){
-        long refNum = getNextSequenceValue( "node_ref_num_s" );
+        long refNum = getNextSequenceValue( getSchema() + "node_ref_num_s" );
         node.setRefNum( refNum );
         String sql = ""
-                + "INSERT INTO nodes "
+                + "INSERT INTO " + getSchema() + "nodes "
                 + "  (ref_num, node_name, cluster_name, status, heartbeat) "
                 + " VALUES "
                 + "  (:refNum, :nodeName, :clusterName, :status, :heartbeat)";
@@ -25,20 +25,20 @@ public class NodeDao extends AbstractWorkflowEngineDao{
     }
 
     public Node findByName( String clusterName, String nodeName ){
-        String sql = "SELECT * FROM nodes WHERE cluster_name = ? AND node_name = ?";
+        String sql = "SELECT * FROM " + getSchema() + "nodes WHERE cluster_name = ? AND node_name = ?";
         Object[] args = {clusterName, nodeName};
         List<Node> results = getJdbcTemplate().query( sql, args, NodeRowMapper.INSTANCE );
         return results.isEmpty() ? null : results.get( 0 );
     }
 
     public List<Node> findAll( String clusterName ){
-        String sql = "SELECT * FROM nodes WHERE cluster_name = ?";
+        String sql = "SELECT * FROM " + getSchema() + "nodes WHERE cluster_name = ?";
         Object[] args = {clusterName};
         return getJdbcTemplate().query( sql, args, NodeRowMapper.INSTANCE );
     }
 
     public List<Node> findByStatus( String clusterName, NodeStatus status ){
-        String sql = "SELECT * FROM nodes WHERE cluster_name = :clusterName AND status = :status";
+        String sql = "SELECT * FROM " + getSchema() + "nodes WHERE cluster_name = :clusterName AND status = :status";
         AdvancedParameterSource source = new AdvancedParameterSource()
                 .addValue( "clusterName", clusterName )
                 .addValue( "status", status );
@@ -47,7 +47,7 @@ public class NodeDao extends AbstractWorkflowEngineDao{
 
     public void updateStatusWhereDead( String clusterName, Date criticalDate, NodeStatus newStatus, NodeStatus expectedStatus ){
         String sql = ""
-                + "UPDATE nodes "
+                + "UPDATE " + getSchema() + "nodes "
                 + "   SET status = :newStatus "
                 + " WHERE cluster_name = :clusterName"
                 + "   AND heartBeat < :criticalDate "
@@ -62,7 +62,7 @@ public class NodeDao extends AbstractWorkflowEngineDao{
 
     public void updateHeartbeat( String nodeName, Date heartBeat ){
         String sql = ""
-                + "UPDATE nodes "
+                + "UPDATE " + getSchema() + "nodes "
                 + "   SET heartBeat = :heartBeat "
                 + " WHERE node_name = :nodeName";
         AdvancedParameterSource source = new AdvancedParameterSource()
@@ -73,7 +73,7 @@ public class NodeDao extends AbstractWorkflowEngineDao{
 
     public void updateStatus( long refNum, NodeStatus status ){
         String sql = ""
-                + "UPDATE nodes "
+                + "UPDATE " + getSchema() + "nodes "
                 + "   SET status = :status "
                 + " WHERE ref_num = :refNum";
         AdvancedParameterSource source = new AdvancedParameterSource()

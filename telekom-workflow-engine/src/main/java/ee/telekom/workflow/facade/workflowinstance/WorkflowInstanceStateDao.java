@@ -141,8 +141,8 @@ public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
         return getNamedParameterJdbcTemplate().queryForList( sql, source, String.class );
     }
 
-    private static String getTableName( boolean isActive ){
-        return isActive ? "workflow_instances" : "workflow_instances_archive";
+    private String getTableName( boolean isActive ){
+        return getSchema() + (isActive ? "workflow_instances" : "workflow_instances_archive");
     }
 
     private static boolean needToQueryMainTable( List<WorkflowInstanceFacadeStatus> statuses ){
