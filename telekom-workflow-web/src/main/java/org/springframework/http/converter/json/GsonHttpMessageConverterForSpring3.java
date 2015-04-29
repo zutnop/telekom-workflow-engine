@@ -39,14 +39,20 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * Comment by Christian Klock 16.09.2014
- * Class is left as obtained from 
+ * CHRISTIAN KLOCK, 2014.09.16
+ * Class is left as obtained from
  * http://grepcode.com/file_/repo1.maven.org/maven2/org.springframework.android/spring-android-rest-template/1.0.1.RELEASE/org/springframework/http/converter/json/GsonHttpMessageConverter.java/?v=source
- * 
+ *
+ *
+ * ERKO HANSAR, 2015.04.29
+ * Renamed the file from GsonHttpMessageConverter to GsonHttpMessageConverterForSpring3 to avoid name clashing with Spring 4, which now includes a GsonHttpMessageConverter.
+ * TODO: When TWE upgrades to Spring 4, start using the Spring included version.
+ *
+ *
  * @author Roy Clarkson
  * @since 1.0
  */
-public class GsonHttpMessageConverter extends AbstractHttpMessageConverter<Object>{
+public class GsonHttpMessageConverterForSpring3 extends AbstractHttpMessageConverter<Object>{
 
     public static final Charset DEFAULT_CHARSET = Charset.forName( "UTF-8" );
 
@@ -59,25 +65,25 @@ public class GsonHttpMessageConverter extends AbstractHttpMessageConverter<Objec
     /**
      * Construct a new {@code GsonHttpMessageConverter} with a default {@link Gson#Gson() Gson}.
      */
-    public GsonHttpMessageConverter(){
+    public GsonHttpMessageConverterForSpring3(){
         this( new Gson() );
     }
 
     /**
      * Construct a new {@code GsonHttpMessageConverter}.
-     * 
+     *
      * @param serializeNulls true to generate json for null values
      */
-    public GsonHttpMessageConverter( boolean serializeNulls ){
+    public GsonHttpMessageConverterForSpring3( boolean serializeNulls ){
         this( serializeNulls ? new GsonBuilder().serializeNulls().create() : new Gson() );
     }
 
     /**
      * Construct a new {@code GsonHttpMessageConverter}.
-     * 
-     * @param gson a customized {@link Gson#Gson() Gson} 
+     *
+     * @param gson a customized {@link Gson#Gson() Gson}
      */
-    public GsonHttpMessageConverter( Gson gson ){
+    public GsonHttpMessageConverterForSpring3( Gson gson ){
         super( new MediaType( "application", "json", DEFAULT_CHARSET ) );
         setGson( gson );
     }

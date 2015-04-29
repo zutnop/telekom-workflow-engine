@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverterForSpring3;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,7 +75,7 @@ public class RestController{
 
     @PostConstruct
     public void init(){
-        adapter.getMessageConverters().add( new GsonHttpMessageConverter( true ) );
+        adapter.getMessageConverters().add( new GsonHttpMessageConverterForSpring3( true ) );
     }
 
     @ExceptionHandler()
