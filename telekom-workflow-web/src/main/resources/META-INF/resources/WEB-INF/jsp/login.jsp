@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
-<%@ include file="header.jsp" %>
+<%@ include file="header.jspf" %>
 <c:url value="${urlPrefix}/processlogin" var="loginUrl" />
 
 <div class="grid-box">
@@ -38,4 +38,4 @@
     </form>
 </div>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="footer.jspf" %>

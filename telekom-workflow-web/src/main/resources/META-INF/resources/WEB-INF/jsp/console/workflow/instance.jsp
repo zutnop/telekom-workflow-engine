@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
-<%@ include file="../../header.jsp" %>
+<%@ include file="../../header.jspf" %>
 <workflow-ui:menu activeTab="workflows" />
 
 <div id="page">
     <div class="inner clear">
-        
+
 		<c:choose>
 			<c:when test="${not empty unknownAction}">
 				<div class="message error">
@@ -22,11 +22,11 @@
 				</div>
 			</c:when>
 		</c:choose>
-		
+
         <div class="box">
 	        <div class="dataTables_wrapper">
 	            <h1><spring:message code="workflow.instance.details.title"/></h1>
-	            
+
 	            <table class="data">
 	            	<thead>
 	                    <tr>
@@ -59,7 +59,7 @@
 	            </table>
 	        </div>
 		</div>
-		
+
         <div class="box">
         	<div class="dataTables_wrapper">
 	            <h1><spring:message code="workflow.instance.environment.title"/></h1>
@@ -87,8 +87,8 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
-        </div>				
-				
+        </div>
+
         <div class="box">
         	<div class="dataTables_wrapper">
 	            <h1><spring:message code="workflow.instance.workitem.title"/></h1>
@@ -144,7 +144,7 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
-        </div>				
+        </div>
 
         <div class="box">
         	<div class="dataTables_wrapper">
@@ -177,8 +177,8 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
-        </div>				
-				
+        </div>
+
         <div class="box">
             <h1><spring:message code="workflow.instance.history.title"/></h1>
             <c:choose>
@@ -208,7 +208,7 @@
 				    </c:when>
 				</c:choose>
 				<pre><c:out value="${executionError.errorDetails}"></c:out></pre>
-        	</div>	
+        	</div>
 		</c:if>
     </div>
 
@@ -246,4 +246,4 @@
     </workflow-ui:adminAccess>
 </div>
 
-<%@ include file="../../footer.jsp" %>
+<%@ include file="../../footer.jspf" %>

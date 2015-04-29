@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@ include file="../../header.jsp"%>
+<%@ include file="../../header.jspf" %>
 <workflow-ui:menu activeTab="create" />
 
 <div id="page">
@@ -95,8 +95,8 @@
                 <p><spring:message code="workflow.create.single.syntax" /></p>
 			    <button><spring:message code="workflow.create.single.action"/></button>
 			</form:form>
-		</div>			
-	
+		</div>
+
 		<div class="box">
 			<h1><spring:message code="workflow.create.batch.title" /></h1>
 			<form:form method="POST" commandName="batchForm" action="batchCreate">
@@ -123,4 +123,4 @@
 	</div>
 </div>
 
-<%@ include file="../../footer.jsp"%>
+<%@ include file="../../footer.jspf" %>

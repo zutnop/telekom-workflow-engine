@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
-<%@ include file="/WEB-INF/jsp/init.jsp" %>
+<%@ include file="/WEB-INF/jsp/init.jspf" %>
 <c:set var="urlPrefix" value="${configuration.getProperty('workflowengine.console.mapping.prefix')}" scope="request"/>
 <c:url value="${urlPrefix}/css/main.css" var="mainCssUrl" />
 <c:url value="${urlPrefix}/images/favicon.ico" var="faviconUrl" />
