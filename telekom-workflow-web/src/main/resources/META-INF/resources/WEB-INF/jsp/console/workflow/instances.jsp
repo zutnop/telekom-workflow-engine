@@ -82,15 +82,16 @@
                         </tbody>
                     </table>
 
-                    <c:url value="${urlPrefix}/console/workflow/instances/" var="urlPrefix" />
-                    <form method="post" action="${urlPrefix}action" id="actionForm">
+                    <c:url value="${urlPrefix}/console/workflow/instances/" var="instancesUrl" />
+                    <form method="post" action="${instancesUrl}action" id="actionForm">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <input type="hidden" name="action" id="action" />
                         <input type="hidden" name="refNums" />
                     </form>
 
                     <script type="text/javascript">
                         $(document).ready(function () {
-                            var urlPrefix = '${urlPrefix}';
+                            var instancesUrl = '${instancesUrl}';
                             $('#instancesTable').dataTable({
                                 lengthMenu: [20, 100, 1000],
                                 pageLength: 20,
@@ -98,7 +99,7 @@
                                 processing: true,
                                 serverSide: true,
                                 ajax: {
-                                    url: "${urlPrefix}search",
+                                    url: "${instancesUrl}search",
                                     type: "POST"
                                 },
                                 columns: [
@@ -108,7 +109,7 @@
 	                                    }},
                                     </workflow-ui:adminAccess>
                                     {data: "refNum", sClass: "w1p right", render: function (refNum, type, full) {
-                                        return '<a href="' + urlPrefix + refNum + '">' + refNum + '</a>';
+                                        return '<a href="' + instancesUrl + refNum + '">' + refNum + '</a>';
                                     }},
                                     {data: "workflowNameWithVersion"},
                                     {data: "label1"},

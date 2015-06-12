@@ -214,7 +214,8 @@
 
 	<c:url value="${urlPrefix}/console/workflow/instances/${workflowInstance.refNum}" var="url" />
 	<form method="post" action="${url}" id="form">
- 		<input type="hidden" name="action" id="action"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <input type="hidden" name="action" id="action"/>
 	</form>
 	<script type="text/javascript">
 		function submit(action, confirmMsg) {

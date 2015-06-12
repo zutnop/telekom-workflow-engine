@@ -12,13 +12,14 @@
 
   <!-- This security feature has to be enabled here, won't work if moved to workflow-console-security-context.xml -->
   <sec:global-method-security pre-post-annotations="enabled"/>
+
   <context:component-scan base-package="ee.telekom.workflow.web" />
 
   <mvc:annotation-driven />
-  <mvc:default-servlet-handler />
+
   <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
-  <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
   <mvc:resources mapping="/images/**" location="/images/, /WEB-INF/images/" />
+  <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
         p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" p:contentType="text/html;charset=UTF-8"

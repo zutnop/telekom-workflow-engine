@@ -5,6 +5,7 @@
 <div class="grid-box">
     <h1><spring:message code="login.title" /></h1>
     <form action="${loginUrl}" method="post" name="loginForm" id="loginForm">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <table class="form">
             <tbody>
             <c:choose>
