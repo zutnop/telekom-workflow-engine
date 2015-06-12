@@ -44,15 +44,15 @@
         <div class="box">
             <h1><spring:message code="workflow.instances.title" /></h1>
             <workflow-ui:adminAccess>
-	            <div id="massOperations" style="display:none">
-	                <p><spring:message code="workflow.instances.action.selected.label" arguments='<span id="selectedInstances"></span>' /></p>
-	                <a id="batchAbort" href="javascript:submit('abort', '<spring:message code="workflow.instances.action.abort.confirm"/>')" class="batch btn-01">
-	                    <spring:message code="workflow.instance.action.abort" />
-	                </a>
-	                <a id="batchSuspend" href="javascript:submit('suspend')" class="batch btn-01"><spring:message code="workflow.instance.action.suspend" /></a>
-	                <a id="batchResume" href="javascript:submit('resume')" class="batch btn-01"><spring:message code="workflow.instance.action.resume" /></a>
-	                <a id="batchRetry" href="javascript:submit('retry')" class="batch btn-01"><spring:message code="workflow.instance.action.retry" /></a>
-	            </div>
+                <div id="massOperations" style="display:none">
+                    <p><spring:message code="workflow.instances.action.selected.label" arguments='<span id="selectedInstances"></span>' /></p>
+                    <a id="batchAbort" href="javascript:submit('abort', '<spring:message code="workflow.instances.action.abort.confirm"/>')" class="batch btn-01">
+                        <spring:message code="workflow.instance.action.abort" />
+                    </a>
+                    <a id="batchSuspend" href="javascript:submit('suspend')" class="batch btn-01"><spring:message code="workflow.instance.action.suspend" /></a>
+                    <a id="batchResume" href="javascript:submit('resume')" class="batch btn-01"><spring:message code="workflow.instance.action.resume" /></a>
+                    <a id="batchRetry" href="javascript:submit('retry')" class="batch btn-01"><spring:message code="workflow.instance.action.retry" /></a>
+                </div>
             </workflow-ui:adminAccess>
             <c:choose>
                 <c:when test="${not empty error}">
@@ -92,6 +92,10 @@
                     <script type="text/javascript">
                         $(document).ready(function () {
                             var instancesUrl = '${instancesUrl}';
+                            var csrfParameterName = '${_csrf.parameterName}';
+                            var csrfToken = '${_csrf.token}';
+                            var csrfData = {};
+                            csrfData[csrfParameterName] = csrfToken;
                             $('#instancesTable').dataTable({
                                 lengthMenu: [20, 100, 1000],
                                 pageLength: 20,
@@ -100,13 +104,14 @@
                                 serverSide: true,
                                 ajax: {
                                     url: "${instancesUrl}search",
-                                    type: "POST"
+                                    type: "POST",
+                                    data: csrfData
                                 },
                                 columns: [
                                     <workflow-ui:adminAccess>
-	                                    {data: null, orderable: false, render: function (data, type, row, meta) {
-	                                        return '<input type="checkbox" class="toggle" data-status="' + row.status + '"  data-refnum="' + row.refNum + '" />'
-	                                    }},
+                                        {data: null, orderable: false, render: function (data, type, row, meta) {
+                                            return '<input type="checkbox" class="toggle" data-status="' + row.status + '"  data-refnum="' + row.refNum + '" />'
+                                        }},
                                     </workflow-ui:adminAccess>
                                     {data: "refNum", sClass: "w1p right", render: function (refNum, type, full) {
                                         return '<a href="' + instancesUrl + refNum + '">' + refNum + '</a>';
