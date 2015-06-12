@@ -31,10 +31,13 @@
             <c:if test="${not empty sessionScope['SPRING_SECURITY_CONTEXT']}">
                 <div id="logged-in">
                     <div id="user">
-                        <ul>
-                            <li><strong>${sessionScope['SPRING_SECURITY_CONTEXT'].authentication.principal}</strong></li>
-                            <li><a href="<c:url value='${urlPrefix}/processlogout' />"><spring:message code="header.logout" /></a></li>
-                        </ul>
+                        <form action="<c:url value='${urlPrefix}/processlogout' />" method="post" name="logoutForm" id="logoutForm">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                            <ul>
+                                <li><strong>${sessionScope['SPRING_SECURITY_CONTEXT'].authentication.principal}</strong></li>
+                                <li><a href="#" onclick="javascript:logoutForm.submit();return false;"><spring:message code="header.logout" /></a></li>
+                            </ul>
+                        </form>
                     </div>
                 </div>
             </c:if>
