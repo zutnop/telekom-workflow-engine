@@ -23,7 +23,7 @@
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
         p:viewClass="org.springframework.web.servlet.view.JstlView" p:prefix="/WEB-INF/jsp-twe/" p:suffix=".jsp" p:contentType="text/html;charset=UTF-8"
-        p:order="1" p:exposedContextBeanNames="configuration"/>
+        p:order="1" p:exposedContextBeanNames="workflowEngineConfiguration"/>
 
   <bean class="ee.telekom.workflow.web.LoggingHandlerExceptionResolver">
     <property name="defaultErrorView" value="error" />

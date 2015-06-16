@@ -55,6 +55,8 @@ public class WorkflowEngineConfiguration{
     private boolean developmentMode;
     @Value("${workflowengine.console.mapping.prefix}")
     private String consoleMappingPrefix;
+    @Value("${workflowengine.environment}")
+    private String environment;
 
     @PostConstruct
     public void init(){
@@ -187,6 +189,13 @@ public class WorkflowEngineConfiguration{
 
     public String getConsoleMappingPrefix() {
         return consoleMappingPrefix != null ? consoleMappingPrefix : "";
+    }
+
+    /**
+     * Environment name, will be displayed (when not empty) in web console after application name
+     */
+    public String getEnvironment(){
+        return environment;
     }
 
     private String getFirstNotEmpty( String configValue, String defaultValue ){
