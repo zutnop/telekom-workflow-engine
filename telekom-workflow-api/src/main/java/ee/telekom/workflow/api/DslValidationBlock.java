@@ -44,7 +44,6 @@ public interface DslValidationBlock<Level> extends DslMainBlock<Level>{
      * @param type type that the variable's value must be assignable to
      * @param isRequired whether the variable is a required or an optional input
      * @param defaultValue a default value if the optional input value is not given
-     * @return
      */
     public DslValidationBlock<Level> validateInputVariable( int id, String variable, Class<?> type, boolean isRequired, Object defaultValue );
 

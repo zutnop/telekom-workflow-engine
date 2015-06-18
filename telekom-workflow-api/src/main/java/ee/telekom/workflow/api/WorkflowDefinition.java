@@ -62,7 +62,7 @@ public interface WorkflowDefinition{
      * }
      * </pre>
      * 
-     * @param workflowFactory factory provides the DSL API for constructing the workflow definition and is later used by the engine to convert the 
+     * @param factory factory provides the DSL API for constructing the workflow definition and is later used by the engine to convert the 
      */
     void configureWorkflowDefinition( WorkflowFactory factory );
 

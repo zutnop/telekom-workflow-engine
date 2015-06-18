@@ -19,7 +19,6 @@ public interface DslAttribute<Level> {
 
     /**
      * Block end tag, closing the iteration of attributes.
-     * @return
      */
     Level done();
 
