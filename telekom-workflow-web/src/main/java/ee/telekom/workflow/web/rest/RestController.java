@@ -41,9 +41,9 @@ import ee.telekom.workflow.web.util.JsonParserUtil;
 
 /**
  * Controller that implements a REST API.
- * <p/>
+ * 
  * For details on individual API methods, please refer to the RequestMapping methods.
- * <p/>
+ * 
  * Some method expect/support an argument/arguments/result field in the request body. Regardless of the deserializer (JSON: e.g. Jackson or GSON, XML:...), the values of these fields
  * are forwarded to lower level engine methods such that maps are implemented using LinkedHashMap's and lists or arrays are implemented using ArrayList's. Furthermore, do not mix up
  * plain JSON with the JSON base format that the engine internally uses to store, e.g., workflow instance attributes.
@@ -88,7 +88,7 @@ public class RestController{
 
     /**
      * Creates a new workflow instance.
-     * <p/>
+     * 
      * <pre>
      * Request:  POST /workflowInstance {workflowName: "credit.step1", workflowVersion: null, arguments: {"arg1":{"refNum":1, "date":"22.09.2014"}, "arg2":[true, 1, "text"]}, label1: "one", label2: null }
      * Response: OK, {refNum: 1, workflowName: "credit.step1", workflowVersion: null, label1: "one", label2: null, status: NEW}
@@ -111,7 +111,7 @@ public class RestController{
 
     /**
      * Finds a workflow instance.
-     * <p/>
+     * 
      * <pre>
      * Request:  GET /workflowInstance/1
      * Response: OK {refNum: 1, workflowName: "credit.step1", workflowVersion: null, label1: "one", label2: null, status: NEW}
@@ -132,7 +132,7 @@ public class RestController{
 
     /**
      * Aborts, suspends or resumes a workflow instance.
-     * <p/>
+     * 
      * <pre>
      * Request:  POST /workflowInstance/{woinRefNum} {status: "ABORT"}
      * Response: OK, {refNum: 1, workflowName: "credit.step1", workflowVersion: null, label1: "one", label2: null, status: ABORT}
@@ -171,9 +171,9 @@ public class RestController{
 
     /**
      * Notifies all waiting signal work items of the given workflow instance and the given signal name.
-     * <p/>
+     * 
      * Technically, sets the work item's result value and updates the status to EXECUTED.
-     * <p/>
+     * 
      * <pre>
      * Request:  POST /workflowInstance/1/signal/invoice {argument: {refNum:3, invoiceAmount: "10 Euro"}}
      * Response: NO_CONTENT
@@ -188,11 +188,11 @@ public class RestController{
 
     /**
      * (Un)assigns a human task to a user or submits its result.
-     * <p/>
+     * 
      * In order to unassign a human task from a user, set an empty user name.
-     * <p/>
+     * 
      * Technically, assigning means updating the user field while submitting means to update the status field to EXECUTED and setting the result value.
-     * <p/>
+     * 
      * <pre>
      * Request:  POST /workflowInstance/1/humanTask/2 {result: {resolution: "completed"}}
      * Response: OK, {refNum:3, woinRefNum:1, tokenId:2, status:EXECUTED, role:"auditor", user:"hans", arguments:{task:"audit customer 500"}, result: {resolution: "completed"}}
@@ -227,7 +227,7 @@ public class RestController{
 
     /**
      * Searches workflow instance's that match the given criteria.
-     * <p/>
+     * 
      * <pre>
      * Request:  GET /workflowInstance/search?label1=aClientId
      * Response: OK, [{refNum: 1, workflowName: "credit.step1", workflowVersion: null, label1: "aClientId", label2: null, status: NEW}, {refNum: 2, workflowName: "credit.client.step1", workflowVersion: null, label1: "aClientId", label2: "anotherIdentificator", status: NEW}]
@@ -249,7 +249,7 @@ public class RestController{
 
     /**
      * Searches active human tasks by role and/or user.
-     * <p/>
+     * 
      * <pre>
      * Request:  GET /humanTask/search?role=auditor&user=hans
      * Response: OK, [{refNum:3, woinRefNum:1, tokenId:2, status:EXECUTED, role:"auditor", user:"hans", arguments:{task:"audit customer 500"}}]

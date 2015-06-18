@@ -24,7 +24,8 @@ import org.springframework.util.Assert;
  * like a normal java.util.Properties object which can be passed on to
  * setProperties() method allowing PropertyOverrideConfigurer and
  * PropertyPlaceholderConfigurer to take advantage of Commons Configuration.
- * <p/> Internally a CompositeConfiguration object is used for merging multiple
+ * 
+ * Internally a CompositeConfiguration object is used for merging multiple
  * Configuration objects.
  * 
  * @see java.util.Properties

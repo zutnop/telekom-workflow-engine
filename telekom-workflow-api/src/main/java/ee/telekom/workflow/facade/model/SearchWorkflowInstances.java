@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Model object that contains a search request.
- * <p/>
+ *
  * When searching for workflow instances, then multiple, non-empty fields are treated join
  * by an AND operator. Multiple entries within the same field (refNums, label1 or label2) are
  * joined by an OR operator.

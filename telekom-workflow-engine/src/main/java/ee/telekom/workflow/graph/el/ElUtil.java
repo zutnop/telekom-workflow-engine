@@ -37,7 +37,7 @@ public class ElUtil{
     /**
      * Creates and prepares a new ELProcessor instance with workflow engine configuration to evaluate expressions on
      * workflow instance environment together with some additional features (NOW variable, WORKFLOW_INSTANCE_ID variable).
-     * <p/>
+     * 
      * The ELProcessor instance is meant to be used "quickly" only for current task execution/evaluation and should be discarded after that.
      */
     public static ELProcessor initNewELProcessor( Environment environment, Long externalInstanceId ){
