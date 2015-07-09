@@ -12,11 +12,11 @@ import ee.telekom.workflow.graph.node.AbstractNode;
 
 /**
  * Activity validating an attribute in the {@link GraphInstance}'s {@link Environment}.
- * 
+ *
  * For a required attribute, it checks that the attribute's value is set in the environment (possibly also to <code>null</code>)
- * and that this value is assignable to the defined type. 
+ * and that this value is assignable to the defined type.
  * For an optional attribute, it initialises the value to a default, if it is not yet set in the environment and ensures that
- * its value is assignable to the defined type. 
+ * its value is assignable to the defined type.
  */
 public class ValidateAttributeActivity extends AbstractNode{
 
@@ -90,7 +90,7 @@ public class ValidateAttributeActivity extends AbstractNode{
         if( value != null && !type.isAssignableFrom( value.getClass() ) ){
             throw new WorkflowException( "The value of attribute '" + attribute
                     + "' is of type " + value.getClass().getCanonicalName()
-                    + " whis is not assignable to the expected type " + value.getClass().getCanonicalName() );
+                    + " whis is not assignable to the expected type " + type.getCanonicalName() );
         }
 
         engine.complete( token, null );
