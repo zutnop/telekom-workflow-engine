@@ -25,7 +25,7 @@ public class WorkflowEngineConfiguration{
     private static final int DEFAULT_CLUSTER_MULTICAST_PORT = MulticastConfig.DEFAULT_MULTICAST_PORT;
     private static final int DEFAULT_CLUSTER_MULTICAST_TTL = 0;
 
-    @Value("${database.workflowengine.schema}")
+    @Value("${database.workflowengine.schema:engine}")
     private String schema;
     @Value("${workflowengine.cluster.name}")
     private String clusterName;
