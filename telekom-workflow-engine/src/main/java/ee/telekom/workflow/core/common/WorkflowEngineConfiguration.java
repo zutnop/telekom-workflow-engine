@@ -53,7 +53,7 @@ public class WorkflowEngineConfiguration{
     private String pluginApplicationContextFile;
     @Value("${workflowengine.developmentMode}")
     private boolean developmentMode;
-    @Value("${workflowengine.console.mapping.prefix}")
+    @Value("${workflowengine.console.mapping.prefix:}")
     private String consoleMappingPrefix;
     @Value("${workflowengine.environment}")
     private String environment;
