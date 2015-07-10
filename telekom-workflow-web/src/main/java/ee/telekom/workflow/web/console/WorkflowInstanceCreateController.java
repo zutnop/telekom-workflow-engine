@@ -2,7 +2,6 @@ package ee.telekom.workflow.web.console;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.gson.Gson;
-
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.facade.model.CreateWorkflowInstance;
@@ -38,7 +35,6 @@ import ee.telekom.workflow.web.console.form.CreateWorkflowInstanceForm;
 public class WorkflowInstanceCreateController{
 
     private static final Logger log = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
-    private static final Gson gson = new Gson();
 
     @Autowired
     private WorkflowEngineConfiguration configuration;
@@ -101,13 +97,13 @@ public class WorkflowInstanceCreateController{
         model.addFlashAttribute( "batchForm", batchForm );
         model.addFlashAttribute( "org.springframework.validation.BindingResult.batchForm", result );
 
-        CreateWorkflowInstance[] requests = null;
+        List<CreateWorkflowInstance> requests = null;
 
         try{
             if( StringUtils.isNotBlank( batchForm.getBatchRequest() ) ){
-                requests = gson.fromJson( batchForm.getBatchRequest(), CreateWorkflowInstance[].class );
+                requests = (List<CreateWorkflowInstance>)JsonUtil.deserializeCollection( batchForm.getBatchRequest(), ArrayList.class, CreateWorkflowInstance.class );
             }
-            if( requests == null || requests.length == 0 ){
+            if( requests == null || requests.isEmpty() ){
                 result.rejectValue( "batchRequest", "workflow.create.batch.error.empty" );
             }
         }
@@ -128,7 +124,7 @@ public class WorkflowInstanceCreateController{
 
         if( !result.hasErrors() ){
             try{
-                facade.createWorkflowInstances( Arrays.asList( requests ) );
+                facade.createWorkflowInstances( requests );
                 batchForm.setRefNums( getRefNums( requests ) );
 
             }
@@ -141,8 +137,8 @@ public class WorkflowInstanceCreateController{
         return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
     }
 
-    private List<Long> getRefNums( CreateWorkflowInstance[] requests ){
-        List<Long> result = new ArrayList<>( requests.length );
+    private List<Long> getRefNums( List<CreateWorkflowInstance> requests ){
+        List<Long> result = new ArrayList<>( requests.size() );
         for( CreateWorkflowInstance request : requests ){
             result.add( request.getRefNum() );
         }

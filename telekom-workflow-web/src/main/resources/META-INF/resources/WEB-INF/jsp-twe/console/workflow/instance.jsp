@@ -225,14 +225,10 @@
 			}
 		}
 	</script>
-    <c:set var="confMsgVal">
-        <%= org.apache.commons.lang3.StringEscapeUtils.escapeEcmaScript( (String)pageContext.getAttribute("confirmMsg") ) %>
-    </c:set>
 	<workflow-ui:adminAccess>
 		<p class="actions">
 		    <c:if test="${workflowInstance.status eq 'NEW' || workflowInstance.status eq 'STARTING' || workflowInstance.status eq 'STARTING_ERROR' || workflowInstance.status eq 'EXECUTING' || workflowInstance.status eq 'EXECUTING_ERROR' || workflowInstance.status eq 'SUSPENDED'}">
-			    <spring:message code="workflow.instance.action.abort.confirm" var="confirmMsg"/>
-			    <a href="javascript:submit('abort', '${confMsgVal}')" class="button"><spring:message code="workflow.instance.action.abort"/></a>
+			    <a href="javascript:submit('abort', '<spring:message code="workflow.instance.action.abort.confirm" />')" class="button"><spring:message code="workflow.instance.action.abort"/></a>
 		    </c:if>
 		    <c:if test="${workflowInstance.status eq 'SUSPENDED' }">
 		  	    <a href="javascript:submit('resume')" class="button"><spring:message code="workflow.instance.action.resume"/></a>

@@ -27,18 +27,18 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.internal.LinkedTreeMap;
 
 /**
- * Utility that serialises and deserialises any deep object tree without cyclic references. 
+ * Utility that serialises and deserialises any deep object tree without cyclic references.
  * <p>
  * Common JSON libraries such as jackson or gson all support to serialise such deep object trees.
- * However, none of the known libraries supports to to deserialise json strings that describe 
+ * However, none of the known libraries supports to to deserialise json strings that describe
  * Object[] or Map<String,Object> fields or classes that contain fields of collections.
- * <p> 
+ * <p>
  * The general problem is that the class information of a given object instance is lost during
  * serialisation. E.g. it is not possible to deserialise the object array
- * <pre>new SportMatch[] {new FootballMatch("Arsenal","Chelsea"), new TennisMatch("Nadal","Djokovic")} </pre>
- * based on the json representation 
+ * <pre>new SportMatch[] {new FootballMatch("Arsenal","Chelsea"), new TennisMatch("Nadal","Djokovic")}</pre>
+ * based on the json representation
  * <pre>[{oponent1:"Arsenal", oponent2:"Chelsea"},{oponent1:"Nadal", oponent2:"Djokovic"}]</pre>
- * 
+ *
  * This library overcomes this issue and also serialises class information where the class type
  * cannot be deducted otherwise. When serialising it allows to choose whether to serialise class
  * type information for the root object. Not serialising root object class type information is
@@ -47,7 +47,7 @@ import com.google.gson.internal.LinkedTreeMap;
  *   // if you can predict the type
  *   String json = JsonUtil.serialize(new SportMatch[] {new FootballMatch("Arsenal","Chelsea"), new TennisMatch("Nadal","Djokovic")},false);
  *   SportMatch[] o = JsonUtil.deserialize(json, SportMatch[].class);
- *   
+ *
  *   // if you cannot predict the type
  *   String json = JsonUtil.serialize(new SportMatch[] {new FootballMatch("Arsenal","Chelsea"), new TennisMatch("Nadal","Djokovic")},true);
  *   Object o = JsonUtil.deserialize(json);
@@ -499,6 +499,10 @@ public class JsonUtil{
     }
 
     private static Map<?, ?> deconvertMap( JsonElement element, Class<?> type ){
+        if (type.equals(Map.class)){
+            // default implementation if type points to the interface
+            type = HashMap.class;
+        }
         return element.isJsonObject() ? deconvertStringKeyMap( element, type ) : deconvertObjectKeyMap( element, type );
     }
 
