@@ -302,6 +302,15 @@ public class JsonUtil{
         else if( Date.class.equals( type ) ){
             return parseDate( value );
         }
+        else if( java.sql.Date.class.equals( type ) ){
+            return new java.sql.Date( parseDate(value).getTime() );
+        }
+        else if( java.sql.Time.class.equals( type ) ){
+            return new java.sql.Time( parseDate(value).getTime() );
+        }
+        else if( java.sql.Timestamp.class.equals( type ) ){
+            return new java.sql.Timestamp( parseDate(value).getTime() );
+        }
         else if( type != null && type.isEnum() ){
             @SuppressWarnings({"unchecked", "rawtypes"})
             Class<Enum> enumClazz = (Class<Enum>)type;

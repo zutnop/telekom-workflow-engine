@@ -122,10 +122,17 @@ public class JsonUtilTest{
         test( new BigDecimal( 0 ) );
         test( new BigDecimal( "9" + Long.MAX_VALUE ) );
         test( new BigDecimal( "9.9" ).add( new BigDecimal( Long.MAX_VALUE ) ) );
-        test( new Date( 0 ) );
-        test( new Date() );
         test( TestEnum.ONE );
         test( TestEnum.TWO );
+        Date now = new Date();
+        test( now );
+        test( new java.sql.Date( now.getTime() ) );
+        test( new java.sql.Time( now.getTime() ) );
+        test( new java.sql.Timestamp( now.getTime() ) );
+        test( new Date( 0 ) );
+        test( new java.sql.Date( 0 ) );
+        test( new java.sql.Time( 0 ) );
+        test( new java.sql.Timestamp( 0 ) );
     }
 
     @Test
