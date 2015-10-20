@@ -1,6 +1,7 @@
 package ee.telekom.workflow.core.workunit;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -16,11 +17,11 @@ import com.hazelcast.nio.serialization.DataSerializable;
  * These actions are not related to a particular work item.
  * <p>
  * It implements the {@link DataSerializable} interface because it is held in the
- * distributed HazelCast queue for load balancing among threads and cluster nodes. 
+ * distributed HazelCast queue for load balancing among threads and cluster nodes.
  *
  * @author Christian Klock
  */
-public class WorkUnit implements DataSerializable{
+public class WorkUnit implements DataSerializable, Serializable{
 
     private static final long serialVersionUID = 7537222252639436638L;
     private Long woinRefNum;
