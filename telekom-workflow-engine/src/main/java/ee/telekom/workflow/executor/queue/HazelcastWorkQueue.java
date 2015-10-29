@@ -45,8 +45,8 @@ public class HazelcastWorkQueue implements WorkQueue{
     @Override
     public void start(){
         Config hcConfig = new Config();
-        // Unfortunately, using the following line does not yet apply during the Hazelcast 
-        // initialization such that Hazelcast initalization log output ends up at stout. 
+        // Unfortunately, using the following line does not yet apply during the Hazelcast
+        // initialization such that Hazelcast initalization log output ends up at stout.
         // This propblem is resolved by setting a system property as shown below.
         // hcConfig.setProperty( "hazelcast.logging.type", "slf4j" );
         System.setProperty( "hazelcast.logging.class", "com.hazelcast.logging.Slf4jFactory" );
@@ -58,7 +58,10 @@ public class HazelcastWorkQueue implements WorkQueue{
         hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastGroup( config.getClusterMulticastGroup() );
         hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort( config.getClusterMulticastPort() );
         hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastTimeToLive( config.getClusterMulticastTtl() );
-        hcInstance = Hazelcast.newHazelcastInstance( hcConfig );
+        hcInstance = Hazelcast.getHazelcastInstanceByName( hcConfig.getInstanceName() );
+        if (hcInstance == null) {
+            hcInstance = Hazelcast.newHazelcastInstance( hcConfig );
+        }
         notifyListeners();
         isStarted.set( true );
         log.info( "Started queue" );
