@@ -31,7 +31,7 @@ public class WorkUnitServiceImpl implements WorkUnitService{
         // However, our concurrency strategy only supports one work unit per workflow instance at a time.
         // If there is more than one work unit, we need to select one of them. When doing this selection, we
         // make use of the fact that the list is ordered such that the first work unit for each workflow instance
-        // reflects the action with highest priority. 
+        // reflects the action with highest priority.
         // (1) ABORT_PROCESS work units are of highest priority. If there is a ABORT_PROCESS work unit, we select this one.
         // (2) First come, first serve. We take the work unit with the earliest "waiting since date". If two such work units have
         //     an identical "waiting since date", then we choose the one earlier inserted into the database (i.e. the one with

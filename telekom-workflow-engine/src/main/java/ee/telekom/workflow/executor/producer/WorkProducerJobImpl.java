@@ -1,6 +1,8 @@
 package ee.telekom.workflow.executor.producer;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.lock.LockService;
 import ee.telekom.workflow.core.notification.ExceptionNotificationService;
+import ee.telekom.workflow.core.workunit.WorkUnit;
+import ee.telekom.workflow.core.workunit.WorkUnitService;
 import ee.telekom.workflow.util.ExecutorServiceUtil;
 import ee.telekom.workflow.util.NamedPoolThreadFactory;
 
@@ -22,8 +26,12 @@ public class WorkProducerJobImpl implements WorkProducerJob{
 
     private static final Logger log = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
+    private static final int WORK_MAX_BATCH_SIZE = 1000;
+
     @Autowired
     private WorkProducerService workProducerService;
+    @Autowired
+    private WorkUnitService workUnitService;
     @Autowired
     private LockService lockService;
     @Autowired
@@ -85,7 +93,10 @@ public class WorkProducerJobImpl implements WorkProducerJob{
                     return;
                 }
                 try{
-                    workProducerService.produceWork();
+                    List<WorkUnit> unprocessedWorkUnits = workUnitService.findNewWorkUnits( new Date() );
+                    do {
+                        workProducerService.produceWork( unprocessedWorkUnits, WORK_MAX_BATCH_SIZE );
+                    } while ( !unprocessedWorkUnits.isEmpty() );
                 }
                 catch( Exception e ){
                     log.error( e.getMessage(), e );

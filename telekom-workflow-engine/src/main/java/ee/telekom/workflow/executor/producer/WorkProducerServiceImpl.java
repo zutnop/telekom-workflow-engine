@@ -1,7 +1,6 @@
 package ee.telekom.workflow.executor.producer;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.SerializationUtils;
@@ -27,15 +26,15 @@ public class WorkProducerServiceImpl implements WorkProducerService{
     private WorkQueue queue;
 
     @Override
-    public void produceWork() throws InterruptedException{
-        Date now = new Date();
-        List<WorkUnit> newWorkUnits = workUnitService.findNewWorkUnits( now );
-        if( newWorkUnits.size() > 0 ){
-            workUnitService.lock( newWorkUnits );
-            for( WorkUnit wu : newWorkUnits ){
+    public void produceWork( List<WorkUnit> unprocessedWorkUnits, int maxBatchSize ) throws InterruptedException{
+        List<WorkUnit> batchOfWorkUnits = unprocessedWorkUnits.subList(0, Math.min(maxBatchSize, unprocessedWorkUnits.size()));
+        if( batchOfWorkUnits.size() > 0 ){
+            workUnitService.lock( batchOfWorkUnits );
+            for( WorkUnit wu : batchOfWorkUnits ){
                 log.info( "Adding '{}' to queue", wu );
                 queue.put( SerializationUtils.clone( wu ) );
             }
+            batchOfWorkUnits.clear();
         }
     }
 
