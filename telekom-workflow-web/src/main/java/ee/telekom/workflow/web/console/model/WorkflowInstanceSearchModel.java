@@ -8,15 +8,14 @@ import ee.telekom.workflow.facade.util.DateUtil;
 public class WorkflowInstanceSearchModel implements Serializable{
 
     private static final long serialVersionUID = 1L;
+
     private Long refNum;
     private String workflowNameWithVersion;
     private String label1;
     private String label2;
     private Date dateCreated;
-    @SuppressWarnings("unused")
     private String dateCreatedText;
     private Date nextTimerDueDate;
-    @SuppressWarnings("unused")
     private String nextTimerDueDateText;
     private String hasActiveHumanTask;
     private String displayStatus;
@@ -63,6 +62,10 @@ public class WorkflowInstanceSearchModel implements Serializable{
         this.dateCreatedText = DateUtil.formatDate( dateCreated );
     }
 
+    public String getDateCreatedText(){
+        return dateCreatedText;
+    }
+
     public Date getNextTimerDueDate(){
         return nextTimerDueDate;
     }
@@ -70,6 +73,10 @@ public class WorkflowInstanceSearchModel implements Serializable{
     public void setNextTimerDueDate( Date nextTimerDueDate ){
         this.nextTimerDueDate = nextTimerDueDate;
         this.nextTimerDueDateText = DateUtil.formatDate( nextTimerDueDate );;
+    }
+
+    public String getNextTimerDueDateText(){
+        return nextTimerDueDateText;
     }
 
     public String getHasActiveHumanTask(){
