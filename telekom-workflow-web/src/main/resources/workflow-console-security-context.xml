@@ -7,13 +7,13 @@
 
   <sec:http auto-config="true" disable-url-rewriting="true" use-expressions="true">
     <!-- TODO ERKO: temporary hack to allow REST API usage without authentication -->
-    <sec:intercept-url pattern="/api/**" access="isAnonymous()"/>  
+    <sec:intercept-url pattern="/api/**" access="isAnonymous()"/>
     <sec:intercept-url pattern="/login/**" access="permitAll"/>
     <sec:intercept-url pattern="/css/**" access="permitAll"/>
     <sec:intercept-url pattern="/js/**" access="permitAll"/>
     <sec:intercept-url pattern="/images/**" access="permitAll"/>
-    <sec:intercept-url pattern="/console/workflow/create" access="hasRole('ROLE_ADMIN')"/>
-    <sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+    <sec:intercept-url pattern="/console/workflow/create" access="hasRole('ROLE_TWE_ADMIN')"/>
+    <sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_TWE_USER','ROLE_TWE_ADMIN')"/>
     <sec:access-denied-handler error-page="/login" />
     <sec:form-login login-page="/login" authentication-failure-url="/login?error=invalid"
                     login-processing-url="/processlogin" username-parameter="username" password-parameter="password"/>

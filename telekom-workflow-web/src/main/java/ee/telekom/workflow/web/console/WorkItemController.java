@@ -49,7 +49,7 @@ public class WorkItemController{
         return "console/workflow/item";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/instances/{woinRefNum}/item/{woitRefNum}")
     public String handleAction( RedirectAttributes model,
                                 @PathVariable long woinRefNum,

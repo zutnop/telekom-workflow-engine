@@ -24,7 +24,7 @@ import ee.telekom.workflow.web.console.model.WorkflowInstanceStateModel;
 
 /**
  * Controller for the workflow instance details view.
- *  
+ *
  * @author Christian Klock
  */
 @Controller
@@ -58,7 +58,7 @@ public class WorkflowInstanceDetailsController{
      * on the instance.<br>
      * Returns a redirect for a GET-after-POST.
      */
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/instances/{woinRefNum}")
     public String performActionOnInstance( RedirectAttributes model, @PathVariable long woinRefNum, @RequestParam() String action ){
         if( "abort".equals( action ) || "suspend".equals( action ) || "resume".equals( action ) || "retry".equals( action ) ){

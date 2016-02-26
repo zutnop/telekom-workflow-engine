@@ -148,7 +148,7 @@ public class WorkflowInstancesListController{
         return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(value = "/workflow/instances/action", method = RequestMethod.POST)
     public String abortInstances( @RequestParam String action, @ModelAttribute("refNums") List<Long> refNums, RedirectAttributes model ){
         switch( action ) {

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component("webConsoleAuthenticationProvider")
 public class DummyAuthenticationProvider implements AuthenticationProvider{
+
     @Override
     public Authentication authenticate( Authentication authentication ) throws AuthenticationException{
         return new UsernamePasswordAuthenticationToken( authentication.getName(), authentication.getCredentials().toString(), getGrantedAuthorities() );
@@ -24,8 +25,7 @@ public class DummyAuthenticationProvider implements AuthenticationProvider{
     }
 
     private Collection<? extends GrantedAuthority> getGrantedAuthorities(){
-        return Arrays.asList( new GrantedAuthority[]{new SimpleGrantedAuthority( "ROLE_ADMIN" )} );
+        return Arrays.asList( new GrantedAuthority[]{new SimpleGrantedAuthority( "ROLE_TWE_ADMIN" )} );
     }
+
 }
-
-

@@ -47,7 +47,7 @@ public class WorkflowInstanceCreateController{
         return "console/workflow/create";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/create")
     public String create( RedirectAttributes model, @ModelAttribute("form") CreateWorkflowInstanceForm form, Errors result ){
         model.addFlashAttribute( "form", form );
@@ -91,7 +91,7 @@ public class WorkflowInstanceCreateController{
         return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/batchCreate")
     public String batchCreate( RedirectAttributes model, @ModelAttribute("batchForm") BatchCreateWorkflowInstancesForm batchForm, Errors result ){
         model.addFlashAttribute( "batchForm", batchForm );
