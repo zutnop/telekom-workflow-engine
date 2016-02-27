@@ -57,6 +57,8 @@ public class WorkflowEngineConfiguration{
     private String consoleMappingPrefix;
     @Value("${workflowengine.environment}")
     private String environment;
+    @Value("${workflowengine.embeddedNavigationMode}")
+    private boolean embeddedNavigationMode;
 
     @PostConstruct
     public void init(){
@@ -181,7 +183,7 @@ public class WorkflowEngineConfiguration{
     }
 
     /**
-     * Determines wether the engine is deployed in development mode (as opposed to production).
+     * Determines whether the engine is deployed in development mode (as opposed to production).
      */
     public boolean isDevelopmentMode(){
         return developmentMode;
@@ -197,6 +199,13 @@ public class WorkflowEngineConfiguration{
     public String getEnvironment(){
         return environment;
     }
+
+    /**
+     * Determines if the header logo and navigation links act as a stand-alone web app (default), or as embedded web screens.
+     */
+    public boolean isEmbeddedNavigationMode() {
+		return embeddedNavigationMode;
+	}
 
     private String getFirstNotEmpty( String configValue, String defaultValue ){
         return StringUtils.isNotBlank( configValue ) ? configValue : defaultValue;

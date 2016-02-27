@@ -39,7 +39,8 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
 
-    <spring.version>3.1.1.RELEASE</spring.version>
+    <spring.version>4.2.5.RELEASE</spring.version>
+    <spring.security.version>4.0.4.RELEASE</spring.security.version>
     <slf4j.version>1.7.5</slf4j.version>
     <logback.version>1.0.13</logback.version>
   </properties>
@@ -85,13 +86,13 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-asm</artifactId>
+      <artifactId>spring-tx</artifactId>
       <version>${spring.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-tx</artifactId>
-      <version>${spring.version}</version>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${spring.security.version}</version>
     </dependency>
 
     <dependency>

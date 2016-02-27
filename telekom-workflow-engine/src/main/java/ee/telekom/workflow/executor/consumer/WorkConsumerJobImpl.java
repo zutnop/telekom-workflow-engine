@@ -8,6 +8,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.concurrent.DelegatingSecurityContextExecutorService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
@@ -24,16 +30,28 @@ public class WorkConsumerJobImpl implements WorkConsumerJob{
     @Autowired
     private WorkflowEngineConfiguration config;
 
-    private ExecutorService threadPool;
+    private ExecutorService executorService;
     private final AtomicBoolean isStopping = new AtomicBoolean();
 
     @Override
     public synchronized void start(){
         isStopping.set( false );
+
+        // number of parallel consumer threads
         int numberOfConsumerThreads = config.getNumberOfConsumerThreads();
-        threadPool = Executors.newFixedThreadPool( numberOfConsumerThreads, new NamedPoolThreadFactory( "consumer" ) );
+
+        // spring security context for executor threads
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("workflow-engine", "[not-used]", AuthorityUtils.createAuthorityList("ROLE_WORKFLOW_ENGINE")));
+
+        // actual executor thread pool
+        ExecutorService delegateExecutorService = Executors.newFixedThreadPool( numberOfConsumerThreads, new NamedPoolThreadFactory( "consumer" ) );
+        // wrapper executor service that sets the security context for each thread
+        executorService = new DelegatingSecurityContextExecutorService(delegateExecutorService, securityContext);
+
+        // start the consuming jobs
         for( int i = 0; i < numberOfConsumerThreads; i++ ){
-            threadPool.execute( new ConsumerRunnable() );
+            executorService.execute( new ConsumerRunnable() );
         }
         log.info( "Scheduled {} consumers", numberOfConsumerThreads );
     }
@@ -42,7 +60,7 @@ public class WorkConsumerJobImpl implements WorkConsumerJob{
     public synchronized void stop(){
         log.debug( "Stopping consumers" );
         isStopping.set( true );
-        ExecutorServiceUtil.shutDownSynchronously( threadPool );
+        ExecutorServiceUtil.shutDownSynchronously( executorService );
         log.info( "Stopped all consumers" );
     }
 

@@ -25,7 +25,9 @@
 <div id="wrap">
     <div id="header">
         <div class="inner clear">
-            <p id="logo"><a href="<c:url value='${urlPrefix}/console' />"><spring:message code="header.logo" /></a></p>
+            <c:url value='${urlPrefix}/console' var="tweConsole" />
+            <c:url value='/' var="rootUrl" />
+            <p id="logo"><a href="${workflowEngineConfiguration.embeddedNavigationMode ? rootUrl : tweConsole}"><spring:message code="header.logo" /></a></p>
             <c:set var="environmentName" value="${workflowEngineConfiguration.environment}"/>
             <p id="portal"><spring:message code="header.name" /><c:if test="${not empty environmentName}">&nbsp;${environmentName}</c:if></p>
             <c:if test="${not empty sessionScope['SPRING_SECURITY_CONTEXT']}">
@@ -35,7 +37,9 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                             <ul>
                                 <li><strong>${sessionScope['SPRING_SECURITY_CONTEXT'].authentication.principal}</strong></li>
-                                <li><a href="#" onclick="javascript:logoutForm.submit();return false;"><spring:message code="header.logout" /></a></li>
+                                <c:if test="${not workflowEngineConfiguration.embeddedNavigationMode}">
+                                    <li><a href="#" onclick="javascript:logoutForm.submit();return false;"><spring:message code="header.logout" /></a></li>
+                                </c:if>
                             </ul>
                         </form>
                     </div>
