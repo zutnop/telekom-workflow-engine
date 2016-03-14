@@ -15,6 +15,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import ee.telekom.workflow.core.archive.ArchiveService;
 import ee.telekom.workflow.core.common.UnexpectedStatusException;
+import ee.telekom.workflow.core.notification.ExceptionNotificationService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstance;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
@@ -50,6 +51,8 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
     private WorkflowEnginePlugin plugin;
     @Autowired
     private PlatformTransactionManager platformTransactionManager;
+    @Autowired
+    private ExceptionNotificationService exceptionNotificationService;
 
     /*
      * A few words on the treatment of UnexpectedStatusException's.
@@ -96,6 +99,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
             catch( Exception e2 ){
                 log.warn( "Handling error failed.", e2 );
             }
+            exceptionNotificationService.handleException( e );
         }
     }
 
@@ -157,6 +161,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
             catch( Exception e2 ){
                 log.warn( "Handling error failed.", e2 );
             }
+            exceptionNotificationService.handleException( e );
         }
     }
 
@@ -195,6 +200,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
             catch( Exception e2 ){
                 log.warn( "Handling error failed.", e2 );
             }
+            exceptionNotificationService.handleException( e );
         }
     }
 
@@ -234,6 +240,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
             catch( Exception e2 ){
                 log.warn( "Handling error failed.", e2 );
             }
+            exceptionNotificationService.handleException( e );
         }
     }
 

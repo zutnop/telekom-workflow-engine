@@ -49,7 +49,7 @@ public class WorkConsumerServiceImpl implements WorkConsumerService{
                 consumedWorkUnits.incrementAndGet();
             }
             finally{
-                MDC.clear();
+                MDC.remove( "workunit" );
             }
         }
     }

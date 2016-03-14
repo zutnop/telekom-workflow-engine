@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
+import ee.telekom.workflow.core.notification.ExceptionNotificationService;
 import ee.telekom.workflow.util.ExecutorServiceUtil;
 import ee.telekom.workflow.util.NamedPoolThreadFactory;
 
@@ -29,6 +30,8 @@ public class WorkConsumerJobImpl implements WorkConsumerJob{
     private WorkConsumerService workConsumerService;
     @Autowired
     private WorkflowEngineConfiguration config;
+    @Autowired
+    private ExceptionNotificationService exceptionNotificationService;
 
     private ExecutorService executorService;
     private final AtomicBoolean isStopping = new AtomicBoolean();
@@ -75,6 +78,7 @@ public class WorkConsumerJobImpl implements WorkConsumerJob{
                     }
                     catch( Exception e ){
                         log.error( "ConsumerRunnable failed to consume work, but we will try again after 10 seconds.", e );
+                        exceptionNotificationService.handleException( e );
                         try{
                             Thread.sleep( 1000L * 10 );
                         }
