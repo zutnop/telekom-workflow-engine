@@ -20,7 +20,7 @@ public class SearchWorkflowInstancesForm extends SearchWorkflowInstances{
 
     public boolean hasSearchCriteria(){
         return getRefNum() != null && getRefNum().size() > 0 || getWorkflowName() != null && getWorkflowName().size() > 0 || getLabel1() != null && getLabel1().size() > 0
-                || getLabel2() != null && getLabel2().size() > 0 || getStatus() != null;
+                || getLabel2() != null && getLabel2().size() > 0 || getStatus() != null && getStatus().size() > 0;
     }
 
     public boolean hasId(){
