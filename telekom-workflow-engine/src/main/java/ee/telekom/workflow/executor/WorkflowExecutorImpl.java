@@ -171,6 +171,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
 
         TransactionStatus status = null;
         try{
+            workflowInstanceService.assertIsExecuting(woinRefNum);
             workItemService.markCompleting( woitRefNum );
             status = begin();
 
@@ -210,6 +211,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
 
         TransactionStatus status = null;
         try{
+            workflowInstanceService.assertIsExecuting(woinRefNum);
             workItemService.markExecuting( woitRefNum );
             status = begin();
 

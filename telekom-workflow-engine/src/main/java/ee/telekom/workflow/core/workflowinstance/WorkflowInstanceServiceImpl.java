@@ -93,6 +93,14 @@ public class WorkflowInstanceServiceImpl implements WorkflowInstanceService{
     }
 
     @Override
+    public void assertIsExecuting( long refNum ) throws UnexpectedStatusException{
+        WorkflowInstanceStatus status = dao.findStatusByRefNum( refNum );
+        if ( !WorkflowInstanceStatus.EXECUTING.equals( status ) ){
+            throw new UnexpectedStatusException( WorkflowInstanceStatus.EXECUTING );
+        }
+    }
+
+    @Override
     public void rewindAfterError( long refNum ) throws UnexpectedStatusException{
         WorkflowInstance woin = find( refNum );
         if( WorkflowInstanceStatus.STARTING_ERROR.equals( woin.getStatus() ) ){

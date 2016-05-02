@@ -23,6 +23,8 @@ public interface WorkflowInstanceService{
 
     void markAborted( long refNum ) throws UnexpectedStatusException;
 
+    void assertIsExecuting( long refNum ) throws UnexpectedStatusException;
+
     void rewindAfterError( long refNum ) throws UnexpectedStatusException;
 
     void suspend( long refNum ) throws UnexpectedStatusException;

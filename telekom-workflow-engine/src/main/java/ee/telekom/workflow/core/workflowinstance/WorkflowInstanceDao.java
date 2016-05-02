@@ -35,6 +35,13 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
         return results.isEmpty() ? null : results.get( 0 );
     }
 
+    public WorkflowInstanceStatus findStatusByRefNum( long refNum ){
+        String sql = "SELECT status FROM " + getSchema() + "workflow_instances WHERE ref_num = ?";
+        Object[] args = {refNum};
+        List<String> results = getJdbcTemplate().queryForList( sql, args, String.class );
+        return results.isEmpty() ? null : WorkflowInstanceStatus.valueOf(results.get( 0 ) );
+    }
+
     public void updateAndUnlock( long refNum,
                                  int workflowVersion,
                                  String attributes,
