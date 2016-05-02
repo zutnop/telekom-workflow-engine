@@ -4,7 +4,7 @@
 
   <groupId>ee.telekom.workflow</groupId>
   <artifactId>workflow-web</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
   <name>telekom-workflow-web</name>
   <description>Telekom-workflow-engine web console, REST services and JMX interface for monitoring and interacting with the running engine.</description>
   <url>https://github.com/zutnop/telekom-workflow-engine</url>
