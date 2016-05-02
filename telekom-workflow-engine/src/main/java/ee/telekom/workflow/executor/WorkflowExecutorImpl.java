@@ -97,7 +97,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workflowInstanceService.handleStartingError( woinRefNum, e );
             }
             catch( Exception e2 ){
-                log.warn( "Handling error failed.", e2 );
+                log.error( "Handling error failed.", e2 );
             }
             exceptionNotificationService.handleException( e );
         }
@@ -159,7 +159,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workflowInstanceService.handleAbortingError( woinRefNum, e );
             }
             catch( Exception e2 ){
-                log.warn( "Handling error failed.", e2 );
+                log.error( "Handling error failed.", e2 );
             }
             exceptionNotificationService.handleException( e );
         }
@@ -198,7 +198,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workItemService.handleCompletingError( woinRefNum, woitRefNum, e );
             }
             catch( Exception e2 ){
-                log.warn( "Handling error failed.", e2 );
+                log.error( "Handling error failed.", e2 );
             }
             exceptionNotificationService.handleException( e );
         }
@@ -238,7 +238,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workItemService.handleExecutingError( woinRefNum, woitRefNum, e );
             }
             catch( Exception e2 ){
-                log.warn( "Handling error failed.", e2 );
+                log.error( "Handling error failed.", e2 );
             }
             exceptionNotificationService.handleException( e );
         }
@@ -257,8 +257,13 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
     private void rollback( TransactionStatus status ){
         if( status != null ){
             log.info( "Trying to roll back" );
-            platformTransactionManager.rollback( status );
-            log.info( "Rolled back" );
+            try{
+                platformTransactionManager.rollback(status);
+                log.info( "Rolled back" );
+            }
+            catch( Exception e ){
+                log.error( "Failed to roll back transaction", e );
+            }
         }
         else{
             log.warn( "Cannot roll back, because transaction status is null" );
