@@ -16,14 +16,20 @@ public class UnexpectedStatusException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 
-    private static final String MSG = "The attempted update failed because the entity was not in one of the expected statuses (%s). This may be caused by a concurrent update.";
+    private static final String MSG = "The attempted update failed. Error: %s. This may be caused by a concurrent update.";
 
-    public UnexpectedStatusException( Object expectedStatus ){
-        super( String.format( MSG, expectedStatus.toString() ) );
+    public UnexpectedStatusException( String error ) {
+        super(  String.format( MSG, error ) );
     }
 
+    public UnexpectedStatusException( Object expectedStatus ){
+        this( "The entity was not in the expected status (" + expectedStatus.toString() + ")" );
+    }
+
+
+
     public UnexpectedStatusException( Collection<? extends Object> expectedStatuses ){
-        super( String.format( MSG, expectedStatuses.toString() ) );
+        this( "The entity was not in one of the expected status (" + expectedStatuses.toString() + ")" );
     }
 
 }

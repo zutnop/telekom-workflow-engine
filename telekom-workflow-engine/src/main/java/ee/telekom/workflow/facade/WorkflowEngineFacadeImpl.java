@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
 import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,12 +97,14 @@ public class WorkflowEngineFacadeImpl implements WorkflowEngineFacade{
     @Override
     public void abortWorkflowInstance( long woinRefNum ){
         validateClusterNameOfWorkflowInstance( woinRefNum );
+        validateCurrentlyNotExecuting( woinRefNum );
         abortService.abort( woinRefNum );
     }
 
     @Override
     public void suspendWorkflowInstance( long woinRefNum ){
         validateClusterNameOfWorkflowInstance( woinRefNum );
+        validateCurrentlyNotExecuting( woinRefNum );
         workflowInstanceService.suspend( woinRefNum );
     }
 
@@ -372,6 +375,24 @@ public class WorkflowEngineFacadeImpl implements WorkflowEngineFacade{
     private void validateClusterNameOfWorkItem( long woitRefNum ){
         WorkItem woit = workItemDao.findByRefNum( woitRefNum );
         validateClusterNameOfWorkflowInstance( woit.getWoinRefNum() );
+    }
+
+    private void validateCurrentlyNotExecuting( long woinRefNum ) {
+        WorkflowInstance woin = workflowInstanceService.find( woinRefNum );
+        if ( !woin.isLocked() ) {
+            return;
+        }
+        if ( WorkflowInstanceStatus.STARTING.equals( woin.getStatus() )
+            || WorkflowInstanceStatus.ABORTING.equals( woin.getStatus() ) ) {
+            throw new UnexpectedStatusException( "The workflow instance is currently executing" );
+        }
+        List<WorkItem> woits = workItemDao.findActiveByWoinRefNum( woinRefNum );
+        for (WorkItem woit : woits) {
+            if ( WorkItemStatus.EXECUTING.equals( woit.getStatus() )
+                || WorkItemStatus.COMPLETING.equals( woit.getStatus() ) ) {
+                throw new UnexpectedStatusException( "The workflow instance is currently executing" );
+            }
+        }
     }
 
 }

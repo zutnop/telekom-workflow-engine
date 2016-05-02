@@ -99,18 +99,11 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
                 log.info( "Created new work items {} ", StringUtils.join( getRefNums( createNew ), "," ) );
             }
         }
-        List<WorkflowInstanceStatus> expectedStatuses;
-        if( WorkflowInstanceStatus.EXECUTED.equals( workflowInstance.getStatus() )
-                || WorkflowInstanceStatus.ABORTED.equals( workflowInstance.getStatus() ) ){
-            // A workflow instance that got completed should be marked completed in the database, even if there was a concurrent ABORT or SUSPEND request.
-            expectedStatuses = Arrays.asList( WorkflowInstanceStatus.STARTING, WorkflowInstanceStatus.EXECUTING, WorkflowInstanceStatus.ABORTING,
-                    WorkflowInstanceStatus.SUSPENDED, WorkflowInstanceStatus.ABORT );
-        }
-        else{
-            expectedStatuses = Arrays.asList( WorkflowInstanceStatus.STARTING, WorkflowInstanceStatus.EXECUTING, WorkflowInstanceStatus.ABORTING );
-        }
-
-        woinDao.updateAndUnlock(
+        List<WorkflowInstanceStatus> expectedStatuses = Arrays.asList(
+          WorkflowInstanceStatus.STARTING,
+          WorkflowInstanceStatus.EXECUTING,
+          WorkflowInstanceStatus.ABORTING );
+        boolean success = woinDao.updateAndUnlock(
                 workflowInstance.getRefNum(),
                 workflowInstance.getWorkflowVersion(),
                 workflowInstance.getAttributes(),
@@ -119,6 +112,10 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
                 workflowInstance.getStatus(),
                 expectedStatuses
                 );
+        if( !success ){
+            throw new UnexpectedStatusException( expectedStatuses );
+        }
+
         log.info( "Updated workflow instance {} with status {} ", workflowInstance.getRefNum(), workflowInstance.getStatus() );
         if( WorkflowInstanceStatus.EXECUTED.equals( workflowInstance.getStatus() )
                 || WorkflowInstanceStatus.ABORTED.equals( workflowInstance.getStatus() ) ){
