@@ -36,7 +36,7 @@ public class WorkConsumerServiceImpl implements WorkConsumerService{
     public void consumeWorkUnit(){
         WorkUnit workUnit = null;
         try{
-            workUnit = queue.poll( 15, TimeUnit.SECONDS );
+            workUnit = queue.poll( 3, TimeUnit.SECONDS );
         }
         catch( InterruptedException e ){
         }
