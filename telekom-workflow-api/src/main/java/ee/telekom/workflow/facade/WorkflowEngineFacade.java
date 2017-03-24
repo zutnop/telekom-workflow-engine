@@ -23,8 +23,6 @@ import ee.telekom.workflow.listener.WorkflowEngineHazelcastStartupListener;
  */
 public interface WorkflowEngineFacade{
 
-    public static final String HAZELCAST_INSTANCE_NAME = "telekomWorkflowEngineHazelcast";
-
     /**
      * Creates a new workflow instance as described by the request and sets
      * the request's refNum field to the newly created workflow instance's refNum.

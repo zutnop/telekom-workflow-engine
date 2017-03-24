@@ -21,12 +21,15 @@ import com.hazelcast.config.MulticastConfig;
 @Component
 public class WorkflowEngineConfiguration{
 
+    private static final String DEFAULT_HAZELCAST_INSTANCE_NAME = "telekomWorkflowEngineHazelcast";
     private static final String DEFAULT_CLUSTER_MULTICAST_GROUP = MulticastConfig.DEFAULT_MULTICAST_GROUP;
     private static final int DEFAULT_CLUSTER_MULTICAST_PORT = MulticastConfig.DEFAULT_MULTICAST_PORT;
     private static final int DEFAULT_CLUSTER_MULTICAST_TTL = 0;
 
     @Value("${database.workflowengine.schema:engine}")
     private String schema;
+    @Value("${workflowengine.cluster.hazelcast.name}")
+    private String clusterHazelcastName;
     @Value("${workflowengine.cluster.name}")
     private String clusterName;
     @Value("${workflowengine.cluster.multicast.group}")
@@ -69,6 +72,13 @@ public class WorkflowEngineConfiguration{
      */
     public String getSchema() {
         return StringUtils.isNotBlank(schema) ? (schema + ".") : "";
+    }
+
+    /**
+     * This parameter is used as the Hazelcast instance bean name.
+     */
+    public String getClusterHazelcastName(){
+        return StringUtils.isNotBlank(clusterHazelcastName) ? clusterHazelcastName : DEFAULT_HAZELCAST_INSTANCE_NAME;
     }
 
     /**

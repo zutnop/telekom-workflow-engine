@@ -1,7 +1,5 @@
 package ee.telekom.workflow.executor.queue;
 
-import static ee.telekom.workflow.facade.WorkflowEngineFacade.HAZELCAST_INSTANCE_NAME;
-
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,7 @@ public class HazelcastWorkQueue implements WorkQueue{
     @Autowired
     private WorkflowEngineConfiguration config;
     private HazelcastInstance hcInstance;
+    private AtomicBoolean isLocalHcInstance = new AtomicBoolean( false );
     private AtomicBoolean isStarted = new AtomicBoolean( false );
     private List<WorkflowEngineHazelcastStartupListener> listeners = new ArrayList<>();
 
@@ -44,23 +43,29 @@ public class HazelcastWorkQueue implements WorkQueue{
 
     @Override
     public void start(){
-        Config hcConfig = new Config();
-        // Unfortunately, using the following line does not yet apply during the Hazelcast
-        // initialization such that Hazelcast initalization log output ends up at stout.
-        // This propblem is resolved by setting a system property as shown below.
-        // hcConfig.setProperty( "hazelcast.logging.type", "slf4j" );
-        System.setProperty( "hazelcast.logging.class", "com.hazelcast.logging.Slf4jFactory" );
-        hcConfig.setProperty( "hazelcast.jmx", "true" );
-        hcConfig.setProperty( "hazelcast.shutdownhook.enabled", "false" );
-        hcConfig.setInstanceName( HAZELCAST_INSTANCE_NAME );
-        hcConfig.getGroupConfig().setName( config.getClusterName() );
-        hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setEnabled( true );
-        hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastGroup( config.getClusterMulticastGroup() );
-        hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort( config.getClusterMulticastPort() );
-        hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastTimeToLive( config.getClusterMulticastTtl() );
-        hcInstance = Hazelcast.getHazelcastInstanceByName( hcConfig.getInstanceName() );
+        String hcInstanceName = config.getClusterHazelcastName();
+        hcInstance = Hazelcast.getHazelcastInstanceByName( hcInstanceName );
         if (hcInstance == null) {
+            log.info( "Didn't find an existing Hazelcast instance by name " + hcInstanceName + ". Starting our own instance!" );
+            Config hcConfig = new Config();
+            // Unfortunately, using the following line does not yet apply during the Hazelcast
+            // initialization such that Hazelcast initalization log output ends up at stout.
+            // This propblem is resolved by setting a system property as shown below.
+            // hcConfig.setProperty( "hazelcast.logging.type", "slf4j" );
+            System.setProperty( "hazelcast.logging.class", "com.hazelcast.logging.Slf4jFactory" );
+            hcConfig.setProperty( "hazelcast.jmx", "true" );
+            hcConfig.setProperty( "hazelcast.shutdownhook.enabled", "false" );
+            hcConfig.setInstanceName( hcInstanceName );
+            hcConfig.getGroupConfig().setName( config.getClusterName() );
+            hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setEnabled( true );
+            hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastGroup( config.getClusterMulticastGroup() );
+            hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastPort( config.getClusterMulticastPort() );
+            hcConfig.getNetworkConfig().getJoin().getMulticastConfig().setMulticastTimeToLive( config.getClusterMulticastTtl() );
+
             hcInstance = Hazelcast.newHazelcastInstance( hcConfig );
+            isLocalHcInstance.set( true );
+        } else {
+            log.info( "Found an existing Hazelcast instance by name " + hcInstanceName + ". Using that." );
         }
         notifyListeners();
         isStarted.set( true );
@@ -76,7 +81,9 @@ public class HazelcastWorkQueue implements WorkQueue{
     @Override
     public void stop(){
         log.debug( "Stopping queue" );
-        hcInstance.getLifecycleService().shutdown();
+        if (isLocalHcInstance.get()) {
+            hcInstance.getLifecycleService().shutdown();
+        }
         isStarted.set( false );
         log.info( "Stopped queue" );
     }
