@@ -1,8 +1,6 @@
 package ee.telekom.workflow.executor.queue;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -20,7 +18,6 @@ import com.hazelcast.core.ItemListener;
 
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.workunit.WorkUnit;
-import ee.telekom.workflow.listener.WorkflowEngineHazelcastStartupListener;
 
 @Component
 public class HazelcastWorkQueue implements WorkQueue{
@@ -34,12 +31,6 @@ public class HazelcastWorkQueue implements WorkQueue{
     private HazelcastInstance hcInstance;
     private AtomicBoolean isLocalHcInstance = new AtomicBoolean( false );
     private AtomicBoolean isStarted = new AtomicBoolean( false );
-    private List<WorkflowEngineHazelcastStartupListener> listeners = new ArrayList<>();
-
-    @Override
-    public void registerHazelcastStartupListener( WorkflowEngineHazelcastStartupListener listener ){
-        listeners.add( listener );
-    }
 
     @Override
     public void start(){
@@ -67,15 +58,8 @@ public class HazelcastWorkQueue implements WorkQueue{
         } else {
             log.info( "Found an existing Hazelcast instance by name " + hcInstanceName + ". Using that." );
         }
-        notifyListeners();
         isStarted.set( true );
         log.info( "Started queue" );
-    }
-
-    private void notifyListeners(){
-        for( WorkflowEngineHazelcastStartupListener listener : listeners ){
-            listener.onStarted();
-        }
     }
 
     @Override

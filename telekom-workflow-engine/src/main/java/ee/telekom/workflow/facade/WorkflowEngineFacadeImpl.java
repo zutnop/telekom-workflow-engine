@@ -26,7 +26,6 @@ import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.core.workitem.WorkItem;
 import ee.telekom.workflow.core.workitem.WorkItemDao;
 import ee.telekom.workflow.executor.GraphEngineFactory;
-import ee.telekom.workflow.executor.queue.WorkQueue;
 import ee.telekom.workflow.facade.model.CreateWorkflowInstance;
 import ee.telekom.workflow.facade.model.ExecutionErrorState;
 import ee.telekom.workflow.facade.model.SearchWorkflowInstances;
@@ -39,7 +38,6 @@ import ee.telekom.workflow.facade.workflowinstance.WorkflowStatusCount;
 import ee.telekom.workflow.facade.workitem.WorkItemStateDao;
 import ee.telekom.workflow.graph.Graph;
 import ee.telekom.workflow.graph.WorkItemStatus;
-import ee.telekom.workflow.listener.WorkflowEngineHazelcastStartupListener;
 import ee.telekom.workflow.util.JsonUtil;
 
 /*
@@ -67,8 +65,6 @@ public class WorkflowEngineFacadeImpl implements WorkflowEngineFacade{
     private WorkItemDao workItemDao;
     @Autowired
     private WorkItemStateDao workItemStateDao;
-    @Autowired
-    private WorkQueue queue;
 
     @Autowired
     private ExecutionErrorDao executionErrorDao;
@@ -355,11 +351,6 @@ public class WorkflowEngineFacadeImpl implements WorkflowEngineFacade{
     @Override
     public boolean isNodeInMasterRole(){
         return lockService.refreshOwnLock();
-    }
-
-    @Override
-    public void registerHazelcastStartupListener( WorkflowEngineHazelcastStartupListener listener ){
-        queue.registerHazelcastStartupListener( listener );
     }
 
     // Please see the class level documentation for a reasoning on this method.

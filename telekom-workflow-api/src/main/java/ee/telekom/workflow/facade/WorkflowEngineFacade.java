@@ -11,7 +11,6 @@ import ee.telekom.workflow.facade.model.SearchWorkflowInstances;
 import ee.telekom.workflow.facade.model.WorkItemState;
 import ee.telekom.workflow.facade.model.WorkflowInstanceFacadeStatus;
 import ee.telekom.workflow.facade.model.WorkflowInstanceState;
-import ee.telekom.workflow.listener.WorkflowEngineHazelcastStartupListener;
 
 /**
  * Provides a facade for the workflow engine.
@@ -219,10 +218,5 @@ public interface WorkflowEngineFacade{
      * Returns whether the engine deployment at hand is in the master role within its cluster.
      */
     boolean isNodeInMasterRole();
-
-    /**
-     * Registers listener that will be notified when engine Hazelcast instance has been started.
-     */
-    void registerHazelcastStartupListener( WorkflowEngineHazelcastStartupListener listener );
 
 }
