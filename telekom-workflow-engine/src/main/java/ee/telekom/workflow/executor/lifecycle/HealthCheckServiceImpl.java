@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
-import ee.telekom.workflow.core.lock.LockService;
 import ee.telekom.workflow.core.node.NodeService;
 import ee.telekom.workflow.core.recovery.RecoveryService;
 import ee.telekom.workflow.executor.producer.WorkProducerJob;
@@ -25,8 +24,6 @@ public class HealthCheckServiceImpl implements HealthCheckService{
     private RecoveryService recoveryService;
     @Autowired
     private NodeService nodeService;
-    @Autowired
-    private LockService lockService;
     @Autowired
     private WorkProducerJob producer;
     @Autowired

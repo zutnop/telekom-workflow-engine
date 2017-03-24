@@ -5,7 +5,6 @@ import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
 
-import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.executor.consumer.WorkConsumerService;
 import ee.telekom.workflow.executor.plugin.WorkflowEnginePlugin;
 import ee.telekom.workflow.executor.producer.WorkProducerJob;
@@ -19,8 +18,6 @@ public class EngineMonitor{
     // Therefore, we explicitly set the bean name to a constant.
     public static final String BEAN = "engineMonitor";
 
-    @Autowired
-    private WorkflowEngineConfiguration config;
     @Autowired
     private WorkflowEnginePlugin plugin;
     @Autowired

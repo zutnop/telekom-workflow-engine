@@ -14,7 +14,6 @@ import ee.telekom.workflow.core.abort.AbortService;
 import ee.telekom.workflow.core.retry.RetryService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
-import ee.telekom.workflow.core.workitem.WorkItemService;
 import ee.telekom.workflow.core.workunit.WorkType;
 import ee.telekom.workflow.executor.plugin.MockPlugin;
 import ee.telekom.workflow.graph.Graph;
@@ -30,8 +29,6 @@ public class OneTaskltemIT extends AbstractWorkflowIT{
 
     @Autowired
     private WorkflowInstanceService workflowInstanceService;
-    @Autowired
-    private WorkItemService workItemService;
     @Autowired
     private AbortService abortService;
     @Autowired

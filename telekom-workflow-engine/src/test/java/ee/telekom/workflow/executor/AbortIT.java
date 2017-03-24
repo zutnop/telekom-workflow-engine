@@ -18,8 +18,6 @@ import ee.telekom.workflow.core.node.NodeService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstance;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
-import ee.telekom.workflow.core.workitem.WorkItemDao;
-import ee.telekom.workflow.core.workitem.WorkItemService;
 import ee.telekom.workflow.core.workunit.WorkType;
 import ee.telekom.workflow.executor.marshall.Marshaller;
 import ee.telekom.workflow.executor.marshall.TokenState;
@@ -36,10 +34,6 @@ public class AbortIT extends AbstractWorkflowIT{
 
     @Autowired
     private WorkflowInstanceService workflowInstanceService;
-    @Autowired
-    private WorkItemService workItemService;
-    @Autowired
-    private WorkItemDao workItemDao;
     @Autowired
     private AbortService abortService;
 
