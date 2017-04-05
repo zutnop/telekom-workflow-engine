@@ -1,6 +1,10 @@
 package ee.telekom.workflow.web.console.form;
 
-public class ExecuteWorkItemForm{
+import java.io.Serializable;
+
+public class ExecuteWorkItemForm implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String result;
 

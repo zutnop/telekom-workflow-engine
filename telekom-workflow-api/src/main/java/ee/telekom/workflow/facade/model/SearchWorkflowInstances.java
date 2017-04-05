@@ -15,6 +15,7 @@ import java.util.List;
 public class SearchWorkflowInstances implements Serializable{
 
     private static final long serialVersionUID = 1L;
+
     private List<Long> refNum;
     private List<String> workflowName;
     private List<String> label1;

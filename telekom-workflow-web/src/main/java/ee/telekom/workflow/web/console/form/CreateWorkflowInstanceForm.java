@@ -1,6 +1,10 @@
 package ee.telekom.workflow.web.console.form;
 
-public class CreateWorkflowInstanceForm{
+import java.io.Serializable;
+
+public class CreateWorkflowInstanceForm implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long refNum;
     private String workflowName;

@@ -1,8 +1,11 @@
 package ee.telekom.workflow.web.console.form;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BatchCreateWorkflowInstancesForm{
+public class BatchCreateWorkflowInstancesForm implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<Long> refNums;
     private String batchRequest;

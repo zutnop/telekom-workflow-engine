@@ -87,6 +87,7 @@ public class WorkItemController{
         // redirect
         if( result.hasErrors() || model.getFlashAttributes().containsKey( "error" ) ){
             model.addFlashAttribute( "form", form );
+            // XXX Errors object was never intended to be put into flash/session for POST-REDIRECT-GET: https://jira.spring.io/browse/SPR-8282
             model.addFlashAttribute( "org.springframework.validation.BindingResult.form", result );
             return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum() + "/item/" + workItem.getRefNum();
         }

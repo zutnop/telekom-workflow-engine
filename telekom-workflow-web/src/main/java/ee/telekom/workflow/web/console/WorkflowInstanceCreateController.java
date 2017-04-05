@@ -51,6 +51,7 @@ public class WorkflowInstanceCreateController{
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/create")
     public String create( RedirectAttributes model, @ModelAttribute("form") CreateWorkflowInstanceForm form, Errors result ){
         model.addFlashAttribute( "form", form );
+        // XXX Errors object was never intended to be put into flash/session for POST-REDIRECT-GET: https://jira.spring.io/browse/SPR-8282
         model.addFlashAttribute( "org.springframework.validation.BindingResult.form", result );
 
         Integer version = null;
@@ -95,6 +96,7 @@ public class WorkflowInstanceCreateController{
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/batchCreate")
     public String batchCreate( RedirectAttributes model, @ModelAttribute("batchForm") BatchCreateWorkflowInstancesForm batchForm, Errors result ){
         model.addFlashAttribute( "batchForm", batchForm );
+        // XXX Errors object was never intended to be put into flash/session for POST-REDIRECT-GET: https://jira.spring.io/browse/SPR-8282
         model.addFlashAttribute( "org.springframework.validation.BindingResult.batchForm", result );
 
         List<CreateWorkflowInstance> requests = null;
