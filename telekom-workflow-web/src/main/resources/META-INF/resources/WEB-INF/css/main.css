@@ -2118,6 +2118,20 @@ td.warning a {
     color: #c00 !important;
 }
 
+table.data > tbody > tr > td.highlight-ACTIVE {
+    background-color: #ccffcc;
+}
+table.data > tbody > tr > td.highlight-ERROR {
+    background-color: #ffcccc;
+}
+table.data > tbody > tr > td.highlight-SUSPENDED {
+    background-color: #ffffcc;
+}
+
+table.data > tbody > tr.text-inactive > td {
+	color: #999;
+}
+
 #instancesTable tr td:first-child,
 #instancesTable th:first-child {
     padding: 7px 5px;

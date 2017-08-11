@@ -50,7 +50,9 @@
 	                        <td><c:out value="${workflowInstance.label2}" /></td>
 	                        <td><c:out value="${workflowInstance.clusterName}" /></td>
 	                        <td><c:out value="${workflowInstance.nodeName}" /></td>
-	                        <td><spring:message code="workflowinstance.status.facadedetailed.${workflowInstance.facadeStatus}" arguments="${workflowInstance.status}"/></td>
+	                        <td class="${'highlight-' += workflowInstance.facadeStatus}">
+	                           <spring:message code="workflowinstance.status.facadedetailed.${workflowInstance.facadeStatus}" arguments="${workflowInstance.status}"/>
+	                        </td>
 							<td><spring:message code="workflowinstance.locked.${workflowInstance.locked}"/></td>
 	                        <td><c:out value="${workflowInstance.dateCreatedText}" /></td>
 	                        <td><c:out value="${workflowInstance.dateUpdatedText}" /></td>
@@ -113,7 +115,7 @@
 			            	</thead>
 			                <tbody>
 			                	<c:forEach var="wi" items="${workItems}">
-				                    <tr>
+				                    <tr class="${(wi.status == 'COMPLETED' or wi.status == 'CANCELLED') ? 'text-inactive' : ''}">
 				                        <td><c:out value="${wi.refNum}" /></td>
 				                        <td><c:out value="${wi.tokenId}" /></td>
 				                        <td><c:out value="${wi.status}" /></td>
@@ -162,7 +164,7 @@
 			            	</thead>
 			                <tbody>
 			                	<c:forEach var="token" items="${workflowInstance.tokenList}">
-				                    <tr>
+				                    <tr class="${token.active ? '' : 'text-inactive'}">
 				                        <td><c:out value="${token.id}" /></td>
 				                        <td><c:out value="${token.parentId}" /></td>
 				                        <td><c:out value="${token.nodeId}" /></td>

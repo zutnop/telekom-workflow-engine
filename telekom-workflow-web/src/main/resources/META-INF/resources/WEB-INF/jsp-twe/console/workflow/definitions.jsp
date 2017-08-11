@@ -25,7 +25,7 @@
                             <a href="${workflowUrl}"><c:out value="${workflow.key}" /></a>
                         </td>
                         <c:forEach items="${statuses}" var="status">
-                            <td>
+                            <td class="${workflow.value[status] > 0 ? ('highlight-' += status) : ''}">
                                 <c:url value="${urlPrefix}/console/workflow/instances" var="workflowStatusUrl">
                                     <c:param name="workflowName" value="${workflow.key}" />
                                     <c:param name="status" value="${status}" />
