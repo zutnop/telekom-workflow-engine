@@ -1993,13 +1993,35 @@ public class GraphFactory{
         return graph;
     }
 
-    public Graph createNewInstanceActivity( String name ){
-        GraphImpl graph = new GraphImpl( "createNewInstanceActivity", 1 );
+    /**
+     * <pre>
+     * [1]--[new_instance]
+     * </pre>
+     */
+    public Graph create_new_instance( String name ){
+        GraphImpl graph = new GraphImpl( "create_new_instance", 1 );
 
         Node node1 = new SetAttributeActivity( 1, "name", "Heli Kopter" );
         MapMapping mapMapping = new MapMapping();
         mapMapping.addEntryMapping( "other", new AttributeMapping<Object>( "name" ) );
         Node node2 = new CreateNewInstanceActivity( 2, name, null, "a", "b", mapMapping );
+
+        graph.setStartNode( node1 );
+        graph.addNode( node2 );
+        graph.addTransition( new TransitionImpl( node1, node2 ) );
+        return graph;
+    }
+
+    /**
+     * <pre>
+     * [1]--[new_instance]
+     * </pre>
+     */
+    public Graph create_new_instance( String name, Integer version, String label1, String label2, MapMapping mapMapping ){
+        GraphImpl graph = new GraphImpl( "create_new_instance", 1 );
+
+        Node node1 = createRecordPathNode( 1 );
+        Node node2 = new CreateNewInstanceActivity( 2, name, version, label1, label2, mapMapping );
 
         graph.setStartNode( node1 );
         graph.addNode( node2 );

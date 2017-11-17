@@ -91,15 +91,19 @@ public abstract class AbstractGraphTest{
     }
 
     protected void assertEnvironmnent( GraphInstance instance, Environment expectedEnv ){
+        assertEnvironmnent( instance.getEnvironment(), expectedEnv );
+    }
+
+    protected void assertEnvironmnent( Environment actualEnv, Environment expectedEnv ){
         // Iterating both ways to ensure that both environments contain the same attributes!
         for( String name : expectedEnv.getAttributeNames() ){
             Object expected = expectedEnv.getAttribute( name );
-            Object actual = instance.getEnvironment().getAttribute( name );
+            Object actual = actualEnv.getAttribute( name );
             Assert.assertTrue( "Attribute with name " + name + " not equal. Expected: " + expected + ", Actual: " + actual, equals( expected, actual ) );
         }
-        for( String name : instance.getEnvironment().getAttributeNames() ){
+        for( String name : actualEnv.getAttributeNames() ){
             Object expected = expectedEnv.getAttribute( name );
-            Object actual = instance.getEnvironment().getAttribute( name );
+            Object actual = actualEnv.getAttribute( name );
             Assert.assertTrue( "Attribute with name " + name + " not equal. Expected: " + expected + ", Actual: " + actual, equals( expected, actual ) );
         }
     }

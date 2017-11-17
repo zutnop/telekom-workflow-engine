@@ -33,7 +33,7 @@ public class CreateNewInstanceActivityIT extends AbstractWorkflowIT{
 
     @Test
     public void test(){
-        Graph graph = GraphFactory.INSTANCE.createNewInstanceActivity( "test-workflow" );
+        Graph graph = GraphFactory.INSTANCE.create_new_instance( "test-workflow" );
         GraphRepository repo = engineFactory.getSingletonInstance().getRepository();
         repo.addGraph( graph );
 

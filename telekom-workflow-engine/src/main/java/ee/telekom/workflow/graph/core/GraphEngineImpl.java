@@ -145,7 +145,7 @@ public class GraphEngineImpl implements GraphEngine{
 
     @Override
     public NewGraphInstanceCreator getNewGraphInstanceCreator(){
-        if( beanResolver == null ){
+        if( newGraphInstanceCreator == null ){
             throw new WorkflowException( "This engine does not provide a NewGraphInstanceCreator." );
         }
         return newGraphInstanceCreator;

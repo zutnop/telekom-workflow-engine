@@ -61,10 +61,12 @@ public class CreateNewInstanceActivity extends AbstractNode{
         Integer graphVersion = graphVersionMapping.evaluate( instance );
         String label1 = label1Mapping.evaluate( instance );
         String label2 = label2Mapping.evaluate( instance );
-        Map<String, Object> arguments = argumentsMapping.evaluate( instance );
         Environment initialEnvironment = new EnvironmentImpl();
-        for( Map.Entry<String, Object> argument : arguments.entrySet() ){
-            initialEnvironment.setAttribute( argument.getKey(), argument.getValue() );
+        if (argumentsMapping != null) {
+	        Map<String, Object> arguments = argumentsMapping.evaluate( instance );
+	        for( Map.Entry<String, Object> argument : arguments.entrySet() ){
+	            initialEnvironment.setAttribute( argument.getKey(), argument.getValue() );
+	        }
         }
         getNewGraphInstanceCreator( engine ).create( graphName, graphVersion, label1, label2, initialEnvironment );
         engine.complete( token, null );
