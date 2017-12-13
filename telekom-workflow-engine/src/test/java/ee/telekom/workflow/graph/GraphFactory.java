@@ -68,7 +68,7 @@ public class GraphFactory{
      * </pre>
      */
     public Graph sequence_one(){
-        GraphImpl graph = new GraphImpl( "sequence_one", 1, true );
+        GraphImpl graph = new GraphImpl( "sequence_one", 1 );
         Node node1 = createRecordPathNode( 1 );
         graph.setStartNode( node1 );
         return graph;
@@ -1400,7 +1400,7 @@ public class GraphFactory{
      * </pre>
      */
     public Graph loop_cancelling_discriminator_twice( int executionCount ){
-        GraphImpl graph = new GraphImpl( "loop_cancelling_discriminator_twice", 1, true );
+        GraphImpl graph = new GraphImpl( "loop_cancelling_discriminator_twice", 1 );
 
         Node node100 = new SetAttributeActivity( 100, "executionCount", 0 );
         XorJoin join3 = new XorJoin( -12 );
@@ -1485,7 +1485,7 @@ public class GraphFactory{
      * </pre>
      */
     public Graph signal_one_pre_post(){
-        GraphImpl graph = new GraphImpl( "signal_one_pre_post", 1, true );
+        GraphImpl graph = new GraphImpl( "signal_one_pre_post", 1 );
 
         Node node1 = createRecordPathNode( 1 );
         Node node2 = new CatchSignal( 2, SIGNAL, new ValueMapping( RESULT_KEY ) );
@@ -1620,7 +1620,7 @@ public class GraphFactory{
      * </pre>
      */
     public Graph timer_one_pre_post(){
-        GraphImpl graph = new GraphImpl( "timer_one_pre_post", 1, true );
+        GraphImpl graph = new GraphImpl( "timer_one_pre_post", 1 );
 
         Node node1 = createRecordPathNode( 1 );
         Node node2 = new CatchTimer( 2, TIMER_MS );
@@ -1792,7 +1792,7 @@ public class GraphFactory{
      * </pre>
      */
     public Graph beanasynccall_one_pre_post_special( String bean, String method, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
-        GraphImpl graph = new GraphImpl( "beanasynccall_one_pre_post_special", 1, true );
+        GraphImpl graph = new GraphImpl( "beanasynccall_one_pre_post_special", 1 );
 
         Node node1 = createRecordPathNode( 1 );
         Node node2 = new BeanAsyncCallActivity( 2, bean, method, argumentsMappings, resultMapping );

@@ -27,6 +27,7 @@ public class GraphImpl implements Graph{
     public GraphImpl( String name, int version ){
         this.name = name;
         this.version = version;
+        this.keepHistory = true;
     }
     
     public GraphImpl( String name, int version, boolean keepHistory ){
