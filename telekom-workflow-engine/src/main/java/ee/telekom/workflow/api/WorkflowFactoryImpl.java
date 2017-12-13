@@ -26,12 +26,19 @@ public class WorkflowFactoryImpl implements
 
     private String name;
     private int version;
+    private boolean keepHistory;
     private Tree<Row> root = Tree.root( Row.class );
     private Tree<Row> current = root;
 
     public WorkflowFactoryImpl( String name, int version ){
         this.name = name;
         this.version = version;
+    }
+    
+    public WorkflowFactoryImpl( String name, int version, boolean keepHistory ){
+        this.name = name;
+        this.version = version;
+        this.keepHistory = keepHistory;
     }
 
     @Override
@@ -385,7 +392,7 @@ public class WorkflowFactoryImpl implements
     }
 
     public Graph buildGraph(){
-        return new GraphBuilder( name, version, root ).build();
+        return new GraphBuilder( name, version, keepHistory, root ).build();
     }
 
     @Override

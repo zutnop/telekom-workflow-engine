@@ -1,8 +1,10 @@
 package ee.telekom.workflow.facade.util;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +30,9 @@ public class HistoryUtil{
             return Collections.emptyList();
         }
         List<String> result = new LinkedList<>();
+        if(history.startsWith("...")) {
+        	result.add("...");
+        }
         for( List<Event> step : groupByStep( parseHistory( history ) ) ){
             result.add( asText( step ) );
         }
@@ -77,6 +82,18 @@ public class HistoryUtil{
         }
         return result.toString();
     }
+    
+    public static String deleteHistory(String history) {
+    	if(history != null && history.length()>0) {
+	    	int lastIndexOfContinue = history.lastIndexOf("continue");
+	    	int lastIndexOfAbort = history.lastIndexOf("abort");
+	    	int lastIndexOfAborted = history.lastIndexOf("aborted");
+	    	int[] indexes = {lastIndexOfContinue, lastIndexOfAbort, lastIndexOfAborted};
+	    	OptionalInt maxIndex = Arrays.stream(indexes).max();
+	    	return maxIndex.getAsInt() > 0 ? "..." + history.substring(maxIndex.getAsInt()-1) : history;
+    	}
+    	return history;
+    }
 
     private static List<List<Event>> groupByStep( List<Event> events ){
         List<List<Event>> result = new LinkedList<>();
@@ -92,7 +109,9 @@ public class HistoryUtil{
     private static List<Event> parseHistory( String history ){
         List<Event> result = new LinkedList<>();
         for( String event : history.split( "\\|" ) ){
-            result.add( Event.parse( event ) );
+        	if(!event.equals("...")) {
+        		result.add( Event.parse( event ) );
+        	}
         }
         return result;
     }

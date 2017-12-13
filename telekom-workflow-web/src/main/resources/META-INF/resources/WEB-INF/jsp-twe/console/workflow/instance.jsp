@@ -32,6 +32,7 @@
 	                    <tr>
 	                    	<th><spring:message code="workflowinstance.refnum"/></th>
 	                    	<th><spring:message code="workflowinstance.nameandversion"/></th>
+	                    	<th><spring:message code="workflowinstance.keephistory"/></th>
 	                    	<th><spring:message code="workflowinstance.label1"/></th>
 	                    	<th><spring:message code="workflowinstance.label2"/></th>
 	                    	<th><spring:message code="workflowinstance.cluster"/></th>
@@ -46,6 +47,7 @@
 	                    <tr>
 	                        <td><c:out value="${workflowInstance.refNum}" /></td>
 	                        <td><c:out value="${workflowInstance.workflowName}" />:<c:choose><c:when test="${not empty workflowInstance.workflowVersion}"><c:out value="${workflowInstance.workflowVersion}" /></c:when><c:otherwise><spring:message code="workflowinstance.workflowversion.latest"/></c:otherwise></c:choose></td>
+	                        <td><c:out value="${workflowInstance.keepHistory}" /></td>
 	                        <td><c:out value="${workflowInstance.label1}" /></td>
 	                        <td><c:out value="${workflowInstance.label2}" /></td>
 	                        <td><c:out value="${workflowInstance.clusterName}" /></td>

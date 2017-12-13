@@ -19,6 +19,7 @@ public class GraphImpl implements Graph{
 
     private String name;
     private int version;
+    private boolean keepHistory;
     private Node startNode;
     private Map<Integer, Node> nodeById = new LinkedHashMap<>();
     private Map<Integer, List<Transition>> transitionsByStartNode = new LinkedHashMap<>();
@@ -26,6 +27,12 @@ public class GraphImpl implements Graph{
     public GraphImpl( String name, int version ){
         this.name = name;
         this.version = version;
+    }
+    
+    public GraphImpl( String name, int version, boolean keepHistory ){
+        this.name = name;
+        this.version = version;
+        this.keepHistory = keepHistory;
     }
 
     @Override
@@ -39,6 +46,11 @@ public class GraphImpl implements Graph{
     }
 
     @Override
+    public boolean getKeepHistory() {
+		return keepHistory;
+	}
+
+	@Override
     public Node getStartNode(){
         return startNode;
     }
