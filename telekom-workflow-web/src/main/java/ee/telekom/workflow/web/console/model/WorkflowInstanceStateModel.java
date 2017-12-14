@@ -78,11 +78,11 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
         return HistoryUtil.getExecutionSteps( getHistory() );
     }
 
-	public String getKeepHistory() {
+	public String getKeepHistory(){
 		return keepHistory;
 	}
 
-	public void setKeepHistory(String keepHistory) {
+	public void setKeepHistory( String keepHistory ){
 		this.keepHistory = keepHistory;
 	}
 }

@@ -113,7 +113,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
         AdvancedParameterSource source = new AdvancedParameterSource()
                 .addValue( "refNum", refNum )
                 .addValue( "expectedStatuses", expectedStatuses );
-        int count = getNamedParameterJdbcTemplate().update(sql, source);
+        int count = getNamedParameterJdbcTemplate().update( sql, source );
         return (count == 1);
     }
 
@@ -135,7 +135,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
         return (count == refNums.size());
     }
     
-    public boolean delete(List<Long> refNums, Collection<WorkItemStatus> expectedStatuses) {
+    public boolean delete( List<Long> refNums, Collection<WorkItemStatus> expectedStatuses ) {
     	String sql = ""
     			+ "DELETE FROM " + getSchema() + "work_items "
                 + " WHERE ref_num IN (:refNums)"
@@ -143,7 +143,7 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
         AdvancedParameterSource source = new AdvancedParameterSource()
                 .addValue( "refNums", refNums )
                 .addValue( "expectedStatuses", expectedStatuses );
-        int count = getNamedParameterJdbcTemplate().update(sql, source);
+        int count = getNamedParameterJdbcTemplate().update( sql, source );
         return (count == refNums.size());
     }
 

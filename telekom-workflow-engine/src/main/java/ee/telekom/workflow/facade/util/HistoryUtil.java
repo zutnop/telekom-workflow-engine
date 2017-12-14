@@ -30,8 +30,8 @@ public class HistoryUtil{
             return Collections.emptyList();
         }
         List<String> result = new LinkedList<>();
-        if(history.startsWith("...")) {
-        	result.add("...");
+        if( history.startsWith("...") ){
+        	result.add( "..." );
         }
         for( List<Event> step : groupByStep( parseHistory( history ) ) ){
             result.add( asText( step ) );
@@ -83,13 +83,13 @@ public class HistoryUtil{
         return result.toString();
     }
     
-    public static String deleteHistory(String history) {
-    	if(history != null && history.length()>0) {
-	    	int lastIndexOfContinue = history.lastIndexOf("continue");
-	    	int lastIndexOfAbort = history.lastIndexOf("abort");
-	    	int lastIndexOfAborted = history.lastIndexOf("aborted");
-	    	int[] indexes = {lastIndexOfContinue, lastIndexOfAbort, lastIndexOfAborted};
-	    	OptionalInt maxIndex = Arrays.stream(indexes).max();
+    public static String deleteHistory( String history ){
+    	if( history != null && history.length()>0 ){
+	    	int lastIndexOfContinue = history.lastIndexOf( "continue" );
+	    	int lastIndexOfAbort = history.lastIndexOf( "abort" );
+	    	int lastIndexOfAborted = history.lastIndexOf( "aborted" );
+	    	int[] indexes = { lastIndexOfContinue, lastIndexOfAbort, lastIndexOfAborted };
+	    	OptionalInt maxIndex = Arrays.stream( indexes ).max();
 	    	return maxIndex.getAsInt() > 0 ? "..." + history.substring(maxIndex.getAsInt()-1) : history;
     	}
     	return history;
@@ -109,7 +109,7 @@ public class HistoryUtil{
     private static List<Event> parseHistory( String history ){
         List<Event> result = new LinkedList<>();
         for( String event : history.split( "\\|" ) ){
-        	if(!event.equals("...")) {
+        	if( !event.equals("...") ){
         		result.add( Event.parse( event ) );
         	}
         }

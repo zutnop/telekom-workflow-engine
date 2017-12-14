@@ -2118,6 +2118,9 @@ td.warning a {
     color: #c00 !important;
 }
 
+table.data > tbody > tr > td.highlight-keephistory {
+    background-color: #ffff00;
+}
 table.data > tbody > tr > td.highlight-ACTIVE {
     background-color: #ccffcc;
 }

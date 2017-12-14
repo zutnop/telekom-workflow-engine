@@ -47,7 +47,7 @@
 	                    <tr>
 	                        <td><c:out value="${workflowInstance.refNum}" /></td>
 	                        <td><c:out value="${workflowInstance.workflowName}" />:<c:choose><c:when test="${not empty workflowInstance.workflowVersion}"><c:out value="${workflowInstance.workflowVersion}" /></c:when><c:otherwise><spring:message code="workflowinstance.workflowversion.latest"/></c:otherwise></c:choose></td>
-	                        <td><c:out value="${workflowInstance.keepHistory}" /></td>
+	                        <td class="${workflowInstance.keepHistory=='true'?'':'highlight-keephistory'}"><c:out value="${workflowInstance.keepHistory}" /></td>
 	                        <td><c:out value="${workflowInstance.label1}" /></td>
 	                        <td><c:out value="${workflowInstance.label2}" /></td>
 	                        <td><c:out value="${workflowInstance.clusterName}" /></td>

@@ -47,7 +47,7 @@ public class GraphImpl implements Graph{
     }
 
     @Override
-    public boolean getKeepHistory() {
+    public boolean getKeepHistory(){
 		return keepHistory;
 	}
 
