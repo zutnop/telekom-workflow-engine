@@ -33,6 +33,7 @@ public class WorkflowFactoryImpl implements
     public WorkflowFactoryImpl( String name, int version ){
         this.name = name;
         this.version = version;
+        this.keepHistory = true;
     }
     
     public WorkflowFactoryImpl( String name, int version, boolean keepHistory ){
