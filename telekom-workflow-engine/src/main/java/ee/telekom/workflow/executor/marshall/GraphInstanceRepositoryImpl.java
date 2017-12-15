@@ -76,44 +76,44 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
             }
         }
         if( !markCancelled.isEmpty() ){
-			Collection<WorkItemStatus> expectedStatuses = Arrays.asList( WorkItemStatus.NEW, WorkItemStatus.EXECUTED );
-			boolean sucess = false;
-			if ( !graphInstance.getGraph().getKeepHistory() ){
-				sucess = woitDao.delete( markCancelled, expectedStatuses );
-			} else {
-				sucess = woitDao.updateStatus( markCancelled, WorkItemStatus.CANCELLED, expectedStatuses );
-			}
+            Collection<WorkItemStatus> expectedStatuses = Arrays.asList( WorkItemStatus.NEW, WorkItemStatus.EXECUTED );
+            boolean sucess = false;
+            if ( !graphInstance.getGraph().getKeepHistory() ){
+                sucess = woitDao.delete( markCancelled, expectedStatuses );
+            } else{
+                sucess = woitDao.updateStatus( markCancelled, WorkItemStatus.CANCELLED, expectedStatuses );
+            }
 
-			if ( !sucess ){
-				throw new UnexpectedStatusException( expectedStatuses );
-			}
-			if ( log.isInfoEnabled() ){
-				if ( graphInstance.getGraph().getKeepHistory() ){
-					log.info( "Cancelled work items {} ", StringUtils.join( markCancelled, "," ) );
-				} else {
-					log.info( "Not keeping history. Deleted cancelled work items {} ",
-							StringUtils.join(markCancelled, ",") );
-				}
-			}
-		}
-		if ( markCompleted != null ){
-			Collection<WorkItemStatus> expectedStatuses = Arrays.asList( WorkItemStatus.COMPLETING );
-			boolean sucess = false;
-			if ( !graphInstance.getGraph().getKeepHistory() ){
-				sucess = woitDao.delete( markCompleted, expectedStatuses );
-			} else {
-				sucess = woitDao.updateStatus( markCompleted, WorkItemStatus.COMPLETED, expectedStatuses );
-			}
-			
-			if ( !sucess ){
-				throw new UnexpectedStatusException( expectedStatuses );
-			}
-			if ( graphInstance.getGraph().getKeepHistory() ){
-				log.info( "Completed work item {} ", markCompleted );
-			} else {
-				log.info( "Not keeping history. Deleted completed work item {} ", markCompleted );
-			}
-		}
+            if ( !sucess ){
+                throw new UnexpectedStatusException( expectedStatuses );
+            }
+            if ( log.isInfoEnabled() ){
+                if ( graphInstance.getGraph().getKeepHistory() ){
+                    log.info( "Cancelled work items {} ", StringUtils.join(markCancelled, "," ) );
+                } else{
+                    log.info( "Not keeping history. Deleted cancelled work items {} ",
+                            StringUtils.join( markCancelled, ",") );
+                }
+            }
+        }
+        if ( markCompleted != null ){
+            Collection<WorkItemStatus> expectedStatuses = Arrays.asList( WorkItemStatus.COMPLETING );
+            boolean sucess = false;
+            if ( !graphInstance.getGraph().getKeepHistory() ){
+                sucess = woitDao.delete( markCompleted, expectedStatuses );
+            } else{
+                sucess = woitDao.updateStatus( markCompleted, WorkItemStatus.COMPLETED, expectedStatuses );
+            }
+
+            if ( !sucess ){
+                throw new UnexpectedStatusException( expectedStatuses );
+            }
+            if ( graphInstance.getGraph().getKeepHistory() ){
+                log.info( "Completed work item {} ", markCompleted );
+            } else{
+                log.info( "Not keeping history. Deleted completed work item {} ", markCompleted );
+            }
+        }
         if( !createNew.isEmpty() ){
             woitDao.create( createNew );
             if( log.isInfoEnabled() ){

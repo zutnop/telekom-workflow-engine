@@ -48,8 +48,8 @@ public class GraphImpl implements Graph{
 
     @Override
     public boolean getKeepHistory(){
-		return keepHistory;
-	}
+        return keepHistory;
+    }
 
 	@Override
     public Node getStartNode(){

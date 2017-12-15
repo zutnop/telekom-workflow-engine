@@ -69,8 +69,8 @@ public interface WorkflowDefinition{
     /**
      * Return keep history boolean value (default value true) for the current workflow definition.
      * <p>
-     * Value true is used for long running workflows when history information in workflow_instances state and history field is growing too large.
-     * When value is true then work_items with COMPLETED or CANCELLED status will be deleted. For workflow_instances state field only active token
+     * Value false is used for extremely long running workflows when history information in workflow_instances state and history field is growing too large.
+     * When value is false then work_items with COMPLETED or CANCELLED status will be deleted. For workflow_instances state field only active token
      * will be kept in that field. For workflow_instances history field, only last completed, abort or aborted event will be kept in that field.
      * 
      * @return true if workflow should keep history, false if not

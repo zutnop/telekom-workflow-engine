@@ -1,12 +1,12 @@
 package ee.telekom.workflow.facade.util;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Utility class that helps to parse a workflow instance history into a list
@@ -83,16 +83,15 @@ public class HistoryUtil{
         return result.toString();
     }
     
-    public static String deleteHistory( String history ){
-    	if( history != null && history.length()>0 ){
-	    	int lastIndexOfContinue = history.lastIndexOf( "continue" );
-	    	int lastIndexOfAbort = history.lastIndexOf( "abort" );
-	    	int lastIndexOfAborted = history.lastIndexOf( "aborted" );
-	    	int[] indexes = { lastIndexOfContinue, lastIndexOfAbort, lastIndexOfAborted };
-	    	OptionalInt maxIndex = Arrays.stream( indexes ).max();
-	    	return maxIndex.getAsInt() > 0 ? "..." + history.substring(maxIndex.getAsInt()-1) : history;
-    	}
-    	return history;
+    public static String deleteHistory( String history ) {
+        if ( history != null && history.length() > 0 ) {
+            int lastIndexOfContinue = history.lastIndexOf( "continue" );
+            int lastIndexOfAbort = history.lastIndexOf( "abort" );
+            int lastIndexOfAborted = history.lastIndexOf( "aborted" );
+            int maxIndex = NumberUtils.max( lastIndexOfContinue, lastIndexOfAbort, lastIndexOfAborted );
+            return maxIndex > 0 ? "..." + history.substring( maxIndex - 1 ) : history;
+        }
+        return history;
     }
 
     private static List<List<Event>> groupByStep( List<Event> events ){
