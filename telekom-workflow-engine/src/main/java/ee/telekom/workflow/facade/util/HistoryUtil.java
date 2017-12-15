@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.math.NumberUtils;
+
 /**
  * Utility class that helps to parse a workflow instance history into a list
  * of human readable steps.
@@ -28,6 +30,9 @@ public class HistoryUtil{
             return Collections.emptyList();
         }
         List<String> result = new LinkedList<>();
+        if( history.startsWith("...") ){
+        	result.add( "..." );
+        }
         for( List<Event> step : groupByStep( parseHistory( history ) ) ){
             result.add( asText( step ) );
         }
@@ -77,6 +82,17 @@ public class HistoryUtil{
         }
         return result.toString();
     }
+    
+    public static String deleteHistory( String history ) {
+        if ( history != null && history.length() > 0 ) {
+            int lastIndexOfContinue = history.lastIndexOf( "continue" );
+            int lastIndexOfAbort = history.lastIndexOf( "abort" );
+            int lastIndexOfAborted = history.lastIndexOf( "aborted" );
+            int maxIndex = NumberUtils.max( lastIndexOfContinue, lastIndexOfAbort, lastIndexOfAborted );
+            return maxIndex > 0 ? "..." + history.substring( maxIndex - 1 ) : history;
+        }
+        return history;
+    }
 
     private static List<List<Event>> groupByStep( List<Event> events ){
         List<List<Event>> result = new LinkedList<>();
@@ -92,7 +108,9 @@ public class HistoryUtil{
     private static List<Event> parseHistory( String history ){
         List<Event> result = new LinkedList<>();
         for( String event : history.split( "\\|" ) ){
-            result.add( Event.parse( event ) );
+        	if( !event.equals("...") ){
+        		result.add( Event.parse( event ) );
+        	}
         }
         return result;
     }

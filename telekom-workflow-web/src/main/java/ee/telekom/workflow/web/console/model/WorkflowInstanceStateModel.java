@@ -29,6 +29,7 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
 
     private static final long serialVersionUID = 1L;
     private static final Gson gson = new GsonBuilder().serializeNulls().create();
+    private String keepHistory;
 
     public static WorkflowInstanceStateModel create( WorkflowInstanceState woin ){
         WorkflowInstanceStateModel model = new WorkflowInstanceStateModel();
@@ -77,4 +78,11 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
         return HistoryUtil.getExecutionSteps( getHistory() );
     }
 
+	public String getKeepHistory(){
+		return keepHistory;
+	}
+
+	public void setKeepHistory( String keepHistory ){
+		this.keepHistory = keepHistory;
+	}
 }

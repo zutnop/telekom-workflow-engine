@@ -29,6 +29,8 @@ public interface Graph {
 	 * @return the graph's version
 	 */
 	int getVersion();
+	
+	boolean getKeepHistory();
 
 	/**
 	 * Returns the graph's start node. The start node is the node where to start

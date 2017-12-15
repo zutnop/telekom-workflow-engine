@@ -16,9 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ee.telekom.workflow.core.common.UnexpectedStatusException;
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
+import ee.telekom.workflow.executor.GraphEngineFactory;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.facade.model.WorkItemState;
 import ee.telekom.workflow.facade.model.WorkflowInstanceState;
+import ee.telekom.workflow.graph.Graph;
 import ee.telekom.workflow.web.console.model.WorkItemStateModel;
 import ee.telekom.workflow.web.console.model.WorkflowInstanceStateModel;
 
@@ -35,11 +37,16 @@ public class WorkflowInstanceDetailsController{
     private WorkflowEngineConfiguration configuration;
     @Autowired
     private WorkflowEngineFacade facade;
+    @Autowired
+    private GraphEngineFactory graphEngineFactory;
 
     @RequestMapping(method = RequestMethod.GET, value = "/workflow/instances/{woinRefNum}")
     public String viewInstance( @PathVariable long woinRefNum, Model model ){
         WorkflowInstanceState woin = facade.findWorkflowInstance( woinRefNum, null );
-        model.addAttribute( "workflowInstance", WorkflowInstanceStateModel.create( woin ) );
+        Graph graph = graphEngineFactory.getGraph( woin.getWorkflowName(), woin.getWorkflowVersion() );
+        WorkflowInstanceStateModel workFlowInstanceStateModel = WorkflowInstanceStateModel.create( woin );
+        workFlowInstanceStateModel.setKeepHistory( graph != null ? String.valueOf( graph.getKeepHistory() ) : "Cannot be determined" );
+        model.addAttribute( "workflowInstance", workFlowInstanceStateModel );
         List<WorkItemState> workItems = facade.findWorkItems( woinRefNum, isActive( woin ) );
         model.addAttribute( "workItems", createModels( workItems ) );
         if( isActive( woin ) ){

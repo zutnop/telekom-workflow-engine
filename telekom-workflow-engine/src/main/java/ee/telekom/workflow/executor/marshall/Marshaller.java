@@ -11,6 +11,7 @@ import ee.telekom.workflow.core.workflowinstance.WorkflowInstance;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
 import ee.telekom.workflow.core.workitem.WorkItem;
 import ee.telekom.workflow.core.workitem.WorkItemType;
+import ee.telekom.workflow.facade.util.HistoryUtil;
 import ee.telekom.workflow.graph.Environment;
 import ee.telekom.workflow.graph.Graph;
 import ee.telekom.workflow.graph.GraphInstance;
@@ -35,8 +36,9 @@ public class Marshaller{
         woin.setWorkflowName( instance.getGraph().getName() );
         woin.setWorkflowVersion( instance.getGraph().getVersion() );
         woin.setAttributes( serializeAttributes( instance.getEnvironment().getAttributesAsMap() ) );
-        woin.setHistory( instance.getHistory() );
-        woin.setState( serializeTokens( instance.getTokens() ) );
+        woin.setHistory( instance.getGraph().getKeepHistory() ? instance.getHistory()
+                : HistoryUtil.deleteHistory( instance.getHistory() ) );
+        woin.setState( serializeTokens( instance.getTokens(), instance.getGraph().getKeepHistory() ) );
         woin.setStatus( instance.isCompleted() ? completeStatus : WorkflowInstanceStatus.EXECUTING );
         for( GraphWorkItem wi : instance.getWorkItems() ){
             woits.add( marshall( wi ) );
@@ -155,9 +157,12 @@ public class Marshaller{
         return env;
     }
 
-    private static String serializeTokens( Collection<Token> tokens ){
+    private static String serializeTokens( Collection<Token> tokens, boolean keepHistory ) {
         List<TokenState> states = new ArrayList<TokenState>();
-        for( Token token : tokens ){
+        for ( Token token : tokens ) {
+            if ( !keepHistory && !token.isActive() ) {
+                continue;
+            }
             states.add( marshall( token ) );
         }
         return serializeTokenStates( states );
