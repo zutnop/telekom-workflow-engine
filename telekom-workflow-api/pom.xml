@@ -4,7 +4,7 @@
 
   <groupId>ee.telekom.workflow</groupId>
   <artifactId>workflow-api</artifactId>
-  <version>1.2.4</version>
+  <version>1.2.5-SNAPSHOT</version>
   <name>telekom-workflow-api</name>
   <description>Telekom-workflow-engine API interface (DSL) for writing your workflow definitions and plugins.</description>
   <url>https://github.com/zutnop/telekom-workflow-engine</url>
