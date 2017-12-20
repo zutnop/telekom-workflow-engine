@@ -57,7 +57,9 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
         WorkflowInstance workflowInstance = new WorkflowInstance();
         List<WorkItem> workItems = new LinkedList<>();
         Marshaller.marshall( graphInstance, workflowInstance, workItems, completeStatus );
-
+        boolean isCompleted = WorkflowInstanceStatus.EXECUTED.equals( workflowInstance.getStatus() )
+        || WorkflowInstanceStatus.ABORTED.equals( workflowInstance.getStatus() );
+        
         List<Long> markCancelled = new LinkedList<>();
         Long markCompleted = null;
         List<WorkItem> createNew = new LinkedList<>();
@@ -78,7 +80,7 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
         if( !markCancelled.isEmpty() ){
             Collection<WorkItemStatus> expectedStatuses = Arrays.asList( WorkItemStatus.NEW, WorkItemStatus.EXECUTED );
             boolean sucess = false;
-            if ( !graphInstance.getGraph().getKeepHistory() ){
+            if ( !graphInstance.getGraph().getKeepHistory() && !isCompleted ){
                 sucess = woitDao.delete( markCancelled, expectedStatuses );
             } else{
                 sucess = woitDao.updateStatus( markCancelled, WorkItemStatus.CANCELLED, expectedStatuses );
@@ -88,18 +90,18 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
                 throw new UnexpectedStatusException( expectedStatuses );
             }
             if ( log.isInfoEnabled() ){
-                if ( graphInstance.getGraph().getKeepHistory() ){
-                    log.info( "Cancelled work items {} ", StringUtils.join(markCancelled, "," ) );
-                } else{
+                if ( !graphInstance.getGraph().getKeepHistory() && !isCompleted ){
                     log.info( "Not keeping history. Deleted cancelled work items {} ",
                             StringUtils.join( markCancelled, ",") );
+                } else{
+                    log.info( "Cancelled work items {} ", StringUtils.join(markCancelled, "," ) );
                 }
             }
         }
         if ( markCompleted != null ){
             Collection<WorkItemStatus> expectedStatuses = Arrays.asList( WorkItemStatus.COMPLETING );
             boolean sucess = false;
-            if ( !graphInstance.getGraph().getKeepHistory() ){
+            if ( !graphInstance.getGraph().getKeepHistory() && !isCompleted ){
                 sucess = woitDao.delete( markCompleted, expectedStatuses );
             } else{
                 sucess = woitDao.updateStatus( markCompleted, WorkItemStatus.COMPLETED, expectedStatuses );
@@ -108,10 +110,10 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
             if ( !sucess ){
                 throw new UnexpectedStatusException( expectedStatuses );
             }
-            if ( graphInstance.getGraph().getKeepHistory() ){
-                log.info( "Completed work item {} ", markCompleted );
-            } else{
+            if ( !graphInstance.getGraph().getKeepHistory() && !isCompleted ){
                 log.info( "Not keeping history. Deleted completed work item {} ", markCompleted );
+            } else{
+                log.info( "Completed work item {} ", markCompleted );
             }
         }
         if( !createNew.isEmpty() ){
@@ -138,8 +140,7 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
         }
 
         log.info( "Updated workflow instance {} with status {} ", workflowInstance.getRefNum(), workflowInstance.getStatus() );
-        if( WorkflowInstanceStatus.EXECUTED.equals( workflowInstance.getStatus() )
-                || WorkflowInstanceStatus.ABORTED.equals( workflowInstance.getStatus() ) ){
+        if( isCompleted ){
             archiveDao.archive( workflowInstance.getRefNum() );
             log.info( "Archived workflow instance {}", workflowInstance.getRefNum() );
         }
