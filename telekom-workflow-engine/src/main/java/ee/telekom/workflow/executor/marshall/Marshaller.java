@@ -32,14 +32,15 @@ import ee.telekom.workflow.util.JsonUtil;
 public class Marshaller{
 
     public static void marshall( GraphInstance instance, WorkflowInstance woin, List<WorkItem> woits, WorkflowInstanceStatus completeStatus ){
+        boolean isCompleted = instance.isCompleted();
         woin.setRefNum( instance.getExternalId() );
         woin.setWorkflowName( instance.getGraph().getName() );
         woin.setWorkflowVersion( instance.getGraph().getVersion() );
         woin.setAttributes( serializeAttributes( instance.getEnvironment().getAttributesAsMap() ) );
-        woin.setHistory( instance.getGraph().getKeepHistory() ? instance.getHistory()
-                : HistoryUtil.deleteHistory( instance.getHistory() ) );
-        woin.setState( serializeTokens( instance.getTokens(), instance.getGraph().getKeepHistory() ) );
-        woin.setStatus( instance.isCompleted() ? completeStatus : WorkflowInstanceStatus.EXECUTING );
+        woin.setHistory( (!instance.getGraph().getKeepHistory() && !isCompleted) ? HistoryUtil.deleteHistory( instance.getHistory() ) 
+                : instance.getHistory() );
+        woin.setState( serializeTokens( instance.getTokens(), instance.getGraph().getKeepHistory(), isCompleted ) );
+        woin.setStatus( isCompleted ? completeStatus : WorkflowInstanceStatus.EXECUTING );
         for( GraphWorkItem wi : instance.getWorkItems() ){
             woits.add( marshall( wi ) );
         }
@@ -157,10 +158,10 @@ public class Marshaller{
         return env;
     }
 
-    private static String serializeTokens( Collection<Token> tokens, boolean keepHistory ) {
+    private static String serializeTokens( Collection<Token> tokens, boolean keepHistory, boolean workflowCompleted ) {
         List<TokenState> states = new ArrayList<TokenState>();
         for ( Token token : tokens ) {
-            if ( !keepHistory && !token.isActive() ) {
+            if ( !keepHistory && !workflowCompleted && !token.isActive() ) {
                 continue;
             }
             states.add( marshall( token ) );
