@@ -37,7 +37,7 @@ public class Marshaller{
         woin.setWorkflowName( instance.getGraph().getName() );
         woin.setWorkflowVersion( instance.getGraph().getVersion() );
         woin.setAttributes( serializeAttributes( instance.getEnvironment().getAttributesAsMap() ) );
-        woin.setHistory( !instance.getGraph().getKeepHistory() && !isCompleted ? HistoryUtil.deleteHistory( instance.getHistory() ) 
+        woin.setHistory( (!instance.getGraph().getKeepHistory() && !isCompleted) ? HistoryUtil.deleteHistory( instance.getHistory() ) 
                 : instance.getHistory() );
         woin.setState( serializeTokens( instance.getTokens(), instance.getGraph().getKeepHistory(), isCompleted ) );
         woin.setStatus( isCompleted ? completeStatus : WorkflowInstanceStatus.EXECUTING );
