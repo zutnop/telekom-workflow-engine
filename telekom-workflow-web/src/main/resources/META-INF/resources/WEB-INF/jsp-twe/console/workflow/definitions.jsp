@@ -40,7 +40,7 @@
             <script type="text/javascript">
                 $(document).ready(function () {
                     $('#definitionsTable').dataTable({
-                        pageLength: 20,
+                        pageLength: -1,
                         sDom: 'rt<"dataTables-pager"ip>'
                     });
                 });
