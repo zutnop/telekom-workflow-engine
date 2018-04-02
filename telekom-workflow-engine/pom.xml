@@ -4,7 +4,7 @@
 
   <groupId>ee.telekom.workflow</groupId>
   <artifactId>workflow-engine</artifactId>
-  <version>1.2.6-SNAPSHOT</version>
+  <version>1.2.6</version>
   <name>telekom-workflow-engine</name>
   <description>Telekom-workflow-engine core provides the runtime environment for workflow execution together with all the supporting services (clustering, persistence, error handling etc).</description>
   <url>https://github.com/zutnop/telekom-workflow-engine</url>
