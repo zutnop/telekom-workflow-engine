@@ -118,7 +118,7 @@ public class GraphImpl implements Graph{
         if( !contains( transition.getStartNode() ) ){
             throw new WorkflowException( "Workflow " + name + ":" + version + " does not contain the start node of transition " + transition );
         }
-        if( !contains( transition.getStartNode() ) ){
+        if( !contains( transition.getEndNode() ) ){
             throw new WorkflowException( "Workflow " + name + ":" + version + " does not contain the end node of transition " + transition );
         }
         Integer nodeId = transition.getStartNode().getId();
