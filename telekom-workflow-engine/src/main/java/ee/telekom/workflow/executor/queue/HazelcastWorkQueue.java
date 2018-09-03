@@ -72,6 +72,7 @@ public class HazelcastWorkQueue implements WorkQueue{
         log.debug( "Stopping queue" );
         // If work queue is not empty and last node in cluster, remove work units from queue and unlock them in database
         if( !getWorkQueue().isEmpty() && hcInstance.getCluster().getMembers().size() == 1 ) {
+            log.info( "Unlocking queued items" );
             List<WorkUnit> workUnits = new ArrayList<>();
             getWorkQueue().drainTo( workUnits );
             for( WorkUnit workUnit : workUnits ) {
