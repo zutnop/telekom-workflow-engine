@@ -4,7 +4,7 @@
 
   <groupId>ee.telekom.workflow</groupId>
   <artifactId>workflow-example</artifactId>
-  <version>1.2.7-SNAPSHOT</version>
+  <version>1.2.7</version>
   <packaging>war</packaging>
   <name>telekom-workflow-example</name>
   <description>Telekom-workflow-engine example implementation application.</description>
