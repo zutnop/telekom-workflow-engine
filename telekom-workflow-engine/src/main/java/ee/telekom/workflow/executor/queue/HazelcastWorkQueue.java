@@ -1,6 +1,8 @@
 package ee.telekom.workflow.executor.queue;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -17,6 +19,7 @@ import com.hazelcast.core.ItemEvent;
 import com.hazelcast.core.ItemListener;
 
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
+import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.core.workunit.WorkUnit;
 
 @Component
@@ -28,6 +31,8 @@ public class HazelcastWorkQueue implements WorkQueue{
 
     @Autowired
     private WorkflowEngineConfiguration config;
+    @Autowired
+    private WorkflowInstanceService workflowInstanceService;
     private HazelcastInstance hcInstance;
     private AtomicBoolean isLocalHcInstance = new AtomicBoolean( false );
     private AtomicBoolean isStarted = new AtomicBoolean( false );
@@ -65,6 +70,14 @@ public class HazelcastWorkQueue implements WorkQueue{
     @Override
     public void stop(){
         log.debug( "Stopping queue" );
+        // If work queue is not empty and last node in cluster, remove work units from queue and unlock them in database
+        if( !getWorkQueue().isEmpty() && hcInstance.getCluster().getMembers().size() == 1 ) {
+            List<WorkUnit> workUnits = new ArrayList<>();
+            getWorkQueue().drainTo( workUnits );
+            for( WorkUnit workUnit : workUnits ) {
+                workflowInstanceService.unlock( workUnit.getWoinRefNum() );
+            }
+        }
         if (isLocalHcInstance.get()) {
             hcInstance.getLifecycleService().shutdown();
         }
