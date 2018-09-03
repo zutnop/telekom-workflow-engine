@@ -143,7 +143,7 @@ public class WorkItemServiceImpl implements WorkItemService{
                 notRecovered++;
             }
         }
-        log.info( "Recoved/Not recovered {}/{} executing work items for node {}", recovered, notRecovered, nodeName );
+        log.info( "Recovered/Not recovered {}/{} executing work items for node {}", recovered, notRecovered, nodeName );
     }
 
     @Override
@@ -153,7 +153,7 @@ public class WorkItemServiceImpl implements WorkItemService{
             updateStatus( woit.getRefNum(), WorkItemStatus.EXECUTED, WorkItemStatus.COMPLETING );
             workflowInstanceService.unlock( woit.getWoinRefNum() );
         }
-        log.info( "Recoved {} completing work items for node {}", workItems.size(), nodeName );
+        log.info( "Recovered {} completing work items for node {}", workItems.size(), nodeName );
     }
 
     private void updateStatus( long refNum, WorkItemStatus newStatus, WorkItemStatus expectedStatus ) throws UnexpectedStatusException{
