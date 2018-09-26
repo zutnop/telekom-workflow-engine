@@ -166,7 +166,7 @@ public class WorkItemServiceImpl implements WorkItemService{
             throw new UnexpectedStatusException( expectedStatuses );
         }
         else{
-            log.info( "Updated the status of workflow item {} to {}", refNum, newStatus );
+            log.debug( "Updated the status of workflow item {} to {}", refNum, newStatus );
         }
     }
 
@@ -176,7 +176,7 @@ public class WorkItemServiceImpl implements WorkItemService{
             throw new UnexpectedStatusException( expectedStatus );
         }
         else{
-            log.info( "Updated the status of workflow item {} to {} and submitted result", refNum, newStatus );
+            log.debug( "Updated the status of workflow item {} to {} and submitted result", refNum, newStatus );
         }
     }
 }

@@ -67,7 +67,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
 
     @Override
     public void startWorkflow( long woinRefNum ){
-        log.info( "Starting" );
+        log.debug( "Starting" );
 
         TransactionStatus status = null;
         try{
@@ -105,7 +105,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
 
     @Override
     public void abortWorkflow( long woinRefNum ){
-        log.info( "Aborting" );
+        log.debug( "Aborting" );
 
         TransactionStatus status = null;
         try{
@@ -167,7 +167,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
 
     @Override
     public void completeWorkItem( long woinRefNum, long woitRefNum ){
-        log.info( "Completing" );
+        log.debug( "Completing" );
 
         TransactionStatus status = null;
         try{
@@ -207,7 +207,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
 
     @Override
     public void executeTask( long woinRefNum, long woitRefNum ){
-        log.info( "Executing" );
+        log.debug( "Executing" );
 
         TransactionStatus status = null;
         try{

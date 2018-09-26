@@ -89,12 +89,12 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
             if ( !sucess ){
                 throw new UnexpectedStatusException( expectedStatuses );
             }
-            if ( log.isInfoEnabled() ){
+            if ( log.isDebugEnabled()){
                 if ( !graphInstance.getGraph().getKeepHistory() && !isCompleted ){
-                    log.info( "Not keeping history. Deleted cancelled work items {} ",
+                    log.debug( "Not keeping history. Deleted cancelled work items {} ",
                             StringUtils.join( markCancelled, ",") );
                 } else{
-                    log.info( "Cancelled work items {} ", StringUtils.join(markCancelled, "," ) );
+                    log.debug( "Cancelled work items {} ", StringUtils.join(markCancelled, "," ) );
                 }
             }
         }
@@ -111,15 +111,15 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
                 throw new UnexpectedStatusException( expectedStatuses );
             }
             if ( !graphInstance.getGraph().getKeepHistory() && !isCompleted ){
-                log.info( "Not keeping history. Deleted completed work item {} ", markCompleted );
+                log.debug( "Not keeping history. Deleted completed work item {} ", markCompleted );
             } else{
-                log.info( "Completed work item {} ", markCompleted );
+                log.debug( "Completed work item {} ", markCompleted );
             }
         }
         if( !createNew.isEmpty() ){
             woitDao.create( createNew );
-            if( log.isInfoEnabled() ){
-                log.info( "Created new work items {} ", StringUtils.join( getRefNums( createNew ), "," ) );
+            if( log.isDebugEnabled()){
+                log.debug( "Created new work items {} ", StringUtils.join( getRefNums( createNew ), "," ) );
             }
         }
         List<WorkflowInstanceStatus> expectedStatuses = Arrays.asList(
@@ -139,10 +139,10 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
             throw new UnexpectedStatusException( expectedStatuses );
         }
 
-        log.info( "Updated workflow instance {} with status {} ", workflowInstance.getRefNum(), workflowInstance.getStatus() );
+        log.debug( "Updated workflow instance {} with status {} ", workflowInstance.getRefNum(), workflowInstance.getStatus() );
         if( isCompleted ){
             archiveDao.archive( workflowInstance.getRefNum() );
-            log.info( "Archived workflow instance {}", workflowInstance.getRefNum() );
+            log.debug( "Archived workflow instance {}", workflowInstance.getRefNum() );
         }
     }
 
