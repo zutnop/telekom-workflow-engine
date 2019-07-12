@@ -12,7 +12,7 @@
         <entry key="ee.telekom.workflowengine:name=EngineMonitor" value-ref="engineMonitor" />
       </map>
     </property>
-    <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING" />
+    <property name="registrationPolicy" value="REPLACE_EXISTING" />
   </bean>
 
   <bean id="jmxAttributeSource" class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource" />
