@@ -188,8 +188,8 @@ public class GsonHttpMessageConverterForSpring3 extends AbstractHttpMessageConve
 
     private Charset getCharset( HttpHeaders headers ){
         if( headers != null && headers.getContentType() != null
-                && headers.getContentType().getCharSet() != null ){
-            return headers.getContentType().getCharSet();
+                && headers.getContentType().getCharset() != null ){
+            return headers.getContentType().getCharset();
         }
         return DEFAULT_CHARSET;
     }

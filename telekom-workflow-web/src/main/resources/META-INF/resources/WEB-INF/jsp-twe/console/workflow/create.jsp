@@ -26,7 +26,7 @@
 
 		<div class="box">
 			<h1><spring:message code="workflow.create.single.title" /></h1>
-			<form:form method="POST" commandName="form" action="create">
+			<form:form method="POST" modelAttribute="form" action="create">
 				<table class="form">
 					<tbody>
 						<tr>
@@ -99,7 +99,7 @@
 
 		<div class="box">
 			<h1><spring:message code="workflow.create.batch.title" /></h1>
-			<form:form method="POST" commandName="batchForm" action="batchCreate">
+			<form:form method="POST" modelAttribute="batchForm" action="batchCreate">
 				<table class="form">
 					<tbody>
 						<tr>

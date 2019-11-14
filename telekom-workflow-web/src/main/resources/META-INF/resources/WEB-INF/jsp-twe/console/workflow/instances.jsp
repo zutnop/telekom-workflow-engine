@@ -3,7 +3,7 @@
 <workflow-ui:menu activeTab="workflows" />
 
 <div id="search">
-    <form:form method="POST" commandName="instanceSearchForm" action="instances">
+    <form:form method="POST" modelAttribute="instanceSearchForm" action="instances">
         <div class="inner clear">
             <p class="main">
                 <span class="fields">
