@@ -52,7 +52,7 @@ public class StatusController{
         for( ObjectName objectName : foundObjectNames ){
             MBeanInfo mbeanInfo = mbeanServer.getMBeanInfo( objectName );
             String name = objectName.getKeyProperty( "name" );
-            if( name == null || mbeans.containsKey(name)){
+            if( name == null || mbeans.containsKey(name) ){
                 name = name + ":" + mbeanInfo.getDescription();
             }
             List<MbeanAttributeModel> attributes = new ArrayList<>();
