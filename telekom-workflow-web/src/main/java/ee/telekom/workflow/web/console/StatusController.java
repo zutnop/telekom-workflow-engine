@@ -66,7 +66,7 @@ public class StatusController{
                 try {
                     attr = mbeanServer.getAttribute(objectName, attribute.getName());
                 } catch (JMException jme) {
-                    log.warn("Error while getting attribute: " + attribute.getName(), jme);
+                    log.warn("Error while getting attribute \"" + attribute.getName() + "\", ignoring, " + jme.getMessage());
                 }
                 attribute.setValue( attr );
                 attributes.add( attribute );
