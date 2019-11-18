@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.management.JMException;
 import javax.management.MBeanAttributeInfo;
 import javax.management.MBeanInfo;
 import javax.management.MBeanServer;
@@ -51,8 +52,8 @@ public class StatusController{
         for( ObjectName objectName : foundObjectNames ){
             MBeanInfo mbeanInfo = mbeanServer.getMBeanInfo( objectName );
             String name = objectName.getKeyProperty( "name" );
-            if( name == null ){
-                name = mbeanInfo.getDescription();
+            if( name == null || mbeans.containsKey(name) ){
+                name = name + ":" + mbeanInfo.getDescription();
             }
             List<MbeanAttributeModel> attributes = new ArrayList<>();
             mbeans.put( name, attributes );
@@ -61,7 +62,13 @@ public class StatusController{
                 MbeanAttributeModel attribute = new MbeanAttributeModel();
                 attribute.setName( attributeInfo.getName() );
                 attribute.setDescription( attributeInfo.getDescription() );
-                attribute.setValue( mbeanServer.getAttribute( objectName, attribute.getName() ) );
+                Object attr = null;
+                try {
+                    attr = mbeanServer.getAttribute(objectName, attribute.getName());
+                } catch (JMException jme) {
+                    log.warn("Error while getting attribute \"" + attribute.getName() + "\", ignoring, " + jme.getMessage());
+                }
+                attribute.setValue( attr );
                 attributes.add( attribute );
             }
         }
