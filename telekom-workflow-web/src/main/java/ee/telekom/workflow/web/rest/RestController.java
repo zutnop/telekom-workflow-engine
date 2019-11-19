@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonHttpMessageConverterForSpring3;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,7 +78,12 @@ public class RestController{
 
     @PostConstruct
     public void init(){
-        adapter.getMessageConverters().add( new GsonHttpMessageConverterForSpring3( true ) );
+        for (HttpMessageConverter converter : adapter.getMessageConverters()) {
+            if (converter instanceof GsonHttpMessageConverter) {
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                ((GsonHttpMessageConverter)converter).setGson(gson);
+            }
+        }
     }
 
     @ExceptionHandler()

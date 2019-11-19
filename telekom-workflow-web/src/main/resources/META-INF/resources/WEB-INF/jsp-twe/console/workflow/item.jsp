@@ -13,7 +13,7 @@
         <div class="box">
 	        <div class="dataTables_wrapper">
 	            <h1><spring:message code="workflow.item.title.${workItem.type}"/></h1>
-				<form:form method="POST" commandName="form">
+				<form:form method="POST" modelAttribute="form">
 					<c:if test="${workItem.type != 'TIMER'}">
 						<table class="form">
 							<tbody>
