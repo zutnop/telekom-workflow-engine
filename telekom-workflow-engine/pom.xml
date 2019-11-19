@@ -40,6 +40,7 @@
     <maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
 
     <spring.version>5.2.1.RELEASE</spring.version>
+    <spring.security.version>5.2.1.RELEASE</spring.security.version>
     <slf4j.version>1.7.5</slf4j.version>
     <logback.version>1.0.13</logback.version>
   </properties>
@@ -91,7 +92,7 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-      <version>${spring.version}</version>
+      <version>${spring.security.version}</version>
     </dependency>
 
     <dependency>
