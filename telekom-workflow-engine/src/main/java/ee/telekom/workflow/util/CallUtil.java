@@ -34,7 +34,7 @@ public class CallUtil {
                     // Nothing to do here.
                 }
             }
-            return "Unresolved classname from proxy class (" + target.getClass().getName() + ")";
+            return target.getClass().getName() + " (unresolved proxy)";
         }
         return target.getClass().getName();
     }
