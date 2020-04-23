@@ -3,7 +3,7 @@
 <c:set var="urlPrefix" value="${workflowEngineConfiguration.consoleMappingPrefix}" scope="request"/>
 <c:url value="${urlPrefix}/css/main.css" var="mainCssUrl" />
 <c:url value="${urlPrefix}/images/favicon.ico" var="faviconUrl" />
-<c:url value="${urlPrefix}/js/jquery-1.11.1.min.js" var="jQueryUrl" />
+<c:url value="${urlPrefix}/js/jquery-3.4.1.min.js" var="jQueryUrl" />
 <c:url value="${urlPrefix}/js/jquery.dataTables.js" var="dataTablesUrl" />
 
 <html>
