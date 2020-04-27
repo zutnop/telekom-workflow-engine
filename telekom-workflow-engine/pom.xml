@@ -289,9 +289,6 @@
   <profiles>
     <profile>
       <id>release</id>
-      <properties>
-        <additionalparam>-Xdoclint:none</additionalparam>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -310,7 +307,10 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.2</version>
+            <version>3.2.0</version>
+            <configuration>
+              <doclint>none</doclint>
+            </configuration>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
