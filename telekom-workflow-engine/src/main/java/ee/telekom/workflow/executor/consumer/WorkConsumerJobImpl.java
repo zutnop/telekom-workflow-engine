@@ -71,15 +71,23 @@ public class WorkConsumerJobImpl implements WorkConsumerJob{
         public void run(){
             try{
                 log.info( "Started consumer on thread {}", Thread.currentThread().getName() );
+                long errorSleepMultiplier = 1L;
                 while( !isStopping.get() ){
                     try{
                         workConsumerService.consumeWorkUnit();
+                        // work was sucessful, reset the sleep multiplier
+                        errorSleepMultiplier = 1L;
                     }
                     catch( Exception e ){
-                        log.error( "ConsumerRunnable failed to consume work, but we will try again after 10 seconds.", e );
+                        // progressively increase the sleep time so that after every failed retry, the waiting time would be longer before the next retry
+                        long sleepSeconds = 10L * errorSleepMultiplier;
+                        if( errorSleepMultiplier < 360L ){
+                            errorSleepMultiplier = errorSleepMultiplier * 3L;
+                        }
+                        log.error( "ConsumerRunnable failed to consume work, but we will try again after " + sleepSeconds + " seconds.", e );
                         exceptionNotificationService.handleException( e );
                         try{
-                            Thread.sleep( 1000L * 10 );
+                            Thread.sleep( 1000L * sleepSeconds );
                         }
                         catch( InterruptedException ie ){
                             // do nothing

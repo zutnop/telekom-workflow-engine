@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,8 @@ public class WorkProducerJobImpl implements WorkProducerJob{
 
     private volatile AtomicBoolean isStarted = new AtomicBoolean( false );
     private volatile AtomicBoolean isSuspended = new AtomicBoolean( false );
+    private volatile AtomicInteger errorSkipCountdown = new AtomicInteger( 0 );
+    private volatile AtomicInteger errorSkipMultiplier = new AtomicInteger( 1 );
     private ScheduledExecutorService scheduledExecutorService;
 
     @Override
@@ -48,7 +51,7 @@ public class WorkProducerJobImpl implements WorkProducerJob{
         scheduledExecutorService = Executors.newScheduledThreadPool( 1, new NamedPoolThreadFactory( "producer" ) );
         scheduledExecutorService.scheduleWithFixedDelay(
                 new ProducerRunnable(),
-                0,
+                config.getProducerIntervalSeconds(),
                 config.getProducerIntervalSeconds(),
                 TimeUnit.SECONDS );
         isSuspended.set( false );
@@ -89,6 +92,10 @@ public class WorkProducerJobImpl implements WorkProducerJob{
         @Override
         public void run(){
             try{
+                if( errorSkipCountdown.getAndUpdate( value -> (value > 0) ? (value - 1) : 0 ) > 0 ){
+                    // skip runs until countdown has reached 0
+                    return;
+                }
                 if( isSuspended.get() || !lockService.refreshOwnLock() ){
                     return;
                 }
@@ -97,14 +104,19 @@ public class WorkProducerJobImpl implements WorkProducerJob{
                     do {
                         workProducerService.produceWork( unprocessedWorkUnits, WORK_MAX_BATCH_SIZE );
                     } while ( !unprocessedWorkUnits.isEmpty() );
+                    // work was sucessful, reset the skip multiplier
+                    errorSkipMultiplier.set( 1 );
                 }
                 catch( Exception e ){
-                    log.error( e.getMessage(), e );
                     exceptionNotificationService.handleException( e );
+                    throw e;
                 }
             }
             catch( Exception e ){
-                log.error( "ProducerRunnable failed to produce work, but we will try again after the configured time interval.", e );
+                // progressively increase the skip countdown so that after every failed retry, the waiting time would be longer before the next retry
+                int currentSkipMultiplier = errorSkipMultiplier.getAndUpdate( value -> (value < 600) ? (value * 3) : value );
+                errorSkipCountdown.set( currentSkipMultiplier );
+                log.error( "ProducerRunnable failed to produce work, but we will try again after " + currentSkipMultiplier + " x configured time interval.", e );
             }
             catch( Throwable t ){
                 log.error( "ProducerRunnable failed miserably to produce work, the scheduledExecutorService will break now!", t );
