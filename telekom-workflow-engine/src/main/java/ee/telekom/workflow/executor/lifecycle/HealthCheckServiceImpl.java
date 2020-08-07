@@ -66,7 +66,7 @@ public class HealthCheckServiceImpl implements HealthCheckService{
     * the element from the queue failed between taking the element and assigning the process execution to itself.
     * <p>
     * The recovery of this scenario is expensive because we need to suspend the producer, wait for the queue to become empty, wait for 
-    * the maximum node assignment grace period, do the* recovery and resume the producer. For this reason, this advanced recovery is not
+    * the maximum node assignment grace period, do the recovery and resume the producer. For this reason, this advanced recovery is not
     * run on every health check. 
     */
     @Override
