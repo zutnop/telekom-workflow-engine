@@ -3,6 +3,7 @@ package ee.telekom.workflow.executor.lifecycle;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.node.NodeService;
 import ee.telekom.workflow.core.recovery.RecoveryService;
+import ee.telekom.workflow.core.workflowinstance.WorkflowInstance;
+import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.executor.producer.WorkProducerJob;
 import ee.telekom.workflow.executor.queue.WorkQueue;
 
@@ -32,6 +35,8 @@ public class HealthCheckServiceImpl implements HealthCheckService{
     private LifecycleService lifecycleService;
     @Autowired
     private WorkflowEngineConfiguration config;
+    @Autowired
+    private WorkflowInstanceService workflowInstanceService;
 
     /**
     * "Cluster healing" is meant to repair inconsistent database state that results from an unclean cluster shutdown or network hardware failure.
@@ -94,6 +99,25 @@ public class HealthCheckServiceImpl implements HealthCheckService{
             producer.resume();
         }
         nodeService.markEnable( nodes );
+    }
+
+    /**
+     * Check for workflow instances that are in the locked state without updates (meaning that a node is executing some work item for this instance) for longer
+     * than configured workflowengine.workItemExecutionTimeWarnSeconds time. Then log an ERROR to draw attention to these potentially stuck workflows.
+     *
+     * NB! The workflow instance execution itself is NOT affected by this mechanism, just logging.
+     */
+    @Override
+    public void checkForStuckWorkflows(){
+        String clusterName = config.getClusterName();
+        int workItemExecutionTimeWarnSeconds = config.getWorkItemExecutionTimeWarnSeconds();
+        List<WorkflowInstance> stuckWorkflowInstances = workflowInstanceService.findStuck( clusterName, workItemExecutionTimeWarnSeconds );
+        String stuckRefNums = stuckWorkflowInstances.stream()
+                .map( woin -> woin.getRefNum().toString() )
+                .collect( Collectors.joining( ", " ) );
+        log.error( "Found potentially stuck workflow instances (exceeding execution time of {} seconds), ref_num-s: {}"
+                , workItemExecutionTimeWarnSeconds
+                , stuckRefNums );
     }
 
     private void sleep( int seconds ){

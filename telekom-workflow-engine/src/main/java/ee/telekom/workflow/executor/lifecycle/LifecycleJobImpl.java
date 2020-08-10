@@ -33,12 +33,21 @@ public class LifecycleJobImpl extends SimpleLifeCycleBean{
     @Override
     public void doStart(){
         lifecycleService.startUp();
-        scheduledExecutorService = Executors.newScheduledThreadPool( 1, new NamedPoolThreadFactory( "lifecycle-manager" ) );
+
+        scheduledExecutorService = Executors.newScheduledThreadPool( 2, new NamedPoolThreadFactory( "lifecycle-manager" ) );
+
         scheduledExecutorService.scheduleWithFixedDelay(
-                new LifecycleManagerRunnable(),
-                0,
+                new LifecycleHeartBeatRunnable(),
+                0, // do the first heart beat immediately, to run before health checks
                 config.getHeartbeatInterval(),
                 TimeUnit.SECONDS );
+
+        scheduledExecutorService.scheduleWithFixedDelay(
+                new LifecycleManagerRunnable(),
+                config.getHeartbeatInterval(), // start health checks later
+                config.getHeartbeatInterval(),
+                TimeUnit.SECONDS );
+
         log.info( "Started lifecycle-manager" );
     }
 
@@ -50,12 +59,12 @@ public class LifecycleJobImpl extends SimpleLifeCycleBean{
         log.debug( "Stopped lifecycle-manager" );
     }
 
-    private class LifecycleManagerRunnable implements Runnable{
+    private abstract class LifecycleBaseRunnable implements Runnable{
         @Override
         public void run(){
             try{
                 try{
-                    lifecycleService.checkNodeStatus();
+                    executeWork();
                 }
                 catch( Exception e ){
                     log.error( e.getMessage(), e );
@@ -63,12 +72,28 @@ public class LifecycleJobImpl extends SimpleLifeCycleBean{
                 }
             }
             catch( Exception e ){
-                log.error( "LifecycleManagerRunnable failed to check the node status, but we will try again after the configured time interval.", e );
+                log.error( "{} failed to execute work, but we will try again after the configured time interval.", getClass().getSimpleName(), e );
             }
             catch( Throwable t ){
-                log.error( "LifecycleManagerRunnable failed miserably to check the node status, the scheduledExecutorService will break now!", t );
+                log.error( "{} failed miserably to execute work, the scheduledExecutorService will break now!", getClass().getSimpleName(), t );
                 throw t;
             }
+        }
+
+        protected abstract void executeWork();
+    }
+
+    private class LifecycleHeartBeatRunnable extends LifecycleBaseRunnable{
+        @Override
+        protected void executeWork(){
+            lifecycleService.doHeartBeat();
+        }
+    }
+
+    private class LifecycleManagerRunnable extends LifecycleBaseRunnable{
+        @Override
+        protected void executeWork(){
+            lifecycleService.checkNodeStatus();
         }
     }
 

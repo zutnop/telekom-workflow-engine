@@ -78,6 +78,7 @@ public class LifecycleServiceImpl implements LifecycleService{
                     break;
                 case FAILED:
                     healFailedNodesIfLockedOwned();
+                    node = nodeService.findOrCreateByName( nodeName );
                     if( NodeStatus.ENABLE.equals( node.getStatus() ) ){
                         log.info( "Healed node" );
                         startIfNotRunning();
@@ -121,22 +122,26 @@ public class LifecycleServiceImpl implements LifecycleService{
     }
 
     @Override
+    public void doHeartBeat(){
+        log.info( "Doing a heart beat" );
+        nodeService.doHeartBeat();
+    }
+
+    @Override
     public void checkNodeStatus(){
         synchronized( monitor ){
             String nodeName = config.getNodeName();
             Node node = nodeService.findOrCreateByName( nodeName );
             log.info( "Running lifecycle check with node status " + node.getStatus() );
 
-            // Step 1: Do heart beat
-            nodeService.doHeartBeat();
-
-            // Step 2: Mark dead nodes as failed
+            // Step 1: Mark dead nodes as failed
             nodeService.markDeadNodesFailed();
 
-            // Step 3: Recover stuck work from dead nodes and reset the status of FAILED nodes.
+            // Step 2: Recover stuck work from dead nodes and reset the status of FAILED nodes.
             healFailedNodesIfLockedOwned();
 
-            // Step 4: Do we need to start-up or shutdown the engine?
+            // Step 3: Do we need to start-up or shutdown the engine?
+            node = nodeService.findOrCreateByName( nodeName );
             if( NodeStatus.ENABLE.equals( node.getStatus() ) ){
                 startIfNotRunning();
                 nodeService.markEnabled( node.getRefNum() );
@@ -160,7 +165,6 @@ public class LifecycleServiceImpl implements LifecycleService{
                 // happen to get to know this, we will shutdown
                 stopIfRunning();
             }
-
         }
     }
 
@@ -203,7 +207,11 @@ public class LifecycleServiceImpl implements LifecycleService{
 
     private void healFailedNodesIfLockedOwned(){
         if( lockService.eagerAcquire() ){
+            // this is the master node, try to fix everything
             healthCheckService.healFailedNodes();
+
+            // check if there are still "stuck" workflow instances and log error to draw manual attention
+            healthCheckService.checkForStuckWorkflows();
         }
     }
 

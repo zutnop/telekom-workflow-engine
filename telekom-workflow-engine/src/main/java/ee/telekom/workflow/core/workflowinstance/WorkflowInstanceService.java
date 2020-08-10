@@ -59,4 +59,6 @@ public interface WorkflowInstanceService{
 
     void recoverAborting( String nodeName );
 
+    List<WorkflowInstance> findStuck( String clusterName, int workItemExecutionTimeWarnSeconds );
+
 }

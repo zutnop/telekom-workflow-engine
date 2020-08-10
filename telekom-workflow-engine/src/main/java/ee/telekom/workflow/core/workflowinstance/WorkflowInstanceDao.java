@@ -1,6 +1,7 @@
 package ee.telekom.workflow.core.workflowinstance;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -224,4 +225,23 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
         int count = getNamedParameterJdbcTemplate().update( sql, source );
         return (count == 1);
     }
+
+    public List<WorkflowInstance> findStuck( String clusterName, int workItemExecutionTimeWarnSeconds ){
+        Calendar thresholdTimestamp = Calendar.getInstance();
+        thresholdTimestamp.add( Calendar.SECOND, workItemExecutionTimeWarnSeconds * -1 );
+
+        String sql = ""
+                + "SELECT * "
+                + "FROM " + getSchema() + "workflow_instances "
+                + "WHERE cluster_name = :clusterName "
+                + "  AND locked = 'Y' "
+                + "  AND status NOT IN (:ignoredStatuses) "
+                + "  AND date_updated < :dateUpdated";
+        AdvancedParameterSource source = new AdvancedParameterSource()
+                .addValue( "clusterName", clusterName )
+                .addValue( "ignoredStatuses", Arrays.asList( WorkflowInstanceStatus.EXECUTING_ERROR ))
+                .addValue( "dateUpdated", thresholdTimestamp.getTime() );
+        return getNamedParameterJdbcTemplate().query( sql, source, WorkflowInstanceRowMapper.INSTANCE );
+    }
+
 }
