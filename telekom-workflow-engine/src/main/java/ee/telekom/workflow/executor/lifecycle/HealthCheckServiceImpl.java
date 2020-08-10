@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.node.NodeService;
@@ -112,12 +113,14 @@ public class HealthCheckServiceImpl implements HealthCheckService{
         String clusterName = config.getClusterName();
         int workItemExecutionTimeWarnSeconds = config.getWorkItemExecutionTimeWarnSeconds();
         List<WorkflowInstance> stuckWorkflowInstances = workflowInstanceService.findStuck( clusterName, workItemExecutionTimeWarnSeconds );
-        String stuckRefNums = stuckWorkflowInstances.stream()
-                .map( woin -> woin.getRefNum().toString() )
-                .collect( Collectors.joining( ", " ) );
-        log.error( "Found potentially stuck workflow instances (exceeding execution time of {} seconds), ref_num-s: {}"
-                , workItemExecutionTimeWarnSeconds
-                , stuckRefNums );
+        if ( !CollectionUtils.isEmpty( stuckWorkflowInstances ) ){
+            String stuckRefNums = stuckWorkflowInstances.stream()
+                    .map( woin -> woin.getRefNum().toString() )
+                    .collect( Collectors.joining( ", " ) );
+            log.error( "Found potentially stuck workflow instances (exceeding execution time of {} seconds), ref_num-s: {}"
+                    , workItemExecutionTimeWarnSeconds
+                    , stuckRefNums );
+        }
     }
 
     private void sleep( int seconds ){
