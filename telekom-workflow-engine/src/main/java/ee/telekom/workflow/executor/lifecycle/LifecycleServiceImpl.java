@@ -125,6 +125,7 @@ public class LifecycleServiceImpl implements LifecycleService{
     public void doHeartBeat(){
         log.info( "Doing a heart beat" );
         nodeService.doHeartBeat();
+        lockService.refreshOwnLock();
     }
 
     @Override

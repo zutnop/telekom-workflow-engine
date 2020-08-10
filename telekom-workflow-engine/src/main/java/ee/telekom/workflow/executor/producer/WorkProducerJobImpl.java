@@ -76,11 +76,13 @@ public class WorkProducerJobImpl implements WorkProducerJob{
     @Override
     public void suspend(){
         isSuspended.set( true );
+        log.info( "Suspended producer" );
     }
 
     @Override
     public void resume(){
         isSuspended.set( false );
+        log.info( "Resumed producer" );
     }
 
     @Override
@@ -104,7 +106,7 @@ public class WorkProducerJobImpl implements WorkProducerJob{
                     do {
                         workProducerService.produceWork( unprocessedWorkUnits, WORK_MAX_BATCH_SIZE );
                     } while ( !unprocessedWorkUnits.isEmpty() );
-                    // work was sucessful, reset the skip multiplier
+                    // work was successful, reset the skip multiplier
                     errorSkipMultiplier.set( 1 );
                 }
                 catch( Exception e ){
