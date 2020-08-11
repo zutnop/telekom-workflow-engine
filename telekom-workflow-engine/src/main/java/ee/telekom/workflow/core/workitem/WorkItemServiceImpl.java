@@ -143,7 +143,7 @@ public class WorkItemServiceImpl implements WorkItemService{
                 notRecovered++;
             }
         }
-        String logMsg = "Recovered/Not recovered " + recovered + "/" + notRecovered + " executing work items for node " + nodeName;
+        String logMsg = "Recovered " + recovered + " and failed to recover " + notRecovered + " executing work item(s) for node " + nodeName;
         if( notRecovered > 0 ){
             log.error(logMsg);
         }

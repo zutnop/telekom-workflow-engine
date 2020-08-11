@@ -48,7 +48,7 @@ public class NodeServiceImpl implements NodeService{
 
     @Override
     public void updateHeartbeat( String nodeName ){
-        dao.updateHeartbeat( nodeName, new Date() );
+        dao.updateHeartBeat( nodeName, new Date() );
     }
 
     @Override
@@ -93,7 +93,7 @@ public class NodeServiceImpl implements NodeService{
     @Override
     public void doHeartBeat(){
         String nodeName = config.getNodeName();
-        dao.updateHeartbeat( nodeName, new Date() );
+        dao.updateHeartBeat( nodeName, new Date() );
     }
 
     @Override

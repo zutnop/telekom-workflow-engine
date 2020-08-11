@@ -60,7 +60,7 @@ public class NodeDao extends AbstractWorkflowEngineDao{
         getNamedParameterJdbcTemplate().update( sql, source );
     }
 
-    public void updateHeartbeat( String nodeName, Date heartBeat ){
+    public void updateHeartBeat( String nodeName, Date heartBeat ){
         String sql = ""
                 + "UPDATE " + getSchema() + "nodes "
                 + "   SET heartBeat = :heartBeat "
