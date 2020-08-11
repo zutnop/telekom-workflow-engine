@@ -12,4 +12,10 @@ public interface HealthCheckService{
      */
     void healFailedNodes();
 
+    /**
+     * Called regularly to test whether there are any workflow instances that seem
+     * to be stuck in the locked state and log and error to draw attention to this.
+     */
+    void checkForStuckWorkflows();
+
 }

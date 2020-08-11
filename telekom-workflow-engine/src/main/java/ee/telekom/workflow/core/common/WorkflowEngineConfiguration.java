@@ -47,6 +47,8 @@ public class WorkflowEngineConfiguration{
     private int heartbeatMaximumPauseSeconds;
     @Value("${workflowengine.maximumNodeAssignementTimeSeconds}")
     private int maximumNodeAssignmentTimeSeconds;
+    @Value("${workflowengine.workItemExecutionTimeWarnSeconds}")
+    private int workItemExecutionTimeWarnSeconds;
     @Value("${workflowengine.producer.intervalSeconds}")
     private int producerIntervalSeconds;
     @Value("${workflowengine.consumer.threads}")
@@ -156,6 +158,16 @@ public class WorkflowEngineConfiguration{
      */
     public int getMaximumNodeAssignmentTimeSeconds(){
         return maximumNodeAssignmentTimeSeconds;
+    }
+
+    /**
+     * The threshold time limit, if the regular health check finds that there are workflow instances that are in the locked state without updates (meaning that
+     * a node is executing some work item for this instance) for longer than this time, then an ERROR is logged to draw attention to potentially stuck workflows.
+     *
+     * NB! The workflow instance execution itself is NOT affected by this mechanism, just logging.
+     */
+    public int getWorkItemExecutionTimeWarnSeconds(){
+        return workItemExecutionTimeWarnSeconds;
     }
 
     /**

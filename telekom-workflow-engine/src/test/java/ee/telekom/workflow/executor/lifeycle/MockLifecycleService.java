@@ -20,6 +20,11 @@ public class MockLifecycleService implements LifecycleService{
     }
 
     @Override
+    public void doHeartBeat(){
+        // Do nothing
+    }
+
+    @Override
     public void checkNodeStatus(){
         // Do nothing
     }

@@ -238,6 +238,11 @@ public class WorkflowInstanceServiceImpl implements WorkflowInstanceService{
         log.info( "Recovered {} abort workflow instances for node {}", count, nodeName );
     }
 
+    @Override
+    public List<WorkflowInstance> findStuck( String clusterName, int workItemExecutionTimeWarnSeconds ){
+        return dao.findStuck( clusterName, workItemExecutionTimeWarnSeconds );
+    }
+
     private void updateStatus( long refNum, WorkflowInstanceStatus newStatus,
                                WorkflowInstanceStatus expectedStatus ) throws UnexpectedStatusException{
         updateStatus( refNum, newStatus, Collections.singleton( expectedStatus ) );
