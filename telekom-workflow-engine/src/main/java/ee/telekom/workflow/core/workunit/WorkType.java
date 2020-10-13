@@ -2,22 +2,22 @@ package ee.telekom.workflow.core.workunit;
 
 public enum WorkType{
 
-    START_WORKFLOW("start"),
+    START_WORKFLOW("s"),
 
-    ABORT_WORKFLOW("abort"),
+    ABORT_WORKFLOW("a"),
 
-    COMPLETE_WORK_ITEM("complete"),
+    COMPLETE_WORK_ITEM("c"),
 
-    EXECUTE_TASK("execute");
+    EXECUTE_TASK("e");
 
-    private String description;
+    private String code;
 
-    private WorkType( String description ){
-        this.description = description;
+    WorkType( String code ){
+        this.code = code;
     }
 
-    public String getDescription(){
-        return description;
+    public String getCode(){
+        return code;
     }
 
 }

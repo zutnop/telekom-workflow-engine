@@ -71,6 +71,6 @@ public class WorkUnit implements DataSerializable, Serializable{
 
     @Override
     public String toString(){
-        return type.getDescription() + ":" + woinRefNum + (woitRefNum != null ? "/" + woitRefNum : "");
+        return type.getCode() + ":" + woinRefNum + (woitRefNum != null ? "/" + woitRefNum : "");
     }
 }
