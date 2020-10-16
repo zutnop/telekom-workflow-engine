@@ -50,7 +50,7 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 	}
 
 	public CommonsConfigurationFactoryBean(Configuration configuration) {
-		Assert.notNull(configuration);
+		Assert.notNull(configuration, "Configuration is mandatory");
 		this.configuration = new CompositeConfiguration(configuration);
 	}
 

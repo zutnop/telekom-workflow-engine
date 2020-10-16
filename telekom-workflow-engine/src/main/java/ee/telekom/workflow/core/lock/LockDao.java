@@ -13,16 +13,11 @@ import ee.telekom.workflow.util.AdvancedParameterSource;
 public class LockDao extends AbstractWorkflowEngineDao{
 
     public boolean create( String clusterName, String owner, Date expireTime ){
-        String sql = "INSERT INTO " + getSchema() + "locks (cluster_name, owner, expire_time) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO " + getSchema() + "locks (cluster_name, owner, expire_time) VALUES (?, ?, ?) ON CONFLICT DO NOTHING";
         Object[] args = {clusterName, owner, expireTime};
-        try{
-            int count = getJdbcTemplate().update( sql, args );
-            return count == 1;
-        }
-        catch( DuplicateKeyException e ){
-            // Cluster_name is the primary key. There may not be two locks for the same cluster.
-            return false;
-        }
+        int count = getJdbcTemplate().update( sql, args );
+        // cluster_name is the primary (unique) key, if trying to insert a lock for a cluster where a lock already exists, nothing happens, 0 rows inserted
+        return count == 1;
     }
 
     public boolean deleteByOwner( String clusterName, String owner ){
