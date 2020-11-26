@@ -239,7 +239,9 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
                 + "  AND date_updated < :dateUpdated";
         AdvancedParameterSource source = new AdvancedParameterSource()
                 .addValue( "clusterName", clusterName )
-                .addValue( "ignoredStatuses", Arrays.asList( WorkflowInstanceStatus.EXECUTING_ERROR ))
+                .addValue( "ignoredStatuses", Arrays.asList( WorkflowInstanceStatus.EXECUTING_ERROR
+                        , WorkflowInstanceStatus.ABORTING_ERROR
+                        , WorkflowInstanceStatus.STARTING_ERROR ))
                 .addValue( "dateUpdated", thresholdTimestamp.getTime() );
         return getNamedParameterJdbcTemplate().query( sql, source, WorkflowInstanceRowMapper.INSTANCE );
     }
