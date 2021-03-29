@@ -41,7 +41,7 @@ public interface WorkflowInstanceService{
 
     void unlock( long refNum );
 
-    void updateNodeName( long refNum, String nodeName );
+    void updateNodeNameFromNull( long refNum, String nodeName );
 
     void updateState( long refNum, String state );
 

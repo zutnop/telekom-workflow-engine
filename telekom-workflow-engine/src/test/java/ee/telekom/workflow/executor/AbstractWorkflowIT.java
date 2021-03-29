@@ -259,7 +259,7 @@ public class AbstractWorkflowIT{
         }
         Assert.assertNotNull( wu );
         workUnitService.lock( Collections.singletonList( wu ) );
-        workflowInstanceService.updateNodeName( wu.getWoinRefNum(), config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( wu.getWoinRefNum(), config.getNodeName() );
     }
 
     protected void sendSignal( long woitRefNum, Object result ){

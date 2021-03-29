@@ -180,8 +180,11 @@ public class WorkflowInstanceServiceImpl implements WorkflowInstanceService{
     }
 
     @Override
-    public void updateNodeName( long refNum, String nodeName ){
-        dao.updateNodeName( refNum, nodeName );
+    public void updateNodeNameFromNull( long refNum, String nodeName ){
+        boolean updateFailed = !dao.updateNodeNameFromNull( refNum, nodeName );
+        if( updateFailed ){
+            throw new UnexpectedStatusException( "Expected workflow instance " + refNum + " node_name to be NULL" );
+        }
     }
 
     @Override

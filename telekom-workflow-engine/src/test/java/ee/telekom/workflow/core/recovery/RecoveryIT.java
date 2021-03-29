@@ -55,7 +55,7 @@ public class RecoveryIT extends TestApplicationContexts{
     public void test_recoveryAssigned_New(){
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         assertAssignedRecovery( woinRefNum, WorkflowInstanceStatus.NEW, WorkflowInstanceStatus.NEW );
     }
 
@@ -63,7 +63,7 @@ public class RecoveryIT extends TestApplicationContexts{
     public void test_recoveryAssigned_Starting(){
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
         assertAssignedRecovery( woinRefNum, WorkflowInstanceStatus.STARTING, WorkflowInstanceStatus.NEW );
     }
@@ -72,7 +72,7 @@ public class RecoveryIT extends TestApplicationContexts{
     public void test_recoveryAssigned_Abort(){
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markAbort( woinRefNum );
         assertAssignedRecovery( woinRefNum, WorkflowInstanceStatus.ABORT, WorkflowInstanceStatus.ABORT );
     }
@@ -81,7 +81,7 @@ public class RecoveryIT extends TestApplicationContexts{
     public void test_recoveryAssigned_Aborting(){
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markAbort( woinRefNum );
         workflowInstanceService.markAborting( woinRefNum );
         assertAssignedRecovery( woinRefNum, WorkflowInstanceStatus.ABORTING, WorkflowInstanceStatus.ABORT );
@@ -92,7 +92,7 @@ public class RecoveryIT extends TestApplicationContexts{
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         long woitRefNum = createWoit( woinRefNum, "signal", null, null );
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
         workflowInstanceService.markExecuting( woinRefNum );
         assertAssignedRecovery( woinRefNum, woitRefNum, WorkflowInstanceStatus.EXECUTING, WorkflowInstanceStatus.EXECUTING, WorkItemStatus.NEW,
@@ -104,7 +104,7 @@ public class RecoveryIT extends TestApplicationContexts{
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         long woitRefNum = createWoit( woinRefNum, "signal", null, null );
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
         workflowInstanceService.markExecuting( woinRefNum );
         workItemService.markExecuting( woitRefNum );
@@ -117,7 +117,7 @@ public class RecoveryIT extends TestApplicationContexts{
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         long woitRefNum = createWoit( woinRefNum, null, "bean", "method" );
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
         workflowInstanceService.markExecuting( woinRefNum );
         workItemService.markExecuting( woitRefNum );
@@ -130,7 +130,7 @@ public class RecoveryIT extends TestApplicationContexts{
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         long woitRefNum = createWoit( woinRefNum, "signal", null, null );
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
         workflowInstanceService.markExecuting( woinRefNum );
         workItemService.markExecuting( woitRefNum );
@@ -144,7 +144,7 @@ public class RecoveryIT extends TestApplicationContexts{
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
         long woitRefNum = createWoit( woinRefNum, "signal", null, null );
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
-        workflowInstanceService.updateNodeName( woinRefNum, config.getNodeName() );
+        workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
         workflowInstanceService.markExecuting( woinRefNum );
         workItemService.markExecuting( woitRefNum );

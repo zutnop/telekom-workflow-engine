@@ -26,8 +26,6 @@ public class UnexpectedStatusException extends RuntimeException{
         this( "The entity was not in the expected status (" + expectedStatus.toString() + ")" );
     }
 
-
-
     public UnexpectedStatusException( Collection<? extends Object> expectedStatuses ){
         this( "The entity was not in one of the expected status (" + expectedStatuses.toString() + ")" );
     }

@@ -158,19 +158,21 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
         getNamedParameterJdbcTemplate().update( sql, source );
     }
 
-    public void updateNodeName( long refNum, String nodeName ){
+    public boolean updateNodeNameFromNull( long refNum, String nodeName ){
         String sql = ""
                 + "UPDATE " + getSchema() + "workflow_instances "
                 + "   SET node_name = :nodeName, "
                 + "       date_updated = :dateUpdated, "
                 + "       last_updated_by = :lastUpdatedBy "
-                + " WHERE ref_num = :refNum ";
+                + " WHERE ref_num = :refNum "
+                + "   AND node_name IS NULL ";
         AdvancedParameterSource source = new AdvancedParameterSource()
                 .addValue( "dateUpdated", new Date() )
                 .addValue( "lastUpdatedBy", getCreatedOrLastUpdatedBy() )
                 .addValue( "refNum", refNum )
                 .addValue( "nodeName", nodeName );
-        getNamedParameterJdbcTemplate().update( sql, source );
+        int count = getNamedParameterJdbcTemplate().update( sql, source );
+        return (count == 1);
     }
 
     public void updateLockAndNodeName( long refNum, boolean locked, String nodeName ){

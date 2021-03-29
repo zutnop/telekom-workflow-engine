@@ -138,7 +138,7 @@ public class WorkItemServiceImpl implements WorkItemService{
             }
             else{
                 Exception exception = new NoStackTraceException(
-                        "Automatic recovery is not possible for not tasks that are associated to a failed node! Recover manually!" );
+                        "Non-task work items, that are associated to a failed node, are not automatically recovered. Please recover manually!" );
                 handleExecutingError( woit.getWoinRefNum(), woit.getRefNum(), exception );
                 notRecovered++;
             }

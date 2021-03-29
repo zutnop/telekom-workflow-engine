@@ -10,6 +10,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ee.telekom.workflow.core.common.UnexpectedStatusException;
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
 import ee.telekom.workflow.core.workunit.WorkUnit;
@@ -44,9 +45,18 @@ public class WorkConsumerServiceImpl implements WorkConsumerService{
             try{
                 log.info( "Retrieved '{}' from queue.", workUnit );
                 MDC.put( "workunit", workUnit.toString() );
-                workflowInstanceService.updateNodeName( workUnit.getWoinRefNum(), config.getNodeName() );
+                workflowInstanceService.updateNodeNameFromNull( workUnit.getWoinRefNum(), config.getNodeName() );
                 execute( workUnit );
                 consumedWorkUnits.incrementAndGet();
+            }
+            catch( UnexpectedStatusException e ){
+                // Workflow was already assigned to some node. Can happen if work producer has put more work into the queue than the consumers can consume, and
+                // a crash/unclean restart happens that triggers the recovery mechanism. Then during the recovery, in recoverNotAssigned, all the work items
+                // that haven't yet been taken from the queue will be unlocked to make sure that they were not forgotten during the crash, but if the hazelcast
+                // queue survived the crash, then the same work items might still exist there in the queue. Now during the next producer run, those work items
+                // will be again locked and added to the queue. Now the same work items exists twice in the queue and if consumers retrieve them and try to run
+                // the same task twice in parallel, then the unexpected status will trigger.
+                log.warn( e.getMessage() );
             }
             finally{
                 MDC.remove( "workunit" );
