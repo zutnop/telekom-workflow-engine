@@ -156,7 +156,12 @@ public class WorkItemServiceImpl implements WorkItemService{
     public void recoverCompleting( String nodeName ) throws UnexpectedStatusException{
         Collection<WorkItem> workItems = dao.findByNodeNameAndStatus( nodeName, WorkItemStatus.COMPLETING );
         for( WorkItem woit : workItems ){
-            updateStatus( woit.getRefNum(), WorkItemStatus.EXECUTED, WorkItemStatus.COMPLETING );
+            if( WorkItemType.TIMER.equals( woit.getType() ) ){
+                updateStatus( woit.getRefNum(), WorkItemStatus.NEW, WorkItemStatus.COMPLETING );
+            }
+            else{
+                updateStatus( woit.getRefNum(), WorkItemStatus.EXECUTED, WorkItemStatus.COMPLETING );
+            }
             workflowInstanceService.unlock( woit.getWoinRefNum() );
         }
         log.info( "Recovered {} completing work items for node {}", workItems.size(), nodeName );
