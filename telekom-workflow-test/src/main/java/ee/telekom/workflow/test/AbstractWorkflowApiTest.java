@@ -2,10 +2,9 @@ package ee.telekom.workflow.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -126,7 +125,8 @@ public abstract class AbstractWorkflowApiTest{
     }
 
     protected void verifyNewInstanceCreation( String instanceName ){
-        verify( newGraphInstanceCreator, times( 1 ) ).create( eq( instanceName ), anyInt(), anyString(), anyString(), any( Environment.class ) );
+        verify( newGraphInstanceCreator, times( 1 ) )
+                .create( eq( instanceName ), nullable(Integer.class), nullable(String.class), nullable(String.class), any( Environment.class ) );
     }
 
     private void addGraph( WorkflowDefinition definition ){

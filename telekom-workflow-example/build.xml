@@ -5,9 +5,11 @@
   <property name="root.dir" location="${basedir}" />
 
   <target name="initAntClasspath">
+    <artifact:remoteRepository id="mvn.repository" url="https://repo1.maven.org/maven2/" />
     <artifact:dependencies pathId="ant.lib.path">
       <dependency groupId="ant-contrib" artifactId="ant-contrib" version="1.0b3" type="jar" />
       <dependency groupId="org.tigris.antelope" artifactId="antelopetasks" version="3.2.10" type="jar" />
+      <remoteRepository refid="mvn.repository" />
     </artifact:dependencies>
   </target>
 
@@ -26,8 +28,7 @@
   <target name="installTomcat" depends="init">
     <mkdir dir="runtime/tomcat" />
     <mkdir dir="target/downloads" />
-
-    <fastget src="http://archive.apache.org/dist/tomcat/tomcat-8/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip" dest="target/downloads/tomcat.zip" />
+    <fastget src="https://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip" dest="target/downloads/tomcat.zip" />
     <sync todir="${tomcat.home}">
       <mappedresources>
         <zipfileset src="target/downloads/tomcat.zip">
