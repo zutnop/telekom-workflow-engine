@@ -4,7 +4,7 @@
 
   <groupId>ee.telekom.workflow</groupId>
   <artifactId>workflow-web</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <name>telekom-workflow-web</name>
   <description>Telekom-workflow-engine web console, REST services and JMX interface for monitoring and interacting with the running engine.</description>
   <url>https://github.com/zutnop/telekom-workflow-engine</url>
@@ -39,8 +39,8 @@
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
 
-    <spring.version>5.3.18</spring.version>
-    <spring.security.version>5.6.2</spring.security.version>
+    <spring.version>5.3.24</spring.version>
+    <spring.security.version>5.7.5</spring.security.version>
     <junit.jupiter.version>5.8.2</junit.jupiter.version>
     <junit.platform.version>1.8.2</junit.platform.version>
     <junit.vintage.version>5.8.2</junit.vintage.version>
