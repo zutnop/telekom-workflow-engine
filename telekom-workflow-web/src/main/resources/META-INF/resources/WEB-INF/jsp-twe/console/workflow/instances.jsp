@@ -105,7 +105,24 @@
                                 ajax: {
                                     url: "${instancesUrl}search",
                                     type: "POST",
-                                    data: csrfData
+                                    data: (data) => {
+                                        data[csrfParameterName] = csrfToken;
+
+                                        if (data.length > 0) {
+                                            data.length = data.length + 1;
+                                        }
+                                        return data;
+                                    },
+                                    dataSrc: (response) => {
+                                        var thisDataTable = $('#instancesTable').DataTable();
+                                        if (thisDataTable.page.len() > 0 && response.data && response.data.length > thisDataTable.page.len()) {
+                                            response.data.pop();
+                                            thisDataTable.settings()[0].oLanguage.sInfo = 'Showing _START_ to _END_ of many records';
+                                        } else {
+                                            thisDataTable.settings()[0].oLanguage.sInfo = 'Showing _START_ to _END_ of _TOTAL_ records';
+                                        }
+                                        return response.data;
+                                    }
                                 },
                                 columns: [
                                     <workflow-ui:adminAccess>

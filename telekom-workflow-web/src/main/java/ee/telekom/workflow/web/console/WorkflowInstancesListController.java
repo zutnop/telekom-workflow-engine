@@ -58,7 +58,6 @@ public class WorkflowInstancesListController{
 
     @RequestMapping(value = "/workflow/instances", method = RequestMethod.GET)
     public String searchInstancesView( Model model, HttpServletRequest request, @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form ){
-        request.getSession().removeAttribute( "instancesSearchResult" );
         form = createFormOnGetRequest( request, form );
         if( form.hasId() ){
             validateAndConvertIdsToRefNums( form, model );
@@ -69,10 +68,7 @@ public class WorkflowInstancesListController{
         removeBlankLabels( form.getLabel1() );
         removeBlankLabels( form.getLabel2() );
         if( !model.containsAttribute( "error" ) ){
-            if( form.hasSearchCriteria() ){
-                request.getSession().setAttribute( "instancesSearchResult", createModels( facade.findWorkflowInstances( form ) ) );
-            }
-            else{
+            if( !form.hasSearchCriteria() ){
                 model.addAttribute( "warning", "workflow.search.message.empty.filter" );
             }
         }
@@ -205,28 +201,22 @@ public class WorkflowInstancesListController{
     public ResponseEntity<DataTable> searchInstancesAjax( Model model,
             @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form,
             HttpServletRequest request ){
-        @SuppressWarnings("unchecked")
-        List<WorkflowInstanceSearchModel> searchResult = (List<WorkflowInstanceSearchModel>)request.getSession().getAttribute( "instancesSearchResult" );
-        List<WorkflowInstanceSearchModel> page = new ArrayList<>();
-        if( searchResult != null && searchResult.size() > 0 ){
+        /* TODO support ordering:
             Integer column = Integer.valueOf( request.getParameter( "order[0][column]" ) );
             String direction = request.getParameter( "order[0][dir]" );
-            List<WorkflowInstanceSearchModel> sortedSearchResult = sortSearchResult( searchResult, column, direction );
-            int pageStart = Math.min( form.getStart(), Math.max( searchResult.size() - 1, 0 ) );
-            int pageEnd = Math.min( form.getStart() + form.getLength(), searchResult.size() );
-            page = sortedSearchResult.subList( pageStart, pageEnd );
-        }
-        return new ResponseEntity<>( createDataTable( request, searchResult, page ), HttpStatus.OK );
+         */
+        List<WorkflowInstanceSearchModel> searchResult = createModels( facade.findWorkflowInstances( form ) );
+        return new ResponseEntity<>( createDataTable( request, searchResult, form ), HttpStatus.OK );
     }
 
-    private DataTable createDataTable( HttpServletRequest request, List<WorkflowInstanceSearchModel> searchResult, List<WorkflowInstanceSearchModel> page ){
+    private DataTable createDataTable( HttpServletRequest request, List<WorkflowInstanceSearchModel> searchResult, SearchWorkflowInstancesForm form ){
         DataTable dataTable = new DataTable();
         dataTable.setDraw( Integer.valueOf( request.getParameter( "draw" ) ) );
         if( searchResult != null ){
-            dataTable.setRecordsTotal( searchResult.size() );
-            dataTable.setRecordsFiltered( searchResult.size() );
+            dataTable.setRecordsFiltered( form.getStart() + searchResult.size() );
+            dataTable.setRecordsTotal( dataTable.getRecordsFiltered() );
         }
-        dataTable.setData( page );
+        dataTable.setData( searchResult );
         return dataTable;
     }
 

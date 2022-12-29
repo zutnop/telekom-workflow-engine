@@ -113,6 +113,13 @@ public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
         else{
             sql = select + "FROM " + getTableName( true ) + where;
         }
+        int limit = request.getLength();
+        int offset = request.getStart();
+        if (limit != 0) {
+            sql += " LIMIT :limit OFFSET :offset ";
+            source.addValue("limit", limit)
+                    .addValue("offset", offset);
+        }
         return getNamedParameterJdbcTemplate().query( sql, source, WorkflowInstanceStateRowMapper.INSTANCE );
     }
 
