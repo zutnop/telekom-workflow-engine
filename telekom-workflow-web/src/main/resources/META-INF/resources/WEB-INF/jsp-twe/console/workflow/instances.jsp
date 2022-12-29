@@ -94,8 +94,6 @@
                             var instancesUrl = '${instancesUrl}';
                             var csrfParameterName = '${_csrf.parameterName}';
                             var csrfToken = '${_csrf.token}';
-                            var csrfData = {};
-                            csrfData[csrfParameterName] = csrfToken;
                             $('#instancesTable').dataTable({
                                 lengthMenu: [20, 100, 1000],
                                 pageLength: 20,
@@ -107,7 +105,6 @@
                                     type: "POST",
                                     data: (data) => {
                                         data[csrfParameterName] = csrfToken;
-
                                         if (data.length > 0) {
                                             data.length = data.length + 1;
                                         }
