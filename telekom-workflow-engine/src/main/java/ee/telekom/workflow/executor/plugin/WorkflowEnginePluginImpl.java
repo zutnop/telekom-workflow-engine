@@ -170,7 +170,8 @@ public class WorkflowEnginePluginImpl implements WorkflowEnginePlugin{
         GraphRepository repository = new GraphRepositoryImpl();
         Collection<WorkflowDefinition> workflowDefinitions = getAllBeansOfType( WorkflowDefinition.class );
         for( WorkflowDefinition workflowDefinition : workflowDefinitions ){
-            WorkflowFactoryImpl factory = new WorkflowFactoryImpl( workflowDefinition.getName(), workflowDefinition.getVersion(), workflowDefinition.getKeepHistory() );
+            WorkflowFactoryImpl factory = new WorkflowFactoryImpl( workflowDefinition.getName(), workflowDefinition.getVersion(),
+                    workflowDefinition.getKeepHistory(), workflowDefinition.getArchiveDuration() );
             workflowDefinition.configureWorkflowDefinition( factory );
             Graph graph = factory.buildGraph();
             repository.addGraph( graph );

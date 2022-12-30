@@ -1,5 +1,6 @@
 package ee.telekom.workflow.graph;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,6 +32,13 @@ public interface Graph {
 	int getVersion();
 	
 	boolean getKeepHistory();
+
+	/**
+	 * Returns duration for how long archive entries are stored for given graph that corresponds to a workflow definition.
+	 *
+	 * @return graph's archive duration
+	 */
+	Duration getArchiveDuration();
 
 	/**
 	 * Returns the graph's start node. The start node is the node where to start

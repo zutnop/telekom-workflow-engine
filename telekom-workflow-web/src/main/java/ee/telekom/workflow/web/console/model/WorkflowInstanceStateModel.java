@@ -2,6 +2,7 @@ package ee.telekom.workflow.web.console.model;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,6 +31,7 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
     private static final long serialVersionUID = 1L;
     private static final Gson gson = new GsonBuilder().serializeNulls().create();
     private String keepHistory;
+    private String archiveDuration;
 
     public static WorkflowInstanceStateModel create( WorkflowInstanceState woin ){
         WorkflowInstanceStateModel model = new WorkflowInstanceStateModel();
@@ -85,4 +87,20 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
 	public void setKeepHistory( String keepHistory ){
 		this.keepHistory = keepHistory;
 	}
+
+    public String getArchiveDuration(){
+        return archiveDuration;
+    }
+
+    public void setArchiveDuration( Duration archiveDuration ){
+        if (archiveDuration == null) {
+            this.archiveDuration = "Cannot be determined";
+        } else {
+            if (archiveDuration.isNegative()) {
+                this.archiveDuration = "Indefinitely";
+            } else {
+                this.archiveDuration = archiveDuration.toString();
+            }
+        }
+    }
 }

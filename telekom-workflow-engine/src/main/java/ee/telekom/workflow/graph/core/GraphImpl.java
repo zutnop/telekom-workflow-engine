@@ -1,5 +1,6 @@
 package ee.telekom.workflow.graph.core;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class GraphImpl implements Graph{
     private String name;
     private int version;
     private boolean keepHistory;
+    private Duration archiveDuration;
     private Node startNode;
     private Map<Integer, Node> nodeById = new LinkedHashMap<>();
     private Map<Integer, List<Transition>> transitionsByStartNode = new LinkedHashMap<>();
@@ -30,10 +32,11 @@ public class GraphImpl implements Graph{
         this.keepHistory = true;
     }
     
-    public GraphImpl( String name, int version, boolean keepHistory ){
+    public GraphImpl( String name, int version, boolean keepHistory, Duration archiveDuration ){
         this.name = name;
         this.version = version;
         this.keepHistory = keepHistory;
+        this.archiveDuration = archiveDuration;
     }
 
     @Override
@@ -51,7 +54,12 @@ public class GraphImpl implements Graph{
         return keepHistory;
     }
 
-	@Override
+    @Override
+    public Duration getArchiveDuration() {
+        return archiveDuration;
+    }
+
+    @Override
     public Node getStartNode(){
         return startNode;
     }

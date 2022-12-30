@@ -1,5 +1,7 @@
 package ee.telekom.workflow.api;
 
+import java.time.Duration;
+
 import ee.telekom.workflow.graph.Graph;
 import ee.telekom.workflow.graph.Node;
 import ee.telekom.workflow.graph.core.GraphImpl;
@@ -14,8 +16,8 @@ public class GraphBuilder{
     private GraphImpl graph;
     private Tree<Row> root;
 
-    public GraphBuilder( String name, int version, boolean keepHistory, Tree<Row> root ){
-        this.graph = new GraphImpl( name, version, keepHistory );
+    public GraphBuilder( String name, int version, boolean keepHistory, Duration archiveDuration, Tree<Row> root ){
+        this.graph = new GraphImpl( name, version, keepHistory, archiveDuration );
         this.root = root;
     }
 
