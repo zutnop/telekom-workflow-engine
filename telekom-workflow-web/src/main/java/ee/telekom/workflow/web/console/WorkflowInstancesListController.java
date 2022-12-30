@@ -11,9 +11,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanComparator;
-import org.apache.commons.collections.comparators.NullComparator;
-import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +35,6 @@ import ee.telekom.workflow.facade.model.WorkflowInstanceState;
 import ee.telekom.workflow.web.console.form.SearchWorkflowInstancesForm;
 import ee.telekom.workflow.web.console.helper.MessageHelper;
 import ee.telekom.workflow.web.console.model.DataTable;
-import ee.telekom.workflow.web.console.model.DataTableColumnMapper;
 import ee.telekom.workflow.web.console.model.WorkflowInstanceSearchModel;
 
 /**
@@ -201,9 +197,9 @@ public class WorkflowInstancesListController{
     public ResponseEntity<DataTable> searchInstancesAjax( Model model,
             @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form,
             HttpServletRequest request ){
-        Integer column = Integer.valueOf( request.getParameter( "order[0][column]" ) );
-        String direction = request.getParameter( "order[0][dir]" );
-        List<WorkflowInstanceSearchModel> searchResult = sortSearchResult( createModels( facade.findWorkflowInstances( form ) ), column, direction );
+        form.setColumn( Integer.valueOf( request.getParameter( "order[0][column]" ) ) );
+        form.setDirection( request.getParameter( "order[0][dir]"  ) );
+        List<WorkflowInstanceSearchModel> searchResult = createModels( facade.findWorkflowInstances( form ) );
         return new ResponseEntity<>( createDataTable( request, searchResult, form ), HttpStatus.OK );
     }
 
@@ -216,20 +212,6 @@ public class WorkflowInstancesListController{
         }
         dataTable.setData( searchResult );
         return dataTable;
-    }
-
-    protected List<WorkflowInstanceSearchModel> sortSearchResult( List<WorkflowInstanceSearchModel> result, int column, String direction ){
-        List<WorkflowInstanceSearchModel> unorderedSource = new ArrayList<>( result );
-        String fieldName = DataTableColumnMapper.from( column ).getFieldName();
-        BeanComparator<WorkflowInstanceSearchModel> beanComparator;
-        if( "asc".equalsIgnoreCase( direction ) ){
-            beanComparator = new BeanComparator<>( fieldName, new NullComparator() );
-        }
-        else{
-            beanComparator = new BeanComparator<>( fieldName, new ReverseComparator( new NullComparator() ) );
-        }
-        Collections.sort( unorderedSource, beanComparator );
-        return unorderedSource;
     }
 
     @ModelAttribute("instanceSearchForm")

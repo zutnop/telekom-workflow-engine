@@ -24,6 +24,8 @@ public class SearchWorkflowInstances implements Serializable{
 
     private int start;
     private int length;
+    private Integer column;
+    private String direction;
 
     public List<Long> getRefNum(){
         return refNum;
@@ -79,5 +81,21 @@ public class SearchWorkflowInstances implements Serializable{
 
     public void setLength( int length ){
         this.length = length;
+    }
+
+    public Integer getColumn(){
+        return column;
+    }
+
+    public void setColumn( Integer column ){
+        this.column = column;
+    }
+
+    public String getDirection(){
+        return direction;
+    }
+
+    public void setDirection( String direction ){
+        this.direction = direction;
     }
 }

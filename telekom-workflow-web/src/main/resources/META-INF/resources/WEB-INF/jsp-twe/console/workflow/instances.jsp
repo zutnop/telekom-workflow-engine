@@ -134,8 +134,8 @@
                                     {data: "label1"},
                                     {data: "label2"},
                                     {data: "dateCreatedText"},
-                                    {data: "nextTimerDueDateText"},
-                                    {data: "hasActiveHumanTask"},
+                                    {data: "nextTimerDueDateText", orderable: false},
+                                    {data: "hasActiveHumanTask", orderable: false},
                                     {data: "displayStatus"}
                                 ],
                                 order: [
