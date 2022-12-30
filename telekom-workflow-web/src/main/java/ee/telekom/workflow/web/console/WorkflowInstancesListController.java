@@ -201,11 +201,9 @@ public class WorkflowInstancesListController{
     public ResponseEntity<DataTable> searchInstancesAjax( Model model,
             @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form,
             HttpServletRequest request ){
-        /* TODO support ordering:
-            Integer column = Integer.valueOf( request.getParameter( "order[0][column]" ) );
-            String direction = request.getParameter( "order[0][dir]" );
-         */
-        List<WorkflowInstanceSearchModel> searchResult = createModels( facade.findWorkflowInstances( form ) );
+        Integer column = Integer.valueOf( request.getParameter( "order[0][column]" ) );
+        String direction = request.getParameter( "order[0][dir]" );
+        List<WorkflowInstanceSearchModel> searchResult = sortSearchResult( createModels( facade.findWorkflowInstances( form ) ), column, direction );
         return new ResponseEntity<>( createDataTable( request, searchResult, form ), HttpStatus.OK );
     }
 
