@@ -243,4 +243,13 @@
     </sql>
   </changeSet>
 
+  <changeSet id="workflow-engine-2023.01.02.1" author="Martin Kabanen" dbms="postgresql">
+    <validCheckSum>8:01c48ac208ef47d50e23077d5e9d12c5</validCheckSum>
+    <sql>
+      <![CDATA[
+         ALTER TABLE ${schemaName}.WORKFLOW_INSTANCES_ARCHIVE ADD CLEANUP_AFTER TIMESTAMP WITH TIME ZONE;
+      ]]>
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>
