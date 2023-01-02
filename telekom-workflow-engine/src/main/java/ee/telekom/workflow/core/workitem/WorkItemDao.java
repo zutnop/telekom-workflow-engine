@@ -19,13 +19,14 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
         }
         String sql = ""
                 + "INSERT INTO " + getSchema() + "work_items "
-                + "  (ref_num, woin_ref_num, token_id, signal, due_date, bean, method, role, user_name, arguments, result, status, date_created, created_by) "
+                + "  (ref_num, woin_ref_num, token_id, signal, due_date, bean, method, role, user_name, arguments, result, status, auto_retry_on_recovery, date_created, created_by) "
                 + " VALUES "
-                + "  (:refNum, :woinRefNum, :tokenId, :signal, :dueDate, :bean, :method, :role, :userName, :arguments, :result, :status, :dateCreated, :createdBy)";
+                + "  (:refNum, :woinRefNum, :tokenId, :signal, :dueDate, :bean, :method, :role, :userName, :arguments, :result, :status, :autoRetryOnRecovery::BOOLEAN, :dateCreated, :createdBy)";
         AdvancedParameterSource[] sources = new AdvancedParameterSource[woits.size()];
         for( int i = 0; i < woits.size(); i++ ){
             sources[i] = new AdvancedParameterSource()
                     .addBean( woits.get( i ) )
+                    // .addValue( "autoRetryOnRecovery", woits.get(i).getAutoRetryOnRecovery() )
                     .addValue( "dateCreated", new Date() )
                     .addValue( "createdBy", getCreatedOrLastUpdatedBy() );
         }

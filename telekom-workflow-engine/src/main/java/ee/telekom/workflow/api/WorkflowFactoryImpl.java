@@ -234,7 +234,7 @@ public class WorkflowFactoryImpl implements
     }
 
     private Tree<Row> append( Type type, Integer id, Object... arguments ){
-        return append( type, id, AutoRetryOnRecovery.TRUE, arguments );
+        return append( type, id, AutoRetryOnRecovery.getDefault(), arguments );
     }
 
     private Tree<Row> append( Type type, Integer id, AutoRetryOnRecovery autoRetryOnRecovery, Object... arguments ){
