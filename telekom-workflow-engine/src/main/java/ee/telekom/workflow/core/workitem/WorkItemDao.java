@@ -26,7 +26,6 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
         for( int i = 0; i < woits.size(); i++ ){
             sources[i] = new AdvancedParameterSource()
                     .addBean( woits.get( i ) )
-                    // .addValue( "autoRetryOnRecovery", woits.get(i).getAutoRetryOnRecovery() )
                     .addValue( "dateCreated", new Date() )
                     .addValue( "createdBy", getCreatedOrLastUpdatedBy() );
         }
