@@ -115,7 +115,7 @@ public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
         }
         if ( request.getColumn() != null ) {
             WorkflowInstancesDataTableColumnMapper column = WorkflowInstancesDataTableColumnMapper.from(request.getColumn());
-            String direction = request.getDirection() == null ? "DESC" : request.getDirection();
+            String direction = "ASC".equalsIgnoreCase(request.getDirection()) ? "ASC" : "DESC";
             sql += " ORDER BY  " + column.getFieldName() + " " + direction + " ";
         }
         int limit = request.getLength();
