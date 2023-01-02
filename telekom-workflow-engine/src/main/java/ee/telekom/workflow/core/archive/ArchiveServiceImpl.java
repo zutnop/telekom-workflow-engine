@@ -16,4 +16,9 @@ public class ArchiveServiceImpl implements ArchiveService{
         archiveDao.archive( woinRefNum, archivePeriodLength );
     }
 
+    @Override
+    public void cleanup(){
+        archiveDao.cleanup();
+    }
+
 }

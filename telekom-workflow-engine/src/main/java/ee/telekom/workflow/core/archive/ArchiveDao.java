@@ -23,6 +23,18 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
         deleteOriginalWorkflowInstance( woinRefNum );
     }
 
+    public void cleanup(){
+        List<Long> refNums = getJdbcTemplate().queryForList( "SELECT ref_num FROM " + getSchema() + "workflow_instances_archive WHERE cleanup_after IS NOT NULL AND cleanup_after <= CURRENT_TIMESTAMP", Long.class );
+        if (!refNums.isEmpty()) {
+            AdvancedParameterSource[] sources = new AdvancedParameterSource[refNums.size()];
+            for( int i = 0; i < refNums.size(); i++ ){
+                sources[i] = new AdvancedParameterSource().addValue( "refNum", refNums.get(i) );
+            }
+            getNamedParameterJdbcTemplate().batchUpdate("DELETE FROM " + getSchema() + "work_items_archive WHERE woin_ref_num IN (:refNum)", sources);
+            getNamedParameterJdbcTemplate().batchUpdate("DELETE FROM " + getSchema() + "workflow_instances_archive WHERE ref_num IN (:refNum)", sources);
+        }
+    }
+
     private void createArchiveWorkflowInstance( long woinRefNum, int archivePeriodLength ){
         Map<String, Object> old = getJdbcTemplate().queryForMap( "SELECT * FROM " + getSchema() + "workflow_instances WHERE ref_num = ?", woinRefNum );
         OffsetDateTime cleanup_after = archivePeriodLength < 0 ? null : OffsetDateTime.now().plusDays(archivePeriodLength);

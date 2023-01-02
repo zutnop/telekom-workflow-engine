@@ -12,4 +12,9 @@ public interface ArchiveService{
      */
     void archive( long woinRefNum, int archivePeriodLength );
 
+    /**
+     * Cleans up archive entries.
+     */
+    void cleanup();
+
 }
