@@ -1,5 +1,6 @@
 package ee.telekom.workflow.graph.node.activity;
 
+import ee.telekom.workflow.api.AutoRetryOnRecovery;
 import ee.telekom.workflow.graph.Environment;
 import ee.telekom.workflow.graph.GraphEngine;
 import ee.telekom.workflow.graph.GraphInstance;
@@ -17,17 +18,23 @@ public class BeanAsyncCallActivity extends AbstractNode{
 
     private String bean;
     private String method;
+    private AutoRetryOnRecovery autoRetryOnRecovery;
     private ArrayMapping argumentsMapping;
     private OutputMapping resultMapping;
 
     public BeanAsyncCallActivity( int id, String bean, String method, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
-        this( id, null, bean, method, argumentsMappings, resultMapping );
+        this( id, null, bean, method, AutoRetryOnRecovery.FALSE, argumentsMappings, resultMapping );
     }
 
-    public BeanAsyncCallActivity( int id, String name, String bean, String method, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
+    public BeanAsyncCallActivity( int id, String bean, String method, AutoRetryOnRecovery autoRetryOnRecovery, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
+        this( id, null, bean, method, autoRetryOnRecovery, argumentsMappings, resultMapping );
+    }
+
+    public BeanAsyncCallActivity( int id, String name, String bean, String method, AutoRetryOnRecovery autoRetryOnRecovery, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
         super( id, name );
         this.bean = bean;
         this.method = method;
+        this.autoRetryOnRecovery = autoRetryOnRecovery;
         this.argumentsMapping = new ArrayMapping( argumentsMappings );
         this.resultMapping = resultMapping;
     }
@@ -52,7 +59,7 @@ public class BeanAsyncCallActivity extends AbstractNode{
     public void execute( GraphEngine engine, Token token ){
         GraphInstance instance = token.getInstance();
         Object[] arguments = argumentsMapping.evaluate( instance );
-        engine.addTaskItem( instance, token, bean, method, arguments );
+        engine.addTaskItem( instance, token, bean, method, autoRetryOnRecovery, arguments );
     }
 
     @Override

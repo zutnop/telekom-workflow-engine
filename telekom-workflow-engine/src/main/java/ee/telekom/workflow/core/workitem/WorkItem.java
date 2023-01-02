@@ -3,6 +3,7 @@ package ee.telekom.workflow.core.workitem;
 import java.io.Serializable;
 import java.util.Date;
 
+import ee.telekom.workflow.api.AutoRetryOnRecovery;
 import ee.telekom.workflow.facade.WorkflowEngineFacade;
 import ee.telekom.workflow.graph.GraphWorkItem;
 import ee.telekom.workflow.graph.WorkItemStatus;
@@ -38,6 +39,8 @@ public class WorkItem implements Serializable{
 
     private String arguments;
     private String result;
+
+    private AutoRetryOnRecovery autoRetryOnRecovery;
 
     public Long getRefNum(){
         return refNum;
@@ -133,6 +136,14 @@ public class WorkItem implements Serializable{
 
     public void setResult( String result ){
         this.result = result;
+    }
+
+    public AutoRetryOnRecovery getAutoRetryOnRecovery(){
+        return autoRetryOnRecovery;
+    }
+
+    public void setAutoRetryOnRecovery( AutoRetryOnRecovery autoRetryOnRecovery ){
+        this.autoRetryOnRecovery = autoRetryOnRecovery;
     }
 
     public WorkItemType getType(){

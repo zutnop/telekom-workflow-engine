@@ -63,7 +63,7 @@ public class NodeBuilder{
                 String caMethod = main.getString( 1 );
                 InputMapping<?>[] caArgumentsMapping = ElementUtil.createArrayMapping( main.getObjectArray( 2 ) );
                 OutputMapping caOutputMapping = ElementUtil.createOutputMapping( output );
-                return new BeanAsyncCallActivity( id, caBean, caMethod, caArgumentsMapping, caOutputMapping );
+                return new BeanAsyncCallActivity( id, caBean, caMethod, main.getAutoRetryOnRecovery(), caArgumentsMapping, caOutputMapping );
             case HUMAN_TASK:
                 String role = main.getString( 0 );
                 String user = main.getString( 1 );

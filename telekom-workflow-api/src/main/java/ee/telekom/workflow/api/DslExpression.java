@@ -22,6 +22,7 @@ public interface DslExpression<Level> {
 
     /**
      * Asynchronous bean method call. Can be defined as a stand-alone node, or next to a <code>variable/variables</code> node to save the returned object.
+     * By default, not retried on recovery.
      * <p>
      * ### WAIT STATE ###
      * 
@@ -31,6 +32,19 @@ public interface DslExpression<Level> {
      * @param arguments method arguments (any java object or "${EL_EXPRESSION}")
      */
     Level callAsync( int id, String beanName, String methodName, Object... arguments );
+
+    /**
+     * Asynchronous bean method call. Can be defined as a stand-alone node, or next to a <code>variable/variables</code> node to save the returned object.
+     * <p>
+     * ### WAIT STATE ###
+     *
+     * @param id node id
+     * @param beanName bean name (from Spring application context)
+     * @param autoRetryOnRecovery indicating if work item should be auto retried on recovery
+     * @param methodName method name to call
+     * @param arguments method arguments (any java object or "${EL_EXPRESSION}")
+     */
+    Level callAsync( int id, String beanName, String methodName, AutoRetryOnRecovery autoRetryOnRecovery, Object... arguments );
 
     /**
      * Create a human task for given role/assignee. Can be defined as a stand-alone node, or next to a <code>variable/variables</code> node to save the returned object.

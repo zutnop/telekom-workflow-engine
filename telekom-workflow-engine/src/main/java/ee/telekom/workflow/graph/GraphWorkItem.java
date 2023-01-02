@@ -3,6 +3,8 @@ package ee.telekom.workflow.graph;
 import java.util.Date;
 import java.util.Map;
 
+import ee.telekom.workflow.api.AutoRetryOnRecovery;
+
 /**
  * When a {@link Node} execution does not immediately return a result it may
  * entitle an external system to perform some actions asynchronously. The action
@@ -43,5 +45,9 @@ public interface GraphWorkItem{
     void setStatus( WorkItemStatus status );
 
     void setResult( Object result );
+
+    void setAutoRetryOnRecovery( AutoRetryOnRecovery autoRetryOnRecovery );
+
+    AutoRetryOnRecovery getAutoRetryOnRecovery();
 
 }
