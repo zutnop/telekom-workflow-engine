@@ -88,12 +88,12 @@ public class Marshaller{
         woit.setUserName( workItem.getUser() );
         if( WorkItemType.TASK.equals( woit.getType() ) ){
             woit.setArguments( JsonUtil.serialize( workItem.getTaskArguments(), false ) );
-            woit.setAutoRetryOnRecovery( workItem.getAutoRetryOnRecovery() );
         }
         else if( WorkItemType.HUMAN_TASK.equals( woit.getType() ) ){
             woit.setArguments( JsonUtil.serialize( workItem.getHumanTaskArguments(), false ) );
         }
         woit.setResult( serializeResult( workItem.getResult() ) );
+        woit.setAutoRetryOnRecovery( workItem.getAutoRetryOnRecovery() );
         return woit;
     }
 
