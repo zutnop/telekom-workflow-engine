@@ -1,7 +1,5 @@
 package ee.telekom.workflow.api;
 
-import java.time.Duration;
-
 import ee.telekom.workflow.api.Element.Type;
 import ee.telekom.workflow.graph.Graph;
 
@@ -29,7 +27,7 @@ public class WorkflowFactoryImpl implements
     private String name;
     private int version;
     private boolean keepHistory;
-    private Duration archiveDuration;
+    private int archivePeriodLength;
     private Tree<Row> root = Tree.root( Row.class );
     private Tree<Row> current = root;
 
@@ -37,14 +35,14 @@ public class WorkflowFactoryImpl implements
         this.name = name;
         this.version = version;
         this.keepHistory = true;
-        this.archiveDuration = Duration.ofDays(-1);
+        this.archivePeriodLength = -1;
     }
     
-    public WorkflowFactoryImpl( String name, int version, boolean keepHistory, Duration archiveDuration ){
+    public WorkflowFactoryImpl( String name, int version, boolean keepHistory, int archivePeriodLength ){
         this.name = name;
         this.version = version;
         this.keepHistory = keepHistory;
-        this.archiveDuration = archiveDuration;
+        this.archivePeriodLength = archivePeriodLength;
     }
 
     @Override
@@ -398,7 +396,7 @@ public class WorkflowFactoryImpl implements
     }
 
     public Graph buildGraph(){
-        return new GraphBuilder( name, version, keepHistory, archiveDuration, root ).build();
+        return new GraphBuilder( name, version, keepHistory, archivePeriodLength, root ).build();
     }
 
     @Override

@@ -1,8 +1,5 @@
 package ee.telekom.workflow.api;
 
-import java.time.Duration;
-import java.time.Period;
-
 /**
  * The workflow engine is built for running long-lived business processes. The execution logic for these business processes (or process parts) is defined via 
  * workflow definitions. You need to write and deploy a workflow definition for every business process (or multiple definitions, if you want to split the 
@@ -83,15 +80,15 @@ public interface WorkflowDefinition{
     }
 
     /**
-     * Returns archive duration for the workflow definition. Defaults to negative duration which means archive is kept indefinitely.
+     * Returns archive period length in days for the workflow definition. Defaults to negative value which means archive is kept infinitely.
      * <p>
-     * When workflow instance is fully executed or aborted, it's data is archived. Archived entries are stored for the given duration.
+     * When workflow instance is fully executed or aborted, it's data is archived. Archived entries are stored for the given period.
      * When archive entry duration is over, it gets automatically deleted.
      *
-     * @return archive duration for this workflow definition
+     * @return archive period length in days for this workflow definition
      */
-    default Duration getArchiveDuration() {
-        return Duration.ofDays(-1);
+    default int getArchivePeriodLength() {
+        return -1;
     }
 
 }
