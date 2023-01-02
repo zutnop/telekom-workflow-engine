@@ -131,7 +131,7 @@ public class WorkItemServiceImpl implements WorkItemService{
         int notRecovered = 0;
         Collection<WorkItem> workItems = dao.findByNodeNameAndStatus( nodeName, WorkItemStatus.EXECUTING );
         for( WorkItem woit : workItems ){
-            if( !WorkItemType.TASK.equals( woit.getType() ) ){
+            if( woit.isAutoRetryOnRecovery() ){
                 updateStatus( woit.getRefNum(), WorkItemStatus.NEW, WorkItemStatus.EXECUTING );
                 workflowInstanceService.unlock( woit.getWoinRefNum() );
                 recovered++;

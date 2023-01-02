@@ -138,7 +138,7 @@ public class WorkItem implements Serializable{
         this.result = result;
     }
 
-    public boolean getAutoRetryOnRecovery(){
+    public boolean isAutoRetryOnRecovery(){
         return autoRetryOnRecovery == null ? AutoRetryOnRecovery.getDefault().asBoolean() : autoRetryOnRecovery.asBoolean();
     }
 
