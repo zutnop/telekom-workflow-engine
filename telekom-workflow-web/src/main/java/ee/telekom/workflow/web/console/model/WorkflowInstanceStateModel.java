@@ -93,7 +93,7 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
 
     public void setArchiveDuration( Integer archivePeriodLength ){
         if (archivePeriodLength == null) {
-            this.archivePeriodLength = "";
+            this.archivePeriodLength = "Cannot be determined";
         } else {
             if (archivePeriodLength < 0) {
                 this.archivePeriodLength = "Infinitely";
