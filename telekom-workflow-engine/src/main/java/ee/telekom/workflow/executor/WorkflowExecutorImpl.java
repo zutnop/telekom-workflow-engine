@@ -119,7 +119,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workflowInstanceService.updateHistory( woin.getRefNum(), woin.getHistory() );
                 workflowInstanceService.markAborted( woin.getRefNum() );
                 workflowInstanceService.unlock( woin.getRefNum() );
-                archiveService.archive( woin.getRefNum() );
+                archiveService.archive( woin.getRefNum(), -1 );
             }
             else if( engineFactory.getGraph( woin.getWorkflowName(), woin.getWorkflowVersion() ) != null ){
                 // Abort a workflow instance that has been started and which is associated to an existing graph 
@@ -147,7 +147,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workflowInstanceService.updateHistory( woin.getRefNum(), woin.getHistory() );
                 workflowInstanceService.markAborted( woin.getRefNum() );
                 workflowInstanceService.unlock( woin.getRefNum() );
-                archiveService.archive( woin.getRefNum() );
+                archiveService.archive( woin.getRefNum(), -1 );
             }
 
             commit( status, "Aborted" );

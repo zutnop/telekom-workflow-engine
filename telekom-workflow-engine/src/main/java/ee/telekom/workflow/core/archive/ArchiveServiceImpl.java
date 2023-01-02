@@ -12,8 +12,8 @@ public class ArchiveServiceImpl implements ArchiveService{
     private ArchiveDao archiveDao;
 
     @Override
-    public void archive( long woinRefNum ){
-        archiveDao.archive( woinRefNum );
+    public void archive( long woinRefNum, int archivePeriodLength ){
+        archiveDao.archive( woinRefNum, archivePeriodLength );
     }
 
 }
