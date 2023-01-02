@@ -23,14 +23,14 @@ public class BeanAsyncCallActivity extends AbstractNode{
     private OutputMapping resultMapping;
 
     public BeanAsyncCallActivity( int id, String bean, String method, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
-        this( id, null, bean, method, AutoRetryOnRecovery.FALSE, argumentsMappings, resultMapping );
+        this( id, null, AutoRetryOnRecovery.FALSE, bean, method, argumentsMappings, resultMapping );
     }
 
-    public BeanAsyncCallActivity( int id, String bean, String method, AutoRetryOnRecovery autoRetryOnRecovery, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
-        this( id, null, bean, method, autoRetryOnRecovery, argumentsMappings, resultMapping );
+    public BeanAsyncCallActivity( int id, String bean, AutoRetryOnRecovery autoRetryOnRecovery, String method, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
+        this( id, null, autoRetryOnRecovery, bean, method, argumentsMappings, resultMapping );
     }
 
-    public BeanAsyncCallActivity( int id, String name, String bean, String method, AutoRetryOnRecovery autoRetryOnRecovery, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
+    public BeanAsyncCallActivity( int id, String name, AutoRetryOnRecovery autoRetryOnRecovery, String bean, String method, InputMapping<?>[] argumentsMappings, OutputMapping resultMapping ){
         super( id, name );
         this.bean = bean;
         this.method = method;
