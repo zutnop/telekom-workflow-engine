@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
+import ee.telekom.workflow.api.AutoRecovery;
 import ee.telekom.workflow.graph.BeanResolver;
 import ee.telekom.workflow.graph.Environment;
 import ee.telekom.workflow.graph.Graph;
@@ -227,8 +228,8 @@ public class GraphEngineImpl implements GraphEngine{
     }
 
     @Override
-    public GraphWorkItem addTaskItem( GraphInstance instance, Token token, String bean, String method, Object[] arguments ){
-        GraphWorkItem wi = GraphWorkItemImpl.createTaskItem( token, bean, method, arguments );
+    public GraphWorkItem addTaskItem( GraphInstance instance, Token token, String bean, String method, AutoRecovery autoRecovery, Object[] arguments ){
+        GraphWorkItem wi = GraphWorkItemImpl.createTaskItem( token, bean, method, autoRecovery, arguments );
         instance.addWorkItem( wi );
         notifier.fireCreated( wi );
         return wi;

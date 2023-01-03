@@ -41,11 +41,13 @@ public class Element{
 
     private Type type;
     private Integer id;
+    private AutoRecovery autoRecovery;
     private Object[] arguments;
 
-    public Element( Type type, Integer id, Object[] arguments ){
+    public Element( Type type, Integer id, AutoRecovery autoRecovery, Object[] arguments ){
         this.type = type;
         this.id = id;
+        this.autoRecovery = autoRecovery;
         this.arguments = arguments;
     }
 
@@ -55,6 +57,10 @@ public class Element{
 
     public Integer getId(){
         return id;
+    }
+
+    public AutoRecovery getAutoRecovery(){
+        return autoRecovery;
     }
 
     public Object getObject( int index ){

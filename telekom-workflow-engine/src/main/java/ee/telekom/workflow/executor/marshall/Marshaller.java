@@ -93,6 +93,7 @@ public class Marshaller{
             woit.setArguments( JsonUtil.serialize( workItem.getHumanTaskArguments(), false ) );
         }
         woit.setResult( serializeResult( workItem.getResult() ) );
+        woit.setAutoRecovery( workItem.autoRecovery() );
         return woit;
     }
 

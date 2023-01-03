@@ -3,6 +3,7 @@ package ee.telekom.workflow.graph;
 import java.util.Date;
 import java.util.Map;
 
+import ee.telekom.workflow.api.AutoRecovery;
 import ee.telekom.workflow.core.workitem.WorkItem;
 
 /**
@@ -71,7 +72,7 @@ public interface GraphEngine extends GraphEngineFacade{
      * @return the new task item
      */
     GraphWorkItem addTaskItem( GraphInstance instance, Token token, String bean,
-                               String method, Object[] arguments );
+                               String method, AutoRecovery autoRecovery, Object[] arguments );
 
     /**
      * Adds a new {@link HumanTaskItem} to the given instance which is

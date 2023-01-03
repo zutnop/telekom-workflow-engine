@@ -3,6 +3,7 @@ package ee.telekom.workflow.graph.core;
 import java.util.Date;
 import java.util.Map;
 
+import ee.telekom.workflow.api.AutoRecovery;
 import ee.telekom.workflow.graph.GraphWorkItem;
 import ee.telekom.workflow.graph.Token;
 import ee.telekom.workflow.graph.WorkItemStatus;
@@ -28,6 +29,8 @@ public class GraphWorkItemImpl implements GraphWorkItem{
 
     private WorkItemStatus status;
 
+    private AutoRecovery autoRecovery;
+
     public static GraphWorkItemImpl createSignalItem( Token token, String signal ){
         GraphWorkItemImpl result = new GraphWorkItemImpl();
         result.setExternalGraphInstanceId( token.getInstance().getExternalId() );
@@ -46,7 +49,7 @@ public class GraphWorkItemImpl implements GraphWorkItem{
         return result;
     }
 
-    public static GraphWorkItemImpl createTaskItem( Token token, String bean, String method, Object[] arguments ){
+    public static GraphWorkItemImpl createTaskItem( Token token, String bean, String method, AutoRecovery autoRecovery, Object[] arguments ){
         GraphWorkItemImpl result = new GraphWorkItemImpl();
         result.setExternalGraphInstanceId( token.getInstance().getExternalId() );
         result.setToken( token );
@@ -54,6 +57,7 @@ public class GraphWorkItemImpl implements GraphWorkItem{
         result.setBean( bean );
         result.setMethod( method );
         result.setArguments( arguments );
+        result.setAutoRecovery(autoRecovery);
         return result;
     }
 
@@ -173,6 +177,16 @@ public class GraphWorkItemImpl implements GraphWorkItem{
     @Override
     public void setResult( Object result ){
         this.result = result;
+    }
+
+    @Override
+    public void setAutoRecovery(AutoRecovery autoRecovery){
+        this.autoRecovery = autoRecovery;
+    }
+
+    @Override
+    public AutoRecovery autoRecovery() {
+        return autoRecovery;
     }
 
     @Override

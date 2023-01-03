@@ -3,6 +3,7 @@ package ee.telekom.workflow.core.workitem;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import ee.telekom.workflow.api.AutoRecovery;
 import ee.telekom.workflow.util.AbstractRowMapper;
 
 /**
@@ -31,6 +32,7 @@ public class WorkItemRowMapper extends AbstractRowMapper<WorkItem>{
         object.setUserName( getString( rs, "user_name" ) );
         object.setArguments( getString( rs, "arguments" ) );
         object.setResult( getString( rs, "result" ) );
+        object.setAutoRecovery( AutoRecovery.of(rs.getBoolean("auto_recovery")) );
         return object;
     }
 
