@@ -26,7 +26,7 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
 
     public void cleanup(){
         String deleteWoitsSql = ""
-                + "DELETE FROM engine.work_items_archive woit "
+                + "DELETE FROM " + getSchema() + "work_items_archive woit "
                 + "WHERE EXISTS ( "
                 + "    SELECT * "
                 + "    FROM engine.workflow_instances_archive woin "
@@ -35,7 +35,7 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
                 + "      AND woin.cleanup_after <= :now "
                 + "    ); ";
         String deleteWoinsSql = ""
-                + "DELETE FROM engine.workflow_instances_archive woin "
+                + "DELETE FROM " + getSchema() + "workflow_instances_archive woin "
                 + "WHERE woin.cleanup_after IS NOT NULL "
                 + "  AND woin.cleanup_after <= :now "
                 + "  AND NOT EXISTS (SELECT * FROM engine.work_items_archive woit WHERE woin.ref_num = woit.woin_ref_num); ";
