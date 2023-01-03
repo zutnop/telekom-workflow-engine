@@ -85,7 +85,8 @@ public class WorkItemController{
             }
         }
         // redirect
-        if( result.hasErrors() || redirectAttr.getFlashAttributes().containsKey( "error" ) ){
+        if( result.hasErrors() || model.containsAttribute( "error" ) ){
+            // If post request failed, render view again
             return view( model, workItem.getWoinRefNum(), workItem.getRefNum(), form );
         }
         else{
