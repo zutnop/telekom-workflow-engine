@@ -3,7 +3,7 @@ package ee.telekom.workflow.graph;
 import java.util.Date;
 import java.util.Map;
 
-import ee.telekom.workflow.api.AutoRetryOnRecovery;
+import ee.telekom.workflow.api.AutoRecovery;
 
 /**
  * When a {@link Node} execution does not immediately return a result it may
@@ -46,8 +46,8 @@ public interface GraphWorkItem{
 
     void setResult( Object result );
 
-    void setAutoRetryOnRecovery( AutoRetryOnRecovery autoRetryOnRecovery );
+    void setAutoRecovery( AutoRecovery autoRecovery);
 
-    AutoRetryOnRecovery getAutoRetryOnRecovery();
+    AutoRecovery autoRecovery();
 
 }

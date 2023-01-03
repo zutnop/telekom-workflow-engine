@@ -79,13 +79,13 @@ public class WorkflowFactoryImpl implements
 
     @Override
     public WorkflowFactoryImpl callAsync( int id, String beanName, String methodName, Object... arguments ){
-        append( Type.CALL_ASYNC, id, AutoRetryOnRecovery.FALSE, beanName, methodName, arguments );
+        append( Type.CALL_ASYNC, id, AutoRecovery.DISABLED, beanName, methodName, arguments );
         return this;
     }
 
     @Override
-    public WorkflowFactoryImpl callAsync( int id, String beanName, String methodName, AutoRetryOnRecovery autoRetryOnRecovery, Object... arguments ){
-        append( Type.CALL_ASYNC, id, autoRetryOnRecovery, beanName, methodName, arguments );
+    public WorkflowFactoryImpl callAsync( int id, String beanName, String methodName, AutoRecovery autoRecovery, Object... arguments ){
+        append( Type.CALL_ASYNC, id, autoRecovery, beanName, methodName, arguments );
         return this;
     }
 
@@ -234,11 +234,11 @@ public class WorkflowFactoryImpl implements
     }
 
     private Tree<Row> append( Type type, Integer id, Object... arguments ){
-        return append( type, id, AutoRetryOnRecovery.getDefault(), arguments );
+        return append( type, id, AutoRecovery.getDefault(), arguments );
     }
 
-    private Tree<Row> append( Type type, Integer id, AutoRetryOnRecovery autoRetryOnRecovery, Object... arguments ){
-        Element token = new Element( type, id, autoRetryOnRecovery, arguments );
+    private Tree<Row> append( Type type, Integer id, AutoRecovery autoRecovery, Object... arguments ){
+        Element token = new Element( type, id, autoRecovery, arguments );
         if( Type.START.equals( type ) ){
             return downRight( token );
         }

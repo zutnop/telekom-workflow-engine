@@ -40,11 +40,11 @@ public interface DslExpression<Level> {
      *
      * @param id node id
      * @param beanName bean name (from Spring application context)
-     * @param autoRetryOnRecovery indicating if work item should be auto retried on recovery
+     * @param autoRecovery indicating if work item should be auto retried on recovery
      * @param methodName method name to call
      * @param arguments method arguments (any java object or "${EL_EXPRESSION}")
      */
-    Level callAsync( int id, String beanName, String methodName, AutoRetryOnRecovery autoRetryOnRecovery, Object... arguments );
+    Level callAsync( int id, String beanName, String methodName, AutoRecovery autoRecovery, Object... arguments );
 
     /**
      * Create a human task for given role/assignee. Can be defined as a stand-alone node, or next to a <code>variable/variables</code> node to save the returned object.
