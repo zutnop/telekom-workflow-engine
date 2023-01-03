@@ -14,8 +14,8 @@ public class GraphBuilder{
     private GraphImpl graph;
     private Tree<Row> root;
 
-    public GraphBuilder( String name, int version, boolean keepHistory, Tree<Row> root ){
-        this.graph = new GraphImpl( name, version, keepHistory );
+    public GraphBuilder( String name, int version, boolean keepHistory, int archivePeriodLength, Tree<Row> root ){
+        this.graph = new GraphImpl( name, version, keepHistory, archivePeriodLength );
         this.root = root;
     }
 

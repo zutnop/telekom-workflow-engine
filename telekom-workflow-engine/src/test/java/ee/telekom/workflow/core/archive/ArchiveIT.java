@@ -53,7 +53,7 @@ public class ArchiveIT extends TestApplicationContexts{
         WorkItem woit = createWoit( woinRefNum );
         woitDao.create( Collections.singletonList( woit ) );
 
-        archiveDao.archive( woinRefNum );
+        archiveDao.archive( woinRefNum, -1 );
 
         Assert.assertNull( woinService.find( woinRefNum ) );
         Assert.assertTrue( woitDao.findByWoinRefNum( woinRefNum ).isEmpty() );
@@ -75,7 +75,7 @@ public class ArchiveIT extends TestApplicationContexts{
         WorkflowInstance woin = woinService.find( woinRefNum );
         WorkItem woit = woitDao.findByWoinRefNum( woinRefNum ).get( 0 );
 
-        archiveDao.archive( woinRefNum );
+        archiveDao.archive( woinRefNum, -1 );
         Assert.assertNull( woinService.find( woinRefNum ) );
         Assert.assertTrue( woitDao.findByWoinRefNum( woinRefNum ).isEmpty() );
         assertWoin( woin );

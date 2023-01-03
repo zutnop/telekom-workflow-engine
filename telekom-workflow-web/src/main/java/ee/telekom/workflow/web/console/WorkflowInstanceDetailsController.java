@@ -46,6 +46,7 @@ public class WorkflowInstanceDetailsController{
         Graph graph = graphEngineFactory.getGraph( woin.getWorkflowName(), woin.getWorkflowVersion() );
         WorkflowInstanceStateModel workFlowInstanceStateModel = WorkflowInstanceStateModel.create( woin );
         workFlowInstanceStateModel.setKeepHistory( graph != null ? String.valueOf( graph.getKeepHistory() ) : "Cannot be determined" );
+        workFlowInstanceStateModel.setArchiveDuration( graph != null ? graph.getArchivePeriodLength() : null );
         model.addAttribute( "workflowInstance", workFlowInstanceStateModel );
         List<WorkItemState> workItems = facade.findWorkItems( woinRefNum, isActive( woin ) );
         model.addAttribute( "workItems", createModels( workItems ) );

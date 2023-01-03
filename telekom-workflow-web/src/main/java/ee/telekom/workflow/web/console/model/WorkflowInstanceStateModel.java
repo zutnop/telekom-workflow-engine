@@ -30,6 +30,7 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
     private static final long serialVersionUID = 1L;
     private static final Gson gson = new GsonBuilder().serializeNulls().create();
     private String keepHistory;
+    private String archivePeriodLength;
 
     public static WorkflowInstanceStateModel create( WorkflowInstanceState woin ){
         WorkflowInstanceStateModel model = new WorkflowInstanceStateModel();
@@ -85,4 +86,20 @@ public class WorkflowInstanceStateModel extends WorkflowInstanceState implements
 	public void setKeepHistory( String keepHistory ){
 		this.keepHistory = keepHistory;
 	}
+
+    public String getArchivePeriodLength(){
+        return archivePeriodLength;
+    }
+
+    public void setArchiveDuration( Integer archivePeriodLength ){
+        if (archivePeriodLength == null) {
+            this.archivePeriodLength = "Cannot be determined";
+        } else {
+            if (archivePeriodLength < 0) {
+                this.archivePeriodLength = "Infinitely";
+            } else {
+                this.archivePeriodLength = archivePeriodLength.toString();
+            }
+        }
+    }
 }

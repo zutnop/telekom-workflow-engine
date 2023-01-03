@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ee.telekom.workflow.core.archive.ArchiveService;
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.lock.LockService;
 import ee.telekom.workflow.core.node.Node;
@@ -27,6 +28,8 @@ public class LifecycleServiceImpl implements LifecycleService{
 
     private static final Logger log = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
+    @Autowired
+    private ArchiveService archiveService;
     @Autowired
     private WorkflowEnginePlugin plugin;
     @Autowired
@@ -166,6 +169,9 @@ public class LifecycleServiceImpl implements LifecycleService{
                 // happen to get to know this, we will shutdown
                 stopIfRunning();
             }
+
+            // Step 4: Clean up archive entries
+            cleanupArchivesIfLockedOwned();
         }
     }
 
@@ -213,6 +219,13 @@ public class LifecycleServiceImpl implements LifecycleService{
 
             // check if there are still "stuck" workflow instances and log error to draw manual attention
             healthCheckService.checkForStuckWorkflows();
+        }
+    }
+
+    private void cleanupArchivesIfLockedOwned(){
+        if( lockService.eagerAcquire() ){
+            // this is the master node, run the archive cleanup
+            archiveService.cleanup();
         }
     }
 

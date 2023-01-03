@@ -141,7 +141,8 @@ public class GraphInstanceRepositoryImpl implements GraphInstanceRepository{
 
         log.debug( "Updated workflow instance {} with status {} ", workflowInstance.getRefNum(), workflowInstance.getStatus() );
         if( isCompleted ){
-            archiveDao.archive( workflowInstance.getRefNum() );
+            int archivePeriodLength = graphInstance.getGraph().getArchivePeriodLength();
+            archiveDao.archive( workflowInstance.getRefNum(), archivePeriodLength );
             log.debug( "Archived workflow instance {}", workflowInstance.getRefNum() );
         }
     }

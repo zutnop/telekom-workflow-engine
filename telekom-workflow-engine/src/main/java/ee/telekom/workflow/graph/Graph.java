@@ -33,6 +33,13 @@ public interface Graph {
 	boolean getKeepHistory();
 
 	/**
+	 * Returns period in days for how long archive entries are stored for given graph that corresponds to a workflow definition.
+	 *
+	 * @return graph's archive period length in days
+	 */
+	int getArchivePeriodLength();
+
+	/**
 	 * Returns the graph's start node. The start node is the node where to start
 	 * execution when creating a new {@link GraphInstance}. A non-empty graph must define
 	 * a start node.
