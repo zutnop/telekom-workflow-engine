@@ -3,7 +3,7 @@
 <workflow-ui:menu activeTab="workflows" />
 
 <div id="search">
-    <form:form method="POST" modelAttribute="instanceSearchForm" action="instances">
+    <form:form method="GET" modelAttribute="instanceSearchForm" action="instances">
         <div class="inner clear">
             <p class="main">
                 <span class="fields">
@@ -108,6 +108,11 @@
                                         if (data.length > 0) {
                                             data.length = data.length + 1;
                                         }
+                                        data['workflowName'] = '${instanceSearchForm.workflowName[0]}';
+                                        data['status'] = '${instanceSearchForm.status[0]}';
+                                        data['id'] = '${instanceSearchForm.id[0]}';
+                                        data['label1'] = '${instanceSearchForm.label1[0]}';
+                                        data['label2'] = '${instanceSearchForm.label2[0]}';
                                         return data;
                                     },
                                     dataSrc: (response) => {
