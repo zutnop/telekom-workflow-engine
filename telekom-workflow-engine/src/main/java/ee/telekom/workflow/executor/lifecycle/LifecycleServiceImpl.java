@@ -171,7 +171,7 @@ public class LifecycleServiceImpl implements LifecycleService{
             }
 
             // Step 4: Clean up archive entries
-            archiveService.cleanup();
+            cleanupArchivesIfLockedOwned();
         }
     }
 
@@ -219,6 +219,13 @@ public class LifecycleServiceImpl implements LifecycleService{
 
             // check if there are still "stuck" workflow instances and log error to draw manual attention
             healthCheckService.checkForStuckWorkflows();
+        }
+    }
+
+    private void cleanupArchivesIfLockedOwned(){
+        if( lockService.eagerAcquire() ){
+            // this is the master node, run the archive cleanup
+            archiveService.cleanup();
         }
     }
 
