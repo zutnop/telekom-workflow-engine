@@ -11,15 +11,15 @@
 					<spring:message code="workflow.create.single.error.unknown" arguments="${error}" />
 				</div>
 			</c:when>
-			<c:when test="${not empty form.refNum}">
+			<c:when test="${not empty createdRefNum}">
 				<div class="message success">
-					<c:url value="${urlPrefix}/console/workflow/instances/${form.refNum}" var="url"/>
-					<spring:message code="workflow.create.single.success" />&nbsp;<a href="${url}"><c:out value="${form.refNum}"/></a>
+					<c:url value="${urlPrefix}/console/workflow/instances/${createdRefNum}" var="url"/>
+					<spring:message code="workflow.create.single.success" />&nbsp;<a href="${url}"><c:out value="${createdRefNum}"/></a>
 				</div>
 			</c:when>
-			<c:when test="${not empty batchForm.refNums}" >
+			<c:when test="${not empty createdRefNums}" >
 				<div class="message success">
-					<spring:message code="workflow.create.batch.success" />&nbsp;<c:forEach items="${batchForm.refNums}" var="refNum" varStatus="status"><c:url value="${urlPrefix}/console/workflow/instances/${refNum}" var="url"/><c:if test="${!status.first}">, </c:if><a href="${url}"><c:out value="${refNum}"/></a></c:forEach>
+					<spring:message code="workflow.create.batch.success" />&nbsp;<c:forEach items="${createdRefNums}" var="refNum" varStatus="status"><c:url value="${urlPrefix}/console/workflow/instances/${refNum}" var="url"/><c:if test="${!status.first}">, </c:if><a href="${url}"><c:out value="${refNum}"/></a></c:forEach>
 				</div>
 			</c:when>
 		</c:choose>

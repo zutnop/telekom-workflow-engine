@@ -11,9 +11,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanComparator;
-import org.apache.commons.collections.comparators.NullComparator;
-import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ee.telekom.workflow.core.common.UnexpectedStatusException;
@@ -38,7 +34,6 @@ import ee.telekom.workflow.facade.model.WorkflowInstanceState;
 import ee.telekom.workflow.web.console.form.SearchWorkflowInstancesForm;
 import ee.telekom.workflow.web.console.helper.MessageHelper;
 import ee.telekom.workflow.web.console.model.DataTable;
-import ee.telekom.workflow.web.console.model.DataTableColumnMapper;
 import ee.telekom.workflow.web.console.model.WorkflowInstanceSearchModel;
 
 /**
@@ -46,7 +41,6 @@ import ee.telekom.workflow.web.console.model.WorkflowInstanceSearchModel;
  */
 @Controller
 @RequestMapping("/console")
-@SessionAttributes("instanceSearchForm")
 public class WorkflowInstancesListController{
 
     @Autowired
@@ -57,8 +51,7 @@ public class WorkflowInstancesListController{
     private MessageHelper messageHelper;
 
     @RequestMapping(value = "/workflow/instances", method = RequestMethod.GET)
-    public String searchInstancesView( Model model, HttpServletRequest request, @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form ){
-        request.getSession().removeAttribute( "instancesSearchResult" );
+    public String searchInstancesView( Model model, HttpServletRequest request, @ModelAttribute SearchWorkflowInstancesForm form ){
         form = createFormOnGetRequest( request, form );
         if( form.hasId() ){
             validateAndConvertIdsToRefNums( form, model );
@@ -69,10 +62,7 @@ public class WorkflowInstancesListController{
         removeBlankLabels( form.getLabel1() );
         removeBlankLabels( form.getLabel2() );
         if( !model.containsAttribute( "error" ) ){
-            if( form.hasSearchCriteria() ){
-                request.getSession().setAttribute( "instancesSearchResult", createModels( facade.findWorkflowInstances( form ) ) );
-            }
-            else{
+            if( !form.hasSearchCriteria() ){
                 model.addAttribute( "warning", "workflow.search.message.empty.filter" );
             }
         }
@@ -86,7 +76,6 @@ public class WorkflowInstancesListController{
         String workflowName = request.getParameter( "workflowName" );
         String status = request.getParameter( "status" );
         if( workflowName != null ){
-            form = new SearchWorkflowInstancesForm();
             List<String> workflowNames = new ArrayList<>();
             workflowNames.add( workflowName );
             form.setWorkflowName( workflowNames );
@@ -142,12 +131,6 @@ public class WorkflowInstancesListController{
         return model;
     }
 
-    @RequestMapping(value = "/workflow/instances", method = RequestMethod.POST)
-    public String searchInstancesAction( @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form, RedirectAttributes model ){
-        model.addFlashAttribute( "instanceSearchForm", form );
-        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances";
-    }
-
     @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(value = "/workflow/instances/action", method = RequestMethod.POST)
     public String abortInstances( @RequestParam String action, @ModelAttribute("refNums") List<Long> refNums, RedirectAttributes model ){
@@ -201,47 +184,26 @@ public class WorkflowInstancesListController{
         model.addFlashAttribute( "actionMessage", "workflow.instances.action.success" );
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/workflow/instances/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, value = "/workflow/instances/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<DataTable> searchInstancesAjax( Model model,
-            @ModelAttribute("instanceSearchForm") SearchWorkflowInstancesForm form,
+            @ModelAttribute SearchWorkflowInstancesForm form,
             HttpServletRequest request ){
-        @SuppressWarnings("unchecked")
-        List<WorkflowInstanceSearchModel> searchResult = (List<WorkflowInstanceSearchModel>)request.getSession().getAttribute( "instancesSearchResult" );
-        List<WorkflowInstanceSearchModel> page = new ArrayList<>();
-        if( searchResult != null && searchResult.size() > 0 ){
-            Integer column = Integer.valueOf( request.getParameter( "order[0][column]" ) );
-            String direction = request.getParameter( "order[0][dir]" );
-            List<WorkflowInstanceSearchModel> sortedSearchResult = sortSearchResult( searchResult, column, direction );
-            int pageStart = Math.min( form.getStart(), Math.max( searchResult.size() - 1, 0 ) );
-            int pageEnd = Math.min( form.getStart() + form.getLength(), searchResult.size() );
-            page = sortedSearchResult.subList( pageStart, pageEnd );
-        }
-        return new ResponseEntity<>( createDataTable( request, searchResult, page ), HttpStatus.OK );
+        form.setColumn( Integer.valueOf( request.getParameter( "order[0][column]" ) ) );
+        form.setDirection( request.getParameter( "order[0][dir]"  ) );
+        validateAndConvertIdsToRefNums( form, model );
+        List<WorkflowInstanceSearchModel> searchResult = createModels( facade.findWorkflowInstances( form ) );
+        return new ResponseEntity<>( createDataTable( request, searchResult, form ), HttpStatus.OK );
     }
 
-    private DataTable createDataTable( HttpServletRequest request, List<WorkflowInstanceSearchModel> searchResult, List<WorkflowInstanceSearchModel> page ){
+    private DataTable createDataTable( HttpServletRequest request, List<WorkflowInstanceSearchModel> searchResult, SearchWorkflowInstancesForm form ){
         DataTable dataTable = new DataTable();
         dataTable.setDraw( Integer.valueOf( request.getParameter( "draw" ) ) );
         if( searchResult != null ){
-            dataTable.setRecordsTotal( searchResult.size() );
-            dataTable.setRecordsFiltered( searchResult.size() );
+            dataTable.setRecordsFiltered( form.getStart() + searchResult.size() );
+            dataTable.setRecordsTotal( dataTable.getRecordsFiltered() );
         }
-        dataTable.setData( page );
+        dataTable.setData( searchResult );
         return dataTable;
-    }
-
-    protected List<WorkflowInstanceSearchModel> sortSearchResult( List<WorkflowInstanceSearchModel> result, int column, String direction ){
-        List<WorkflowInstanceSearchModel> unorderedSource = new ArrayList<>( result );
-        String fieldName = DataTableColumnMapper.from( column ).getFieldName();
-        BeanComparator<WorkflowInstanceSearchModel> beanComparator;
-        if( "asc".equalsIgnoreCase( direction ) ){
-            beanComparator = new BeanComparator<>( fieldName, new NullComparator() );
-        }
-        else{
-            beanComparator = new BeanComparator<>( fieldName, new ReverseComparator( new NullComparator() ) );
-        }
-        Collections.sort( unorderedSource, beanComparator );
-        return unorderedSource;
     }
 
     @ModelAttribute("instanceSearchForm")

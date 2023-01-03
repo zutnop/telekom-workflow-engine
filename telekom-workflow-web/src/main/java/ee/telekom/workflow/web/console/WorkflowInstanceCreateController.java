@@ -49,11 +49,7 @@ public class WorkflowInstanceCreateController{
 
     @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/create")
-    public String create( RedirectAttributes model, @ModelAttribute("form") CreateWorkflowInstanceForm form, Errors result ){
-        model.addFlashAttribute( "form", form );
-        // XXX Errors object was never intended to be put into flash/session for POST-REDIRECT-GET: https://jira.spring.io/browse/SPR-8282
-        model.addFlashAttribute( "org.springframework.validation.BindingResult.form", result );
-
+    public String create( Model model, RedirectAttributes redirectAttrs, @ModelAttribute("form") CreateWorkflowInstanceForm form, Errors result ){
         Integer version = null;
         Map<String, Object> arguments = null;
         if( StringUtils.isBlank( form.getWorkflowName() ) ){
@@ -82,23 +78,22 @@ public class WorkflowInstanceCreateController{
                 request.setLabel2( form.getLabel2() );
                 request.setArguments( arguments );
                 facade.createWorkflowInstance( request );
-                form.setRefNum( request.getRefNum() );
+                redirectAttrs.addFlashAttribute( "createdRefNum", request.getRefNum() );
+                return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
             }
             catch( Exception e ){
-                model.addFlashAttribute( "error", e.getMessage() );
+                model.addAttribute( "error", e.getMessage() );
                 log.error( e.getMessage(), e );
             }
         }
-        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
+
+        // If post request failed, render view again
+        return viewStart( model );
     }
 
     @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/batchCreate")
-    public String batchCreate( RedirectAttributes model, @ModelAttribute("batchForm") BatchCreateWorkflowInstancesForm batchForm, Errors result ){
-        model.addFlashAttribute( "batchForm", batchForm );
-        // XXX Errors object was never intended to be put into flash/session for POST-REDIRECT-GET: https://jira.spring.io/browse/SPR-8282
-        model.addFlashAttribute( "org.springframework.validation.BindingResult.batchForm", result );
-
+    public String batchCreate( Model model, RedirectAttributes redirectAttrs, @ModelAttribute("batchForm") BatchCreateWorkflowInstancesForm batchForm, Errors result ){
         List<CreateWorkflowInstance> requests = null;
 
         try{
@@ -127,16 +122,17 @@ public class WorkflowInstanceCreateController{
         if( !result.hasErrors() ){
             try{
                 facade.createWorkflowInstances( requests );
-                batchForm.setRefNums( getRefNums( requests ) );
-
+                redirectAttrs.addFlashAttribute( "createdRefNums", getRefNums( requests ) );
+                return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
             }
             catch( Exception e ){
-                model.addFlashAttribute( "error", e.getMessage() );
+                model.addAttribute( "error", e.getMessage() );
                 log.error( e.getMessage(), e );
             }
         }
 
-        return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/create";
+        // If post request failed, render view again
+        return viewStart( model );
     }
 
     private List<Long> getRefNums( List<CreateWorkflowInstance> requests ){
