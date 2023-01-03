@@ -22,6 +22,9 @@ import ee.telekom.workflow.util.AdvancedParameterSource;
 @Repository
 public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
 
+    // All common columns between workflow_instance and workflow_instance_archive tables, only difference is that archive table has extra column "cleanup_after"
+    private static final String COMMON_COLUMNS = " ref_num, workflow_name, workflow_version, attributes, state, history, label1, label2, cluster_name, node_name, status, locked, date_created, created_by, date_updated, last_updated_by ";
+
     @Autowired
     private WorkflowEngineConfiguration config;
 
@@ -45,9 +48,9 @@ public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
         }
         else{
             sql = ""
-                    + "SELECT * FROM " + getTableName( true ) + where
+                    + "SELECT " + COMMON_COLUMNS + " FROM " + getTableName( true ) + where
                     + " UNION ALL "
-                    + "SELECT * FROM " + getTableName( false ) + where;
+                    + "SELECT " + COMMON_COLUMNS + " FROM " + getTableName( false ) + where;
         }
         return getNamedParameterJdbcTemplate().query( sql, source, WorkflowInstanceStateRowMapper.INSTANCE );
     }
@@ -67,9 +70,9 @@ public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
         }
         else{
             sql = ""
-                    + "SELECT * FROM " + getTableName( true ) + where
+                    + "SELECT " + COMMON_COLUMNS + " FROM " + getTableName( true ) + where
                     + " UNION ALL "
-                    + "SELECT * FROM " + getTableName( false ) + where;
+                    + "SELECT " + COMMON_COLUMNS + " FROM " + getTableName( false ) + where;
         }
         return getNamedParameterJdbcTemplate().query( sql, source, WorkflowInstanceStateRowMapper.INSTANCE );
     }

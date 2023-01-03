@@ -142,4 +142,24 @@
       ]]>
     </sql>
   </changeSet>
+
+  <changeSet id="workflow-engine-test-2023.01.02.1" author="Martin Kabanen">
+    <sql>
+      <![CDATA[
+         ALTER TABLE WORKFLOW_INSTANCES_ARCHIVE ADD CLEANUP_AFTER TIMESTAMP WITH TIME ZONE;
+      ]]>
+    </sql>
+  </changeSet>
+
+  <changeSet id="workflow-engine-test-2023.01.02.2" author="Martin Kabanen">
+    <sql>
+      <![CDATA[
+         ALTER TABLE WORK_ITEMS ADD AUTO_RECOVERY BOOLEAN NOT NULL DEFAULT TRUE;
+         UPDATE WORK_ITEMS SET AUTO_RECOVERY = FALSE WHERE BEAN IS NOT NULL AND METHOD IS NOT NULL;
+         ALTER TABLE WORK_ITEMS_ARCHIVE ADD AUTO_RECOVERY BOOLEAN NOT NULL DEFAULT TRUE;
+         UPDATE WORK_ITEMS_ARCHIVE SET AUTO_RECOVERY = FALSE WHERE BEAN IS NOT NULL AND METHOD IS NOT NULL;
+      ]]>
+    </sql>
+  </changeSet>
+
 </databaseChangeLog> 

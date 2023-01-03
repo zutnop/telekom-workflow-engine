@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ee.telekom.workflow.TestApplicationContexts;
+import ee.telekom.workflow.api.AutoRecovery;
 import ee.telekom.workflow.core.common.WorkflowEngineConfiguration;
 import ee.telekom.workflow.core.error.ExecutionErrorService;
 import ee.telekom.workflow.core.node.NodeService;
@@ -115,7 +116,7 @@ public class RecoveryIT extends TestApplicationContexts{
     @Test
     public void test_recoveryAssigned_Executing_Executing_Task(){
         long woinRefNum = workflowInstanceService.create( "test", 1, null, null, null ).getRefNum();
-        long woitRefNum = createWoit( woinRefNum, null, "bean", "method" );
+        long woitRefNum = createWoit( woinRefNum, null, "bean", "method", AutoRecovery.DISABLED );
         workflowInstanceService.lock( Collections.singletonList( woinRefNum ) );
         workflowInstanceService.updateNodeNameFromNull( woinRefNum, config.getNodeName() );
         workflowInstanceService.markStarting( woinRefNum );
@@ -200,6 +201,18 @@ public class RecoveryIT extends TestApplicationContexts{
         woit.setSignal( signal );
         woit.setBean( bean );
         woit.setMethod( method );
+        workItemDao.create( Collections.singletonList( woit ) );
+        return woit.getRefNum();
+    }
+
+    private long createWoit( long woinRefNum, String signal, String bean, String method, AutoRecovery autoRecovery ){
+        WorkItem woit = new WorkItem();
+        woit.setStatus( WorkItemStatus.NEW );
+        woit.setWoinRefNum( woinRefNum );
+        woit.setSignal( signal );
+        woit.setBean( bean );
+        woit.setMethod( method );
+        woit.setAutoRecovery(autoRecovery);
         workItemDao.create( Collections.singletonList( woit ) );
         return woit.getRefNum();
     }

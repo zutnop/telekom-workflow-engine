@@ -62,9 +62,9 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
         List<Map<String, Object>> old = getJdbcTemplate().queryForList( "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ?", woinRefNum );
         String sql = ""
                 + "INSERT INTO " + getSchema() + "work_items_archive "
-                + "  (ref_num, woin_ref_num, token_id, signal, due_date, bean, method, role, user_name, arguments, result, status, date_created, created_by, date_updated, last_updated_by) "
+                + "  (ref_num, woin_ref_num, token_id, signal, due_date, bean, method, role, user_name, arguments, result, status, auto_recovery, date_created, created_by, date_updated, last_updated_by) "
                 + " VALUES "
-                + "  (:ref_num, :woin_ref_num, :token_id, :signal, :due_date, :bean, :method, :role, :user_name, :arguments, :result, :status, :date_created, :created_by, :date_updated, :last_updated_by)";
+                + "  (:ref_num, :woin_ref_num, :token_id, :signal, :due_date, :bean, :method, :role, :user_name, :arguments, :result, :status, :auto_recovery, :date_created, :created_by, :date_updated, :last_updated_by)";
         AdvancedParameterSource[] sources = new AdvancedParameterSource[old.size()];
         for( int i = 0; i < old.size(); i++ ){
             sources[i] = new AdvancedParameterSource().addMapWithLowercaseKeys( old.get( i ) );

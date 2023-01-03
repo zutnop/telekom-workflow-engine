@@ -251,11 +251,13 @@
     </sql>
   </changeSet>
 
-  <changeSet id="workflow-engine-2023.01.02.2" author="Martin Kabanen">
+  <changeSet id="workflow-engine-2023.01.02.2" author="Martin Kabanen" dbms="postgresql">
     <sql>
       <![CDATA[
         ALTER TABLE ${schemaName}.WORK_ITEMS ADD AUTO_RECOVERY BOOLEAN NOT NULL DEFAULT TRUE;
         UPDATE ${schemaName}.WORK_ITEMS SET AUTO_RECOVERY = FALSE WHERE BEAN IS NOT NULL AND METHOD IS NOT NULL;
+        ALTER TABLE ${schemaName}.WORK_ITEMS_ARCHIVE ADD AUTO_RECOVERY BOOLEAN NOT NULL DEFAULT TRUE;
+        UPDATE ${schemaName}.WORK_ITEMS_ARCHIVE SET AUTO_RECOVERY = FALSE WHERE BEAN IS NOT NULL AND METHOD IS NOT NULL;
       ]]>
     </sql>
   </changeSet>
