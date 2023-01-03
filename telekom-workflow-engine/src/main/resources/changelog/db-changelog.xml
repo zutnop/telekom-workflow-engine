@@ -244,7 +244,6 @@
   </changeSet>
 
   <changeSet id="workflow-engine-2023.01.02.2" author="Martin Kabanen">
-    <validCheckSum>8:52a08f097478f79465bd4e7cf0e862bd</validCheckSum>
     <sql>
       <![CDATA[
         ALTER TABLE ${schemaName}.WORK_ITEMS ADD AUTO_RETRY_ON_RECOVERY BOOLEAN NOT NULL DEFAULT TRUE;
