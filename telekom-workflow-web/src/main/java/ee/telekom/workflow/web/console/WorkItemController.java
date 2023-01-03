@@ -51,7 +51,7 @@ public class WorkItemController{
 
     @PreAuthorize("hasRole('ROLE_TWE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, value = "/workflow/instances/{woinRefNum}/item/{woitRefNum}")
-    public String handleAction( RedirectAttributes model,
+    public String handleAction( Model model, RedirectAttributes redirectAttr,
                                 @PathVariable long woinRefNum,
                                 @PathVariable long woitRefNum,
                                 @ModelAttribute("form") ExecuteWorkItemForm form, Errors result ){
@@ -75,24 +75,21 @@ public class WorkItemController{
             }
             catch( UnexpectedStatusException e ){
                 log.info( e.getMessage(), e );
-                model.addFlashAttribute( "errorMessage", "workflow.item.error.status" );
+                redirectAttr.addFlashAttribute( "errorMessage", "workflow.item.error.status" );
                 return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum();
             }
             catch( Exception e ){
                 log.warn( "Unable to perform action on work item " + woitRefNum, e );
-                model.addFlashAttribute( "errorMessage", "workflow.item.error.action." + workItem.getType() );
-                model.addFlashAttribute( "error", e.getMessage() );
+                model.addAttribute( "errorMessage", "workflow.item.error.action." + workItem.getType() );
+                model.addAttribute( "error", e.getMessage() );
             }
         }
         // redirect
-        if( result.hasErrors() || model.getFlashAttributes().containsKey( "error" ) ){
-            model.addFlashAttribute( "form", form );
-            // XXX Errors object was never intended to be put into flash/session for POST-REDIRECT-GET: https://jira.spring.io/browse/SPR-8282
-            model.addFlashAttribute( "org.springframework.validation.BindingResult.form", result );
-            return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum() + "/item/" + workItem.getRefNum();
+        if( result.hasErrors() || redirectAttr.getFlashAttributes().containsKey( "error" ) ){
+            return view( model, workItem.getWoinRefNum(), workItem.getRefNum(), form );
         }
         else{
-            model.addFlashAttribute( "successMessage", "workflow.item.success." + workItem.getType() );
+            redirectAttr.addFlashAttribute( "successMessage", "workflow.item.success." + workItem.getType() );
             return "redirect:" + configuration.getConsoleMappingPrefix() + "/console/workflow/instances/" + workItem.getWoinRefNum();
         }
     }

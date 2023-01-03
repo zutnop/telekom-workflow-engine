@@ -154,6 +154,12 @@
                                 clearAndHidePossibleActions();
                             }).on('page.dt', function () {
                                 clearAndHidePossibleActions();
+                            }).on('draw.dt', function () {
+                                // If pagination next button is disabled we have reached the last page. Otherwise display "..." indicating there are more pages
+                                var nextButton = $('#instancesTable_next');
+                                if ( !nextButton.hasClass('disabled') ) {
+                                    $('<li class="disabled">...</li>').insertBefore(nextButton);
+                                }
                             });
 
                             $('.toggleAll').click(function (event) {
