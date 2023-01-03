@@ -27,6 +27,7 @@ import ee.telekom.workflow.executor.marshall.Marshaller;
 import ee.telekom.workflow.executor.marshall.TokenState;
 import ee.telekom.workflow.executor.plugin.WorkflowEnginePlugin;
 import ee.telekom.workflow.graph.Environment;
+import ee.telekom.workflow.graph.Graph;
 import ee.telekom.workflow.graph.GraphInstance;
 import ee.telekom.workflow.graph.GraphWorkItem;
 import ee.telekom.workflow.graph.WorkflowException;
@@ -112,6 +113,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
             workflowInstanceService.markAborting( woinRefNum );
             status = begin();
             WorkflowInstance woin = workflowInstanceService.find( woinRefNum );
+            Graph graph = engineFactory.getGraph(woin.getWorkflowName(), woin.getWorkflowVersion());
 
             if( woin.getState() == null ){
                 // Abort a workflow instance that has not started previously (at least not successfully) 
@@ -119,9 +121,13 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workflowInstanceService.updateHistory( woin.getRefNum(), woin.getHistory() );
                 workflowInstanceService.markAborted( woin.getRefNum() );
                 workflowInstanceService.unlock( woin.getRefNum() );
-                archiveService.archive( woin.getRefNum() );
+                int archivePeriodLength = -1;
+                if( graph != null ){
+                    archivePeriodLength = graph.getArchivePeriodLength();
+                }
+                archiveService.archive( woin.getRefNum(), archivePeriodLength );
             }
-            else if( engineFactory.getGraph( woin.getWorkflowName(), woin.getWorkflowVersion() ) != null ){
+            else if( graph != null ){
                 // Abort a workflow instance that has been started and which is associated to an existing graph 
                 GraphInstance graphInstance = graphInstanceRepository.load( woin.getRefNum() );
                 engineFactory.getSingletonInstance().abort( graphInstance );
@@ -147,7 +153,7 @@ public class WorkflowExecutorImpl implements WorkflowExecutor{
                 workflowInstanceService.updateHistory( woin.getRefNum(), woin.getHistory() );
                 workflowInstanceService.markAborted( woin.getRefNum() );
                 workflowInstanceService.unlock( woin.getRefNum() );
-                archiveService.archive( woin.getRefNum() );
+                archiveService.archive( woin.getRefNum(), -1 );
             }
 
             commit( status, "Aborted" );

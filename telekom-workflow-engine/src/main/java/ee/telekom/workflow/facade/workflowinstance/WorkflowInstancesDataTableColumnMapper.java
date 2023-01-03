@@ -1,26 +1,24 @@
-package ee.telekom.workflow.web.console.model;
+package ee.telekom.workflow.facade.workflowinstance;
 
-public enum DataTableColumnMapper{
+public enum WorkflowInstancesDataTableColumnMapper {
 
-    REF_NUM(1, "refNum"),
-    NAME(2, "workflowNameWithVersion"),
+    REF_NUM(1, "ref_num"),
+    NAME(2, "workflow_name"),
     LABEL1(3, "label1"),
     LABEL2(4, "label2"),
-    DATE_CREATED(5, "dateCreated"),
-    NEXT_TIMER_DUE_DATE(6, "nextTimerDueDate"),
-    HAS_ACTIVE_HUMAN_TASK(7, "hasActiveHumanTask"),
+    DATE_CREATED(5, "date_created"),
     STATUS(8, "status");
 
     private int columnId;
     private String fieldName;
 
-    DataTableColumnMapper( int columnId, String fieldName ){
+    WorkflowInstancesDataTableColumnMapper( int columnId, String fieldName ){
         this.columnId = columnId;
         this.fieldName = fieldName;
     }
 
-    public static DataTableColumnMapper from( int columnId ){
-        for( DataTableColumnMapper type : values() ){
+    public static WorkflowInstancesDataTableColumnMapper from( int columnId ){
+        for( WorkflowInstancesDataTableColumnMapper type : values() ){
             if( type.columnId == columnId ){
                 return type;
             }

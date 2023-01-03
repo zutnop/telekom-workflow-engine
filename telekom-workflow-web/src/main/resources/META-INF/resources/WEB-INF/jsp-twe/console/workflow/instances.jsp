@@ -3,7 +3,7 @@
 <workflow-ui:menu activeTab="workflows" />
 
 <div id="search">
-    <form:form method="POST" modelAttribute="instanceSearchForm" action="instances">
+    <form:form method="GET" modelAttribute="instanceSearchForm" action="instances">
         <div class="inner clear">
             <p class="main">
                 <span class="fields">
@@ -94,8 +94,6 @@
                             var instancesUrl = '${instancesUrl}';
                             var csrfParameterName = '${_csrf.parameterName}';
                             var csrfToken = '${_csrf.token}';
-                            var csrfData = {};
-                            csrfData[csrfParameterName] = csrfToken;
                             $('#instancesTable').dataTable({
                                 lengthMenu: [20, 100, 1000],
                                 pageLength: 20,
@@ -105,7 +103,28 @@
                                 ajax: {
                                     url: "${instancesUrl}search",
                                     type: "POST",
-                                    data: csrfData
+                                    data: (data) => {
+                                        data[csrfParameterName] = csrfToken;
+                                        if (data.length > 0) {
+                                            data.length = data.length + 1;
+                                        }
+                                        data['workflowName'] = '${instanceSearchForm.workflowName[0]}';
+                                        data['status'] = '${instanceSearchForm.status[0]}';
+                                        data['id'] = '${instanceSearchForm.id[0]}';
+                                        data['label1'] = '${instanceSearchForm.label1[0]}';
+                                        data['label2'] = '${instanceSearchForm.label2[0]}';
+                                        return data;
+                                    },
+                                    dataSrc: (response) => {
+                                        var thisDataTable = $('#instancesTable').DataTable();
+                                        if (thisDataTable.page.len() > 0 && response.data && response.data.length > thisDataTable.page.len()) {
+                                            response.data.pop();
+                                            thisDataTable.settings()[0].oLanguage.sInfo = 'Showing _START_ to _END_ of many records';
+                                        } else {
+                                            thisDataTable.settings()[0].oLanguage.sInfo = 'Showing _START_ to _END_ of _TOTAL_ records';
+                                        }
+                                        return response.data;
+                                    }
                                 },
                                 columns: [
                                     <workflow-ui:adminAccess>
@@ -120,8 +139,8 @@
                                     {data: "label1"},
                                     {data: "label2"},
                                     {data: "dateCreatedText"},
-                                    {data: "nextTimerDueDateText"},
-                                    {data: "hasActiveHumanTask"},
+                                    {data: "nextTimerDueDateText", orderable: false},
+                                    {data: "hasActiveHumanTask", orderable: false},
                                     {data: "displayStatus"}
                                 ],
                                 order: [
@@ -135,6 +154,12 @@
                                 clearAndHidePossibleActions();
                             }).on('page.dt', function () {
                                 clearAndHidePossibleActions();
+                            }).on('draw.dt', function () {
+                                // If pagination next button is disabled we have reached the last page. Otherwise display "..." indicating there are more pages
+                                var nextButton = $('#instancesTable_next');
+                                if ( !nextButton.hasClass('disabled') ) {
+                                    $('<li class="disabled">...</li>').insertBefore(nextButton);
+                                }
                             });
 
                             $('.toggleAll').click(function (event) {

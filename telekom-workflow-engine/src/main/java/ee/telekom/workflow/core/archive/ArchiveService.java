@@ -10,6 +10,11 @@ public interface ArchiveService{
     /**
      * Archive a workflow instance's data once it is fully executed or aborted.
      */
-    void archive( long woinRefNum );
+    void archive( long woinRefNum, int archivePeriodLength );
+
+    /**
+     * Cleans up archive entries.
+     */
+    void cleanup();
 
 }
