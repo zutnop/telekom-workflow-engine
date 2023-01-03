@@ -1,6 +1,7 @@
 package ee.telekom.workflow.core.archive;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,15 +25,23 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
     }
 
     public void cleanup(){
-        List<Long> refNums = getJdbcTemplate().queryForList( "SELECT ref_num FROM " + getSchema() + "workflow_instances_archive WHERE cleanup_after IS NOT NULL AND cleanup_after <= CURRENT_TIMESTAMP", Long.class );
-        if (!refNums.isEmpty()) {
-            AdvancedParameterSource[] sources = new AdvancedParameterSource[refNums.size()];
-            for( int i = 0; i < refNums.size(); i++ ){
-                sources[i] = new AdvancedParameterSource().addValue( "refNum", refNums.get(i) );
-            }
-            getNamedParameterJdbcTemplate().batchUpdate("DELETE FROM " + getSchema() + "work_items_archive WHERE woin_ref_num IN (:refNum)", sources);
-            getNamedParameterJdbcTemplate().batchUpdate("DELETE FROM " + getSchema() + "workflow_instances_archive WHERE ref_num IN (:refNum)", sources);
-        }
+        String deleteWoitsSql = ""
+                + "DELETE FROM engine.work_items_archive woit "
+                + "WHERE EXISTS ( "
+                + "    SELECT * "
+                + "    FROM engine.workflow_instances_archive woin "
+                + "    WHERE woin.ref_num = woit.woin_ref_num "
+                + "      AND woin.cleanup_after IS NOT NULL "
+                + "      AND woin.cleanup_after <= :now "
+                + "    ); ";
+        String deleteWoinsSql = ""
+                + "DELETE FROM engine.workflow_instances_archive woin "
+                + "WHERE woin.cleanup_after IS NOT NULL "
+                + "  AND woin.cleanup_after <= :now "
+                + "  AND NOT EXISTS (SELECT * FROM engine.work_items_archive woit WHERE woin.ref_num = woit.woin_ref_num); ";
+        AdvancedParameterSource source = new AdvancedParameterSource().addValue("now", new Date());
+        getNamedParameterJdbcTemplate().update(deleteWoitsSql, source);
+        getNamedParameterJdbcTemplate().update(deleteWoinsSql, source);
     }
 
     private void createArchiveWorkflowInstance( long woinRefNum, int archivePeriodLength ){
