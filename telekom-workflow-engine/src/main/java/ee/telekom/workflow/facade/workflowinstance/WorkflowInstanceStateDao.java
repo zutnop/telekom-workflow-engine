@@ -78,7 +78,7 @@ public class WorkflowInstanceStateDao extends AbstractWorkflowEngineDao{
     }
 
     public List<WorkflowInstanceState> find( SearchWorkflowInstances request ){
-        String select = "SELECT * ";
+        String select = "SELECT " + COMMON_COLUMNS + " ";
         StringBuilder where = new StringBuilder( " WHERE cluster_name = :clusterName " );
         AdvancedParameterSource source = new AdvancedParameterSource().addValue( "clusterName", config.getClusterName() );
         if( request.getRefNum() != null && request.getRefNum().size() > 0 ){
