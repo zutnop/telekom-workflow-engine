@@ -79,7 +79,7 @@ public class WorkflowInstancesListController{
             List<String> workflowNames = new ArrayList<>();
             workflowNames.add( workflowName );
             form.setWorkflowName( workflowNames );
-            if( status != null ){
+            if( StringUtils.isNotBlank(status) ){
                 form.setStatus( Collections.unmodifiableList( Arrays.asList( WorkflowInstanceFacadeStatus.valueOf( status ) ) ) );
             }
         }
