@@ -29,7 +29,7 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
                 + "DELETE FROM " + getSchema() + "work_items_archive woit "
                 + "WHERE EXISTS ( "
                 + "    SELECT * "
-                + "    FROM engine.workflow_instances_archive woin "
+                + "    FROM " + getSchema() + "workflow_instances_archive woin "
                 + "    WHERE woin.ref_num = woit.woin_ref_num "
                 + "      AND woin.cleanup_after IS NOT NULL "
                 + "      AND woin.cleanup_after <= :now "
@@ -38,7 +38,7 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
                 + "DELETE FROM " + getSchema() + "workflow_instances_archive woin "
                 + "WHERE woin.cleanup_after IS NOT NULL "
                 + "  AND woin.cleanup_after <= :now "
-                + "  AND NOT EXISTS (SELECT * FROM engine.work_items_archive woit WHERE woin.ref_num = woit.woin_ref_num); ";
+                + "  AND NOT EXISTS (SELECT * FROM " + getSchema() + "work_items_archive woit WHERE woin.ref_num = woit.woin_ref_num); ";
         AdvancedParameterSource source = new AdvancedParameterSource().addValue("now", new Date());
         getNamedParameterJdbcTemplate().update(deleteWoitsSql, source);
         getNamedParameterJdbcTemplate().update(deleteWoinsSql, source);
