@@ -32,6 +32,11 @@ public class LifecycleJobImpl extends SimpleLifeCycleBean{
 
     @Override
     public void doStart(){
+        if (!config.isEnabled()) {
+            log.info( "Workflow engine is NOT enabled - did not start lifecycle-manager" );
+            return;
+        }
+
         lifecycleService.startUp();
 
         scheduledExecutorService = Executors.newScheduledThreadPool( 2, new NamedPoolThreadFactory( "lifecycle-manager" ) );
@@ -53,6 +58,11 @@ public class LifecycleJobImpl extends SimpleLifeCycleBean{
 
     @Override
     public void doStop(){
+        if (!config.isEnabled()) {
+            log.info( "Workflow engine is NOT enabled - did not have to stop lifecycle-manager" );
+            return;
+        }
+
         log.debug( "Stopping lifecycle-manager" );
         ExecutorServiceUtil.shutDownSynchronously( scheduledExecutorService );
         lifecycleService.shutDown();

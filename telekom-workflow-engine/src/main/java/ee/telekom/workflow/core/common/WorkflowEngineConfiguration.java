@@ -26,6 +26,8 @@ public class WorkflowEngineConfiguration{
     private static final int DEFAULT_CLUSTER_MULTICAST_PORT = MulticastConfig.DEFAULT_MULTICAST_PORT;
     private static final int DEFAULT_CLUSTER_MULTICAST_TTL = 0;
 
+    @Value("${workflowengine.enabled:true}")
+    private boolean enabled;
     @Value("${database.workflowengine.schema:engine}")
     private String schema;
     @Value("${workflowengine.cluster.hazelcast.name}")
@@ -67,6 +69,13 @@ public class WorkflowEngineConfiguration{
     @PostConstruct
     public void init(){
         hostName = getHostName();
+    }
+
+    /**
+     * Determines if during Spring Framework bootup the lifecycle services will be started and the engine will start working
+     */
+    public boolean isEnabled() {
+        return enabled;
     }
 
     /**
