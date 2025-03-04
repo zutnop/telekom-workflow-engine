@@ -28,9 +28,8 @@ public class ExecutionErrorDao extends AbstractWorkflowEngineDao{
 
     public ExecutionError findByWoinRefNum( long woinRefNum ){
         String sql = "SELECT * FROM " + getSchema() + "execution_errors WHERE woin_ref_num = ?";
-        Object[] args = {woinRefNum};
-        List<ExecutionError> result = getJdbcTemplate().query( sql, args, ExecutionErrorRowMapper.INSTANCE );
-        return result.isEmpty() ? null : result.get( 0 );
+        List<ExecutionError> result = getJdbcTemplate().query( sql, ExecutionErrorRowMapper.INSTANCE, woinRefNum );
+        return result.isEmpty() ? null : result.getFirst();
     }
 
     public void delete( long refNum ){

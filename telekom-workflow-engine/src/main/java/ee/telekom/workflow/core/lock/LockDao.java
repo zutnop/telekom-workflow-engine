@@ -3,7 +3,6 @@ package ee.telekom.workflow.core.lock;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 import ee.telekom.workflow.util.AbstractWorkflowEngineDao;
@@ -55,13 +54,13 @@ public class LockDao extends AbstractWorkflowEngineDao{
         String sql = "SELECT owner FROM " + getSchema() + "locks WHERE cluster_name = ?";
         Object[] args = {clusterName};
         List<String> result = getJdbcTemplate().queryForList( sql, String.class, args );
-        return result.isEmpty() ? null : result.get( 0 );
+        return result.isEmpty() ? null : result.getFirst();
     }
 
     public Date findExpireTime( String clusterName ){
         String sql = "SELECT expire_time FROM " + getSchema() + "locks WHERE cluster_name = ?";
         Object[] args = {clusterName};
         List<Date> result = getJdbcTemplate().queryForList( sql, Date.class, args );
-        return result.isEmpty() ? null : result.get( 0 );
+        return result.isEmpty() ? null : result.getFirst();
     }
 }

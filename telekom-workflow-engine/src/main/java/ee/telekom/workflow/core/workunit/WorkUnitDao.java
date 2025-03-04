@@ -31,8 +31,7 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
             sqlCache = getSql( clusterName );
             cachedSqlClusterName = clusterName;
         }
-        Object[] args = {now};
-        return getJdbcTemplate().query( sqlCache, args, WorkUnitRowMapper.INSTANCE );
+        return getJdbcTemplate().query( sqlCache, WorkUnitRowMapper.INSTANCE, now);
     }
 
     /*
