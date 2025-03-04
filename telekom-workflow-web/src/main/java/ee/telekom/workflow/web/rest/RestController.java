@@ -3,19 +3,13 @@ package ee.telekom.workflow.web.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.google.gson.JsonObject;
 
@@ -72,19 +65,6 @@ public class RestController{
 
     @Autowired
     private WorkflowEngineFacade facade;
-
-    @Autowired
-    private RequestMappingHandlerAdapter adapter;
-
-    @PostConstruct
-    public void init(){
-        for (HttpMessageConverter converter : adapter.getMessageConverters()) {
-            if (converter instanceof GsonHttpMessageConverter) {
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                ((GsonHttpMessageConverter)converter).setGson(gson);
-            }
-        }
-    }
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

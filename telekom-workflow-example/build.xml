@@ -1,6 +1,6 @@
 <project name="root" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant" xmlns:ac="antlib:net.sf.antcontrib">
 
-  <description>An ANT build file to setup and start an "embedded" Tomcat 8 instance for running the workflow-example module in a development environment.</description>
+  <description>An ANT build file to setup and start an "embedded" Tomcat 10 instance for running the workflow-example module in a development environment.</description>
   
   <property name="root.dir" location="${basedir}" />
 
@@ -28,7 +28,7 @@
   <target name="installTomcat" depends="init">
     <mkdir dir="runtime/tomcat" />
     <mkdir dir="target/downloads" />
-    <fastget src="https://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip" dest="target/downloads/tomcat.zip" />
+    <fastget src="https://archive.apache.org/dist/tomcat/tomcat-10/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip" dest="target/downloads/tomcat.zip" />
     <sync todir="${tomcat.home}">
       <mappedresources>
         <zipfileset src="target/downloads/tomcat.zip">
@@ -40,9 +40,9 @@
     <copy file="conf/default/server.xml" todir="${tomcat.home}/conf" overwrite="true" />
   </target>
 
-  <target name="setup" depends="installTomcat" description="Downloads and sets up the embedded Tomcat 8 folder." />
+  <target name="setup" depends="installTomcat" description="Downloads and sets up the embedded Tomcat 10 folder." />
 
-  <target name="start" depends="init" description="Starts the embedded Tomcat 8 instance and runs the target/workflow-example/ webapp.">
+  <target name="start" depends="init" description="Starts the embedded Tomcat 10 instance and runs the target/workflow-example/ webapp.">
     <property name="web.build.war.dir" location="${basedir}/target/workflow-example" />
     <echo file="${tomcat.home}/conf/Catalina/localhost/ROOT.xml">&lt;?xml version="1.0" encoding="UTF-8"?>&lt;Context
       docBase="${web.build.war.dir}" privileged="true" antiResourceLocking="false" /></echo>
@@ -94,7 +94,7 @@
     </exec>
   </target>
 
-  <target name="stop" depends="init" description="Stops the embedded Tomcat 8 instance.">
+  <target name="stop" depends="init" description="Stops the embedded Tomcat 10 instance.">
     <exec dir="${tomcat.home}/bin" executable="cmd" osfamily="windows">
       <env key="JAVA_OPTS" value="-Dtomcat.shutdown.port=${tomcat.shutdown.port} -Dtomcat.http.port=${tomcat.http.port}" />
       <arg line="/c shutdown.bat" />

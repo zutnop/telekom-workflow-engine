@@ -2,9 +2,9 @@ package ee.telekom.workflow.graph.el;
 
 import java.util.Date;
 
-import javax.el.ELProcessor;
+import jakarta.el.ELProcessor;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import ee.telekom.workflow.graph.Environment;
 

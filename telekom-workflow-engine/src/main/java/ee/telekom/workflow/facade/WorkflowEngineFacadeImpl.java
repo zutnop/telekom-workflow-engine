@@ -8,8 +8,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,7 @@ import ee.telekom.workflow.core.lock.LockService;
 import ee.telekom.workflow.core.retry.RetryService;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstance;
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceService;
+import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
 import ee.telekom.workflow.core.workitem.WorkItem;
 import ee.telekom.workflow.core.workitem.WorkItemDao;
 import ee.telekom.workflow.executor.GraphEngineFactory;

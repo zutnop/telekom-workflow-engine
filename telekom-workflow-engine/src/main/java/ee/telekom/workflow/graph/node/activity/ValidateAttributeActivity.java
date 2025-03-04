@@ -1,6 +1,6 @@
 package ee.telekom.workflow.graph.node.activity;
 
-import javax.el.ELProcessor;
+import jakarta.el.ELProcessor;
 
 import ee.telekom.workflow.graph.Environment;
 import ee.telekom.workflow.graph.GraphEngine;

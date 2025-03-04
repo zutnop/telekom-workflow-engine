@@ -1,6 +1,6 @@
 package ee.telekom.workflow.graph.el;
 
-import javax.el.BeanNameResolver;
+import jakarta.el.BeanNameResolver;
 
 import ee.telekom.workflow.graph.Environment;
 
