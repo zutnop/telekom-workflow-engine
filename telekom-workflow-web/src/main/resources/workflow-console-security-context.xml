@@ -5,6 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+  <bean id="mvcHandlerMappingIntrospector" class="org.springframework.web.servlet.handler.HandlerMappingIntrospector" />
+  <bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+
   <sec:http auto-config="true" disable-url-rewriting="true" use-expressions="true">
     <!-- TODO ERKO: temporary hack to allow REST API usage without authentication -->
     <sec:intercept-url pattern="/api/**" access="isAnonymous()"/>
