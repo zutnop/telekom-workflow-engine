@@ -2,7 +2,7 @@ package ee.telekom.workflow.util.el;
 
 import java.util.Date;
 
-import javax.el.ELProcessor;
+import jakarta.el.ELProcessor;
 
 import org.junit.Assert;
 import org.junit.Test;

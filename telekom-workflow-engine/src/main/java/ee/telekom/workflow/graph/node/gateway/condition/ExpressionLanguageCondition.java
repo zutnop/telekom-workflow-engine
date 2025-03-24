@@ -1,8 +1,8 @@
 package ee.telekom.workflow.graph.node.gateway.condition;
 
-import javax.el.ELProcessor;
+import jakarta.el.ELProcessor;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import ee.telekom.workflow.graph.Environment;
 import ee.telekom.workflow.graph.GraphInstance;

@@ -34,28 +34,25 @@ public class WorkItemDao extends AbstractWorkflowEngineDao{
 
     public WorkItem findByRefNum( long refNum ){
         String sql = "SELECT * FROM " + getSchema() + "work_items WHERE ref_num = ?";
-        Object[] args = {refNum};
-        List<WorkItem> results = getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
-        return results.isEmpty() ? null : results.get( 0 );
+        List<WorkItem> results = getJdbcTemplate().query( sql, WorkItemRowMapper.INSTANCE, refNum);
+        return results.isEmpty() ? null : results.getFirst();
     }
 
     public List<WorkItem> findByWoinRefNum( long woinRefNum ){
         String sql = "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ?";
-        Object[] args = {woinRefNum};
-        return getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
+        return getJdbcTemplate().query( sql, WorkItemRowMapper.INSTANCE, woinRefNum );
     }
 
     public List<WorkItem> findActiveByWoinRefNum( long woinRefNum ){
         String sql = "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ? AND NOT status IN (?,?) ORDER BY ref_num ASC";
-        Object[] args = {woinRefNum, WorkItemStatus.COMPLETED.name(), WorkItemStatus.CANCELLED.name()};
-        return getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
+        return getJdbcTemplate().query( sql, WorkItemRowMapper.INSTANCE,  woinRefNum, WorkItemStatus.COMPLETED.name(), WorkItemStatus.CANCELLED.name());
     }
 
     public WorkItem findActiveByWoinRefNumAndTokenId( long woinRefNum, int tokenId ){
         String sql = "SELECT * FROM " + getSchema() + "work_items WHERE woin_ref_num = ? AND token_id = ? AND NOT status IN (?,?) ORDER BY ref_num ASC";
-        Object[] args = {woinRefNum, tokenId, WorkItemStatus.COMPLETED.name(), WorkItemStatus.CANCELLED.name()};
-        List<WorkItem> results = getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
-        return results.isEmpty() ? null : results.get( 0 );
+        List<WorkItem> results = getJdbcTemplate().query( sql, WorkItemRowMapper.INSTANCE,
+                woinRefNum, tokenId, WorkItemStatus.COMPLETED.name(), WorkItemStatus.CANCELLED.name() );
+        return results.isEmpty() ? null : results.getFirst();
     }
 
     public Collection<WorkItem> findByNodeNameAndStatus( String nodeName, WorkItemStatus status ){

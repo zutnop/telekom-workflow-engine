@@ -31,16 +31,14 @@ public class WorkflowInstanceDao extends AbstractWorkflowEngineDao{
 
     public WorkflowInstance findByRefNum( long refNum ){
         String sql = "SELECT * FROM " + getSchema() + "workflow_instances WHERE ref_num = ?";
-        Object[] args = {refNum};
-        List<WorkflowInstance> results = getJdbcTemplate().query( sql, args, WorkflowInstanceRowMapper.INSTANCE );
-        return results.isEmpty() ? null : results.get( 0 );
+        List<WorkflowInstance> results = getJdbcTemplate().query( sql, WorkflowInstanceRowMapper.INSTANCE, refNum );
+        return results.isEmpty() ? null : results.getFirst();
     }
 
     public WorkflowInstanceStatus findStatusByRefNum( long refNum ){
         String sql = "SELECT status FROM " + getSchema() + "workflow_instances WHERE ref_num = ?";
-        Object[] args = {refNum};
-        List<String> results = getJdbcTemplate().queryForList( sql, args, String.class );
-        return results.isEmpty() ? null : WorkflowInstanceStatus.valueOf(results.get( 0 ) );
+        List<String> results = getJdbcTemplate().queryForList( sql, String.class, refNum );
+        return results.isEmpty() ? null : WorkflowInstanceStatus.valueOf(results.getFirst() );
     }
 
     public boolean updateAndUnlock( long refNum,

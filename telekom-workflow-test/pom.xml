@@ -4,7 +4,7 @@
 
   <groupId>ee.telekom.workflow</groupId>
   <artifactId>workflow-test</artifactId>
-  <version>1.6.4-SNAPSHOT</version>
+  <version>1.7.0-SNAPSHOT</version>
   <name>telekom-workflow-test</name>
   <description>Telekom-workflow-engine support classes for writing automated tests.</description>
   <url>https://github.com/zutnop/telekom-workflow-engine</url>
@@ -12,7 +12,7 @@
   <licenses>
     <license>
       <name>MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <url>https://opensource.org/license/mit</url>
     </license>
   </licenses>
 
@@ -35,11 +35,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.compiler.debuglevel>lines,vars,source</maven.compiler.debuglevel>
 
-    <tomcat.version>9.0.62</tomcat.version>
+    <tomcat.version>10.1.36</tomcat.version>
     <junit.jupiter.version>5.8.2</junit.jupiter.version>
     <junit.platform.version>1.8.2</junit.platform.version>
     <junit.vintage.version>5.8.2</junit.vintage.version>
@@ -121,8 +120,9 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
+        <version>3.5.2</version>
       </plugin>
     </plugins>
   </build>
@@ -135,7 +135,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.1</version>
+            <version>3.3.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -148,7 +148,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.11.2</version>
             <configuration>
               <doclint>none</doclint>
             </configuration>
@@ -164,7 +164,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.2.7</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>

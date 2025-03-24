@@ -83,22 +83,19 @@ public class ArchiveDao extends AbstractWorkflowEngineDao{
 
     public WorkflowInstance findWoinByRefNum( long refNum ){
         String sql = "SELECT * FROM " + getSchema() + "workflow_instances_archive WHERE ref_num = ?";
-        Object[] args = {refNum};
-        List<WorkflowInstance> results = getJdbcTemplate().query( sql, args, WorkflowInstanceRowMapper.INSTANCE );
-        return results.isEmpty() ? null : results.get( 0 );
+        List<WorkflowInstance> results = getJdbcTemplate().query( sql, WorkflowInstanceRowMapper.INSTANCE, refNum );
+        return results.isEmpty() ? null : results.getFirst();
     }
 
     public WorkItem findWoitByRefNum( long refNum ){
         String sql = "SELECT * FROM " + getSchema() + "work_items_archive WHERE ref_num = ?";
-        Object[] args = {refNum};
-        List<WorkItem> results = getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
-        return results.isEmpty() ? null : results.get( 0 );
+        List<WorkItem> results = getJdbcTemplate().query( sql, WorkItemRowMapper.INSTANCE, refNum );
+        return results.isEmpty() ? null : results.getFirst();
     }
 
     public List<WorkItem> findWoitsByWoinRefNum( long woinRefNum ){
         String sql = "SELECT * FROM " + getSchema() + "work_items_archive WHERE woin_ref_num = ?";
-        Object[] args = {woinRefNum};
-        return getJdbcTemplate().query( sql, args, WorkItemRowMapper.INSTANCE );
+        return getJdbcTemplate().query( sql, WorkItemRowMapper.INSTANCE, woinRefNum );
     }
 
 }

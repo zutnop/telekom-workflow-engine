@@ -15,7 +15,17 @@
 
   <context:component-scan base-package="ee.telekom.workflow.web" />
 
-  <mvc:annotation-driven />
+  <bean id="gson" class="org.springframework.http.converter.json.GsonFactoryBean">
+    <property name="serializeNulls" value="true" />
+  </bean>
+
+  <mvc:annotation-driven>
+    <mvc:message-converters>
+      <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+        <constructor-arg name="gson" ref="gson" />
+      </bean>
+    </mvc:message-converters>
+  </mvc:annotation-driven>
 
   <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
   <mvc:resources mapping="/images/**" location="/images/, /WEB-INF/images/" />

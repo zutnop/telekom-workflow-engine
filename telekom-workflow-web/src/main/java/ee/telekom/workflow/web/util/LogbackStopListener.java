@@ -1,7 +1,7 @@
 package ee.telekom.workflow.web.util;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import org.slf4j.LoggerFactory;
 

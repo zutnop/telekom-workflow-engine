@@ -8,18 +8,18 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.PostConstruct;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.annotation.PostConstruct;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,7 +82,7 @@ public class ExceptionNotificationServiceImpl implements ExceptionNotificationSe
                         + "\n"
                         + "The most recent exception occured at " + format( now ) + " with the following stacktrace:\n"
                         + "\n"
-                        + ExceptionUtils.getFullStackTrace( exception );
+                        + ExceptionUtils.getStackTrace( exception );
 
                 sendEmail( mailFrom, recipients, subject, body );
 

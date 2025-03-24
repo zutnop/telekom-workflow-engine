@@ -26,15 +26,13 @@ public class NodeDao extends AbstractWorkflowEngineDao{
 
     public Node findByName( String clusterName, String nodeName ){
         String sql = "SELECT * FROM " + getSchema() + "nodes WHERE cluster_name = ? AND node_name = ?";
-        Object[] args = {clusterName, nodeName};
-        List<Node> results = getJdbcTemplate().query( sql, args, NodeRowMapper.INSTANCE );
-        return results.isEmpty() ? null : results.get( 0 );
+        List<Node> results = getJdbcTemplate().query( sql, NodeRowMapper.INSTANCE, clusterName, nodeName );
+        return results.isEmpty() ? null : results.getFirst();
     }
 
     public List<Node> findAll( String clusterName ){
         String sql = "SELECT * FROM " + getSchema() + "nodes WHERE cluster_name = ?";
-        Object[] args = {clusterName};
-        return getJdbcTemplate().query( sql, args, NodeRowMapper.INSTANCE );
+        return getJdbcTemplate().query( sql, NodeRowMapper.INSTANCE, clusterName );
     }
 
     public List<Node> findByStatus( String clusterName, NodeStatus status ){

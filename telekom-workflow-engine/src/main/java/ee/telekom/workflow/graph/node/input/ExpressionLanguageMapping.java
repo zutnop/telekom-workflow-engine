@@ -1,8 +1,9 @@
 package ee.telekom.workflow.graph.node.input;
 
-import javax.el.ELProcessor;
 
-import org.apache.commons.lang.StringUtils;
+import jakarta.el.ELProcessor;
+
+import org.apache.commons.lang3.StringUtils;
 
 import ee.telekom.workflow.graph.Environment;
 import ee.telekom.workflow.graph.GraphInstance;

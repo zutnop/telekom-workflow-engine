@@ -2,9 +2,9 @@ package ee.telekom.workflow.core.workunit;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import ee.telekom.workflow.core.workflowinstance.WorkflowInstanceStatus;
@@ -27,12 +27,11 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
      * Retrieves the list of work units that can be performed at the given date.
      */
     public List<WorkUnit> findNewWorkUnits( Date now, String clusterName ){
-        if( sqlCache == null || !ObjectUtils.equals( cachedSqlClusterName, clusterName ) ){
+        if( sqlCache == null || !Objects.equals( cachedSqlClusterName, clusterName ) ){
             sqlCache = getSql( clusterName );
             cachedSqlClusterName = clusterName;
         }
-        Object[] args = {now};
-        return getJdbcTemplate().query( sqlCache, args, WorkUnitRowMapper.INSTANCE );
+        return getJdbcTemplate().query( sqlCache, WorkUnitRowMapper.INSTANCE, now);
     }
 
     /*
@@ -126,7 +125,8 @@ public class WorkUnitDao extends AbstractWorkflowEngineDao{
             return "   AND woin.cluster_name IS NULL ";
         }
         else{
-            return "   AND woin.cluster_name = '" + StringEscapeUtils.escapeSql( clusterName ) + "'";
+            String escapedClusterName = StringUtils.replace(clusterName, "'", "''");
+            return "   AND woin.cluster_name = '" + escapedClusterName + "'";
         }
     }
 }
